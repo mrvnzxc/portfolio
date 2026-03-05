@@ -391,3 +391,61 @@ if (typewriterElement) {
   typeWriter();
 }
 
+// Lightbox for certificates and competition photos
+const lightboxOverlay = document.getElementById('lightbox-overlay');
+const lightboxClose = document.getElementById('lightbox-close');
+const lightboxImageWrapper = document.getElementById('lightbox-image-wrapper');
+const lightboxPdfWrapper = document.getElementById('lightbox-pdf-wrapper');
+const lightboxImage = document.getElementById('lightbox-image');
+const lightboxPdf = document.getElementById('lightbox-pdf');
+
+function openImageLightbox(src) {
+  if (!lightboxOverlay || !lightboxImageWrapper || !lightboxImage || !lightboxPdfWrapper) return;
+  lightboxPdfWrapper.classList.add('hidden');
+  lightboxPdf.src = '';
+  lightboxImageWrapper.classList.remove('hidden');
+  lightboxImage.src = src;
+  lightboxOverlay.classList.remove('hidden');
+  lightboxOverlay.classList.add('flex');
+}
+
+function openPdfLightbox(src) {
+  if (!lightboxOverlay || !lightboxPdfWrapper || !lightboxPdf || !lightboxImageWrapper) return;
+  lightboxImageWrapper.classList.add('hidden');
+  lightboxImage.src = '';
+  lightboxPdfWrapper.classList.remove('hidden');
+  lightboxPdf.src = src;
+  lightboxOverlay.classList.remove('hidden');
+  lightboxOverlay.classList.add('flex');
+}
+
+function closeLightbox() {
+  if (!lightboxOverlay) return;
+  lightboxOverlay.classList.add('hidden');
+  lightboxOverlay.classList.remove('flex');
+  if (lightboxPdf) lightboxPdf.src = '';
+}
+
+if (lightboxClose && lightboxOverlay) {
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightboxOverlay.addEventListener('click', (event) => {
+    if (event.target === lightboxOverlay) {
+      closeLightbox();
+    }
+  });
+}
+
+document.querySelectorAll('[data-lightbox-img]').forEach((el) => {
+  el.addEventListener('click', () => {
+    const src = el.getAttribute('data-lightbox-img');
+    if (src) openImageLightbox(src);
+  });
+});
+
+document.querySelectorAll('[data-lightbox-pdf]').forEach((el) => {
+  el.addEventListener('click', () => {
+    const src = el.getAttribute('data-lightbox-pdf');
+    if (src) openPdfLightbox(src);
+  });
+});
+

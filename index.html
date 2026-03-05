@@ -63,6 +63,7 @@
         <ul class="flex flex-col gap-3 text-base font-medium text-slate-700 dark:text-slate-200 md:flex-row md:items-center md:gap-6">
           <li><a href="#about" class="transition hover:text-primary-600 dark:hover:text-primary-400">About</a></li>
           <li><a href="#projects" class="transition hover:text-primary-600 dark:hover:text-primary-400">Projects</a></li>
+          <li><a href="#achievements" class="transition hover:text-primary-600 dark:hover:text-primary-400">Achievements</a></li>
           <li><a href="#skills" class="transition hover:text-primary-600 dark:hover:text-primary-400">Skills</a></li>
           <li><a href="#contact" class="transition hover:text-primary-600 dark:hover:text-primary-400">Contact</a></li>
         </ul>
@@ -149,7 +150,7 @@
             </ul>
           </div>
           <div class="h-full reveal-on-scroll">
-            <div class="flex h-full flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80">
+            <div class="card-animated flex h-full flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80">
               <h3 class="text-xs sm:text-sm font-semibold uppercase tracking-wide text-primary-600">Quick Facts</h3>
               <div class="mt-4 space-y-2 text-sm sm:text-base text-slate-600 dark:text-slate-300">
                 <div>📍 Based in: General Santos City</div>
@@ -171,7 +172,7 @@
           <h2 class="text-3xl font-semibold tracking-tight sm:text-4xl">Featured Project</h2>
           <span class="text-xs sm:text-sm font-semibold uppercase tracking-wide text-primary-600">Built &amp; shipped</span>
         </div>
-        <article class="hover-card overflow-hidden rounded-2xl border border-slate-200/80 bg-white/90 shadow-lg shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
+        <article class="hover-card card-animated overflow-hidden rounded-2xl border border-slate-200/80 bg-white/90 shadow-lg shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
           <div class="grid gap-0 md:grid-cols-[minmax(0,1.6fr)_minmax(0,1.1fr)]">
             <div class="space-y-4 p-6 sm:p-8">
               <h3 class="text-2xl font-semibold tracking-tight">Payroll &amp; Attendance Automation</h3>
@@ -228,26 +229,93 @@
           <span class="text-xs sm:text-sm font-semibold uppercase tracking-wide text-primary-600">Services</span>
         </div>
         <div class="grid gap-6 md:grid-cols-3">
-          <div class="hover-card h-full rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300 reveal-on-scroll">
+          <div class="hover-card card-animated h-full rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300 reveal-on-scroll">
             <h3 class="mb-2 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-slate-50">
               <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200">⚙️</span>
               Backend &amp; APIs
             </h3>
             <p class="text-sm sm:text-base">Designing reliable REST/GraphQL services, data models, and integrations that stay scalable and secure.</p>
           </div>
-          <div class="hover-card h-full rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300 reveal-on-scroll">
+          <div class="hover-card card-animated h-full rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300 reveal-on-scroll">
             <h3 class="mb-2 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-slate-50">
               <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200">💻</span>
               Frontend &amp; UX
             </h3>
             <p class="text-sm sm:text-base">Building responsive, accessible UIs with clean component systems and thoughtful interactions.</p>
           </div>
-          <div class="hover-card h-full rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300 reveal-on-scroll">
+          <div class="hover-card card-animated h-full rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300 reveal-on-scroll">
             <h3 class="mb-2 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-slate-50">
               <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200">🤖</span>
               Automation &amp; AI
             </h3>
             <p class="text-sm sm:text-base">Automating workflows with Python, OpenCV, and scripts to reduce manual ops and increase reliability.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Achievements -->
+    <section class="border-t border-slate-200/70 bg-white/80 py-16 sm:py-20 dark:border-slate-800 dark:bg-slate-900/60" id="achievements">
+      <div class="mx-auto max-w-6xl px-4">
+        <div class="mb-8 flex items-baseline justify-between gap-4 reveal-on-scroll">
+          <h2 class="text-3xl font-semibold tracking-tight sm:text-4xl">Achievements</h2>
+          <span class="text-xs sm:text-sm font-semibold uppercase tracking-wide text-primary-600">Certificates &amp; contests</span>
+        </div>
+        <div class="grid gap-8 lg:grid-cols-2">
+          <!-- Certificates -->
+          <div class="reveal-on-scroll achievement-card rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300">
+            <h3 class="mb-4 text-lg font-semibold text-slate-900 dark:text-slate-50">Certificates</h3>
+            <p class="mb-4 text-xs text-slate-500 dark:text-slate-400">Scroll inside each card to preview the PDF. Click to view full screen.</p>
+            <div class="space-y-4">
+              <button type="button" class="overflow-hidden rounded-xl border border-slate-200/80 bg-slate-50/80 text-left dark:border-slate-700 dark:bg-slate-900/60 cursor-pointer w-full achievement-item" data-lightbox-pdf="1.pdf">
+                <div class="flex items-center justify-between px-3 py-2 text-[11px] text-slate-600 dark:text-slate-300">
+                  <span class="font-medium">Certificate 1</span>
+                  <span class="text-slate-400 dark:text-slate-500">PDF preview</span>
+                </div>
+                <iframe src="1.pdf" title="Certificate 1" class="h-40 w-full sm:h-52 pointer-events-none" loading="lazy"></iframe>
+              </button>
+              <button type="button" class="overflow-hidden rounded-xl border border-slate-200/80 bg-slate-50/80 text-left dark:border-slate-700 dark:bg-slate-900/60 cursor-pointer w-full achievement-item" data-lightbox-pdf="2.pdf">
+                <div class="flex items-center justify-between px-3 py-2 text-[11px] text-slate-600 dark:text-slate-300">
+                  <span class="font-medium">Certificate 2</span>
+                  <span class="text-slate-400 dark:text-slate-500">PDF preview</span>
+                </div>
+                <iframe src="2.pdf" title="Certificate 2" class="h-40 w-full sm:h-52 pointer-events-none" loading="lazy"></iframe>
+              </button>
+              <button type="button" class="overflow-hidden rounded-xl border border-slate-200/80 bg-slate-50/80 text-left dark:border-slate-700 dark:bg-slate-900/60 cursor-pointer w-full achievement-item" data-lightbox-pdf="3.pdf">
+                <div class="flex items-center justify-between px-3 py-2 text-[11px] text-slate-600 dark:text-slate-300">
+                  <span class="font-medium">Certificate 3</span>
+                  <span class="text-slate-400 dark:text-slate-500">PDF preview</span>
+                </div>
+                <iframe src="3.pdf" title="Certificate 3" class="h-40 w-full sm:h-52 pointer-events-none" loading="lazy"></iframe>
+              </button>
+            </div>
+          </div>
+          <!-- Competitions -->
+          <div class="reveal-on-scroll achievement-card rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300">
+            <h3 class="mb-4 text-lg font-semibold text-slate-900 dark:text-slate-50">Programming Competitions</h3>
+            <p class="mb-4 text-xs text-slate-500 dark:text-slate-400">Moments from contests and results. Click any image to view it larger.</p>
+            <div class="grid gap-3 sm:grid-cols-2">
+              <figure class="overflow-hidden rounded-xl border border-slate-200/80 bg-slate-900/5 dark:border-slate-800 dark:bg-slate-900/60 cursor-pointer achievement-item" data-lightbox-img="res1.jpg">
+                <img src="res1.jpg" alt="Programming competition photo 1" class="achievement-thumb h-32 w-full object-cover sm:h-40">
+                <figcaption class="px-3 py-2 text-[11px] text-slate-500 dark:text-slate-400">Contest moment 1</figcaption>
+              </figure>
+              <figure class="overflow-hidden rounded-xl border border-slate-200/80 bg-slate-900/5 dark:border-slate-800 dark:bg-slate-900/60 cursor-pointer achievement-item" data-lightbox-img="res2.jpg">
+                <img src="res2.jpg" alt="Programming competition photo 2" class="achievement-thumb h-32 w-full object-cover sm:h-40">
+                <figcaption class="px-3 py-2 text-[11px] text-slate-500 dark:text-slate-400">Contest moment 2</figcaption>
+              </figure>
+              <figure class="overflow-hidden rounded-xl border border-slate-200/80 bg-slate-900/5 dark:border-slate-800 dark:bg-slate-900/60 cursor-pointer achievement-item" data-lightbox-img="res3.jpg">
+                <img src="res3.jpg" alt="Programming competition photo 3" class="achievement-thumb h-32 w-full object-cover sm:h-40">
+                <figcaption class="px-3 py-2 text-[11px] text-slate-500 dark:text-slate-400">Contest moment 3</figcaption>
+              </figure>
+              <figure class="overflow-hidden rounded-xl border border-slate-200/80 bg-slate-900/5 dark:border-slate-800 dark:bg-slate-900/60 cursor-pointer achievement-item" data-lightbox-img="res4.jpg">
+                <img src="res4.jpg" alt="Programming competition photo 4" class="achievement-thumb h-32 w-full object-cover sm:h-40">
+                <figcaption class="px-3 py-2 text-[11px] text-slate-500 dark:text-slate-400">Contest moment 4</figcaption>
+              </figure>
+              <figure class="overflow-hidden rounded-xl border border-slate-200/80 bg-slate-900/5 dark:border-slate-800 dark:bg-slate-900/60 cursor-pointer achievement-item sm:col-span-2" data-lightbox-img="res5.jpg">
+                <img src="res5.jpg" alt="Programming competition photo 5" class="achievement-thumb h-32 w-full object-cover sm:h-48">
+                <figcaption class="px-3 py-2 text-[11px] text-slate-500 dark:text-slate-400">Contest moment 5</figcaption>
+              </figure>
+            </div>
           </div>
         </div>
       </div>
@@ -262,7 +330,7 @@
         </div>
         <div class="grid gap-6 md:grid-cols-3">
           <!-- Languages -->
-          <div class="rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
+          <div class="card-animated rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
             <h3 class="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-slate-50">
               <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200">&lt;/&gt;</span>
               Languages &amp; Stack
@@ -351,7 +419,7 @@
             </div>
           </div>
           <!-- Platforms & Tools -->
-          <div class="rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
+          <div class="card-animated rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
             <h3 class="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-slate-50">
               <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200">🛠</span>
               Platforms &amp; Tools
@@ -389,7 +457,7 @@
             </div>
           </div>
           <!-- Strengths -->
-          <div class="rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
+          <div class="card-animated rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
             <h3 class="mb-3 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-slate-50">
               <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200">📈</span>
               Strengths
@@ -414,7 +482,7 @@
               Have a project in mind or want to collaborate? Reach out—I reply quickly.
             </p>
             <form
-              class="mt-6 flex flex-1 flex-col space-y-4 rounded-2xl border border-slate-200/80 bg-white/90 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80"
+              class="card-animated mt-6 flex flex-1 flex-col space-y-4 rounded-2xl border border-slate-200/80 bg-white/90 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80"
               id="contact-form"
               action="https://formspree.io/f/mdawnzeb"
               method="POST"
@@ -462,7 +530,7 @@
             </form>
           </div>
           <div class="reveal-on-scroll h-full">
-            <div class="flex h-full flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300">
+            <div class="card-animated flex h-full flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300">
               <div>
                 <h3 class="mb-3 text-base font-semibold text-slate-900 dark:text-slate-50">Other ways to reach me</h3>
                 <div class="space-y-2">
@@ -490,6 +558,25 @@
       </div>
     </section>
   </main>
+
+  <!-- Lightbox for certificates and photos -->
+  <div id="lightbox-overlay" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 px-4">
+    <div class="relative flex max-h-[90vh] w-full max-w-5xl flex-col rounded-2xl bg-slate-900/90 p-3 shadow-2xl shadow-black/50">
+      <button
+        id="lightbox-close"
+        type="button"
+        class="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 text-slate-200 hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+      >
+        ✕
+      </button>
+      <div id="lightbox-image-wrapper" class="hidden h-full w-full">
+        <img id="lightbox-image" alt="Lightbox preview" class="h-full w-full max-h-[80vh] rounded-xl object-contain" />
+      </div>
+      <div id="lightbox-pdf-wrapper" class="hidden h-[80vh] w-full">
+        <iframe id="lightbox-pdf" title="Certificate preview" class="h-full w-full rounded-xl bg-white" loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
 
   <!-- Toast notifications -->
   <div id="toast-root" class="pointer-events-none fixed inset-x-0 bottom-4 z-40 flex justify-center px-4 sm:px-6">

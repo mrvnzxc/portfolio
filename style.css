@@ -252,6 +252,45 @@ body.dark-mode section + section {
   transform: translateY(0);
 }
 
+/* Shared card hover animations */
+.card-animated,
+.achievement-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  border-color: rgba(148, 163, 184, 0.35); /* subtle slate border that blends on both themes */
+}
+
+.card-animated:hover,
+.card-animated:focus-within,
+.achievement-card:hover,
+.achievement-card:focus-within {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.35);
+  border-color: rgba(148, 163, 184, 0.8); /* slightly brighter slate, still soft */
+}
+
+.item-animated,
+.achievement-item {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+.item-animated:hover,
+.item-animated:focus-visible,
+.achievement-item:hover,
+.achievement-item:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.3);
+  border-color: rgba(148, 163, 184, 0.8);
+}
+
+.achievement-thumb {
+  transition: transform 0.5s ease;
+}
+
+.achievement-item:hover .achievement-thumb {
+  transform: scale(1.05);
+}
+
 /* Toast animation */
 #toast-content {
   transform: translateY(12px);
