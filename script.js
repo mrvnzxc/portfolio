@@ -185,6 +185,55 @@ if ('IntersectionObserver' in window && revealElements.length > 0) {
   revealElements.forEach((el) => el.classList.add('is-visible'));
 }
 
+// Animated skill bars
+const skillBars = document.querySelectorAll('.skill-bar');
+
+function animateSkillBar(bar) {
+  const percent = parseInt(bar.dataset.percent, 10) || 0;
+  const fill = bar.querySelector('.skill-bar-fill');
+  const label = bar.querySelector('.skill-percentage');
+  let start = null;
+
+  function step(timestamp) {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / 1000, 1); // 1 second
+    const current = Math.floor(progress * percent);
+    if (fill) fill.style.width = `${current}%`;
+    if (label) label.textContent = `${current}%`;
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+if ('IntersectionObserver' in window && skillBars.length > 0) {
+  const barObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const bar = entry.target;
+        const fill = bar.querySelector('.skill-bar-fill');
+        const label = bar.querySelector('.skill-percentage');
+
+        if (entry.isIntersecting) {
+          if (fill) fill.style.width = '0%';
+          if (label) label.textContent = '0%';
+          animateSkillBar(bar);
+        } else {
+          if (fill) fill.style.width = '0%';
+          if (label) label.textContent = '0%';
+        }
+      });
+    },
+    {
+      threshold: 0.4,
+    },
+  );
+
+  skillBars.forEach((bar) => barObserver.observe(bar));
+}
+
 // Simple form validation feedback
 const form = document.getElementById('contact-form');
 const emailInput = document.getElementById('email');
