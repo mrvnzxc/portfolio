@@ -1,0 +1,266 @@
+/* Base styling */
+:root {
+  --gradient-text: linear-gradient(90deg, #0d6efd, #6610f2);
+  --light-bg: radial-gradient(circle at 20% 20%, #f6f8ff, #e9edf5 50%, #e2e8f0);
+  --dark-bg: radial-gradient(circle at 20% 20%, #0b1d3a, #030712 60%);
+  --dark-surface: rgba(255, 255, 255, 0.06);
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--light-bg);
+  color: #0f172a;
+  position: relative;
+  min-height: 100vh;
+}
+
+.text-gradient {
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#typewriter-name {
+  display: inline-block;
+  white-space: nowrap;
+  position: relative;
+}
+
+#typewriter-name::after {
+  content: attr(data-full-text);
+  visibility: hidden;
+  display: block;
+  height: auto;
+}
+
+.pill {
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(13, 110, 253, 0.08);
+  color: #0d6efd;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.profile-wrapper {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(13, 110, 253, 0.15), rgba(102, 16, 242, 0.15));
+  display: grid;
+  place-items: center;
+  padding: 10px;
+}
+
+.profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 6px solid #fff;
+}
+
+.btn {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.btn:hover,
+.btn:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.nav-link {
+  transition: color 0.2s ease, transform 0.2s ease;
+  color: inherit;
+}
+
+/* Legacy navbar styles removed – Tailwind handles layout & colors */
+
+.hover-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hover-card:hover,
+.hover-card:focus-within {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.16);
+}
+
+
+#projects .project-visual {
+  background: linear-gradient(135deg, rgba(13, 110, 253, 0.2), rgba(3, 7, 18, 0.75));
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.biometric-ui {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.fingerprint {
+  height: 120px;
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.35);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent 60%), rgba(255, 255, 255, 0.05);
+}
+
+.face-scan {
+  position: relative;
+  height: 120px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(13, 110, 253, 0.8);
+  animation: scan 3s linear infinite;
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  50% { transform: translateY(100%); }
+  100% { transform: translateY(-100%); }
+}
+
+#contact .form-text {
+  font-size: 0.9rem;
+}
+
+footer a {
+  text-decoration: none;
+}
+
+/* Dark mode */
+body.dark-mode {
+  background: var(--dark-bg);
+  color: #e2e8f0;
+}
+
+body.dark-mode .navbar,
+body.dark-mode .card,
+body.dark-mode .btn-outline-primary,
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  color: #e2e8f0;
+}
+
+body.dark-mode .card,
+body.dark-mode .btn-outline-primary,
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+body.dark-mode .text-secondary,
+body.dark-mode .form-text,
+body.dark-mode footer a,
+body.dark-mode .navbar .nav-link {
+  color: #cbd5e1 !important;
+}
+
+body.dark-mode .pill {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+body.dark-mode .glass-card {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+body.dark-mode .bg-body,
+body.dark-mode .bg-body-tertiary {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+/* Nav menu responsiveness is handled by Tailwind's utility classes */
+
+body.dark-mode .badge.text-bg-light {
+  background: rgba(255, 255, 255, 0.14) !important;
+  color: #fff !important;
+}
+
+/* Floating dust canvas */
+#dust-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  transition: opacity 0.5s ease;
+}
+
+body.dark-mode #dust-canvas {
+  opacity: 0.65;
+}
+
+/* Spacing tweaks */
+section + section {
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+body.dark-mode section + section {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+@media (max-width: 767px) {
+  .profile-wrapper {
+    width: 240px;
+    height: 240px;
+  }
+
+  /* Allow name to wrap on small screens to avoid horizontal scroll */
+  #typewriter-name {
+    white-space: normal;
+    word-break: break-word;
+  }
+}
+
+/* Scroll reveal animations */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Toast animation */
+#toast-content {
+  transform: translateY(12px);
+  opacity: 0;
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+}
+
+#toast-content.toast-show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
