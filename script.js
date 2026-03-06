@@ -21,8 +21,7 @@ function setTheme(isDark) {
   html.classList.toggle('dark', isDark);
   themeToggle.checked = isDark;
   localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  particleColor = isDark ? 'rgba(255,255,255,0.9)' : 'rgba(15,23,42,0.9)';
-  startDust();
+  particleColor = isDark ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,1)';
 }
 
 function resizeCanvas() {
@@ -147,6 +146,7 @@ if (themeToggle) {
 window.addEventListener('resize', resizeCanvas);
 
 setTheme(initialDark);
+startDust();
 
 // Mobile nav toggle
 const navToggle = document.getElementById('nav-toggle');
