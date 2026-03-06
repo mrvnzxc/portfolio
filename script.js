@@ -10,9 +10,9 @@ let animationId = null;
 let particleColor = '#ffffff';
 let toastHideTimeout = null;
 
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 const storedTheme = localStorage.getItem('theme');
-const initialDark = storedTheme ? storedTheme === 'dark' : prefersDark;
+// Default to dark on first visit; afterwards respect saved preference
+const initialDark = storedTheme ? storedTheme === 'dark' : true;
 
 document.getElementById('year').textContent = new Date().getFullYear();
 
