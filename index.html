@@ -78,11 +78,10 @@
 
         <div class="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
           <span>Light</span>
-          <label class="relative inline-flex cursor-pointer items-center">
+          <label class="relative inline-flex h-6 w-11 cursor-pointer items-center">
             <input id="theme-toggle" type="checkbox" class="peer sr-only">
-            <span class="flex h-6 w-11 items-center rounded-full bg-slate-200 px-0.5 transition peer-checked:bg-primary-600 dark:bg-slate-700">
-              <span class="h-5 w-5 rounded-full bg-white shadow-sm ring-1 ring-slate-200 transition peer-checked:translate-x-5 peer-checked:ring-primary-300"></span>
-            </span>
+            <span class="pointer-events-none flex h-6 w-11 items-center rounded-full bg-slate-200 px-0.5 transition peer-checked:bg-primary-600 dark:bg-slate-700" aria-hidden="true"></span>
+            <span class="pointer-events-none absolute left-0.5 top-1/2 h-5 w-5 -translate-y-1/2 rounded-full bg-white shadow-sm ring-1 ring-slate-200 transition peer-checked:translate-x-5 peer-checked:ring-primary-300" aria-hidden="true"></span>
           </label>
           <span>Dark</span>
         </div>

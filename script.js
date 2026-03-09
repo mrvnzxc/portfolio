@@ -19,7 +19,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
 function setTheme(isDark) {
   body.classList.toggle('dark-mode', isDark);
   html.classList.toggle('dark', isDark);
-  themeToggle.checked = isDark;
+  if (themeToggle) themeToggle.checked = isDark;
   localStorage.setItem('theme', isDark ? 'dark' : 'light');
   particleColor = isDark ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,1)';
 }
