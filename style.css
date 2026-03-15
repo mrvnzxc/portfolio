@@ -303,3 +303,23 @@ body.dark-mode section + section {
   transform: translateY(0);
 }
 
+/* Gallery: transform-based infinite carousel */
+.gallery-track {
+  /* No native scrolling; all movement is transform-driven */
+  overflow: visible;
+}
+
+.gallery-image {
+  object-fit: cover;
+  -webkit-user-drag: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+#gallery {
+  scroll-behavior: auto;
+  scroll-snap-type: none;
+}
+
+
+

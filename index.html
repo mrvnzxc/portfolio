@@ -26,6 +26,9 @@
     };
   </script>
 
+  <!-- Iconify for sun/moon icons -->
+  <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
+
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/webp" href="profile.webp">
 </head>
@@ -47,23 +50,37 @@
         </span>
       </a>
 
-      <!-- Mobile nav toggle -->
-      <button
-        id="nav-toggle"
-        type="button"
-        class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-700/40 bg-slate-900/40 text-slate-100 hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 md:hidden"
-        aria-controls="navMenu"
-        aria-expanded="false"
-      >
-        <span class="sr-only">Toggle navigation</span>
-        <span class="flex h-4 w-5 flex-col items-center justify-between">
-          <span class="block h-0.5 w-full rounded-full bg-current"></span>
-          <span class="block h-0.5 w-4 rounded-full bg-current"></span>
-          <span class="block h-0.5 w-3 rounded-full bg-current"></span>
-        </span>
-      </button>
+      <!-- Mobile theme + nav toggle -->
+      <div class="flex items-center gap-2 md:hidden">
+        <button
+          type="button"
+          class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-700 shadow-sm transition hover:bg-slate-100 hover:text-slate-900 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+          aria-label="Toggle light or dark mode"
+          onclick="toggleTheme()"
+        >
+          <span class="inline-flex dark:hidden">
+            <span class="iconify" data-icon="ph:sun-fill" data-inline="false"></span>
+          </span>
+          <span class="hidden dark:inline-flex">
+            <span class="iconify" data-icon="ph:moon-fill" data-inline="false"></span>
+          </span>
+        </button>
+        <button
+          id="nav-toggle"
+          type="button"
+          class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-700/40 bg-slate-900/40 text-slate-100 hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+          aria-controls="navMenu"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Toggle navigation</span>
+          <span class="flex h-4 w-5 flex-col items-center justify-between">
+            <span class="block h-0.5 w-full rounded-full bg-current"></span>
+            <span class="block h-0.5 w-4 rounded-full bg-current"></span>
+            <span class="block h-0.5 w-3 rounded-full bg-current"></span>
+          </span>
+        </button>
+      </div>
 
-      <!-- Nav links + theme toggle -->
       <div
         id="navMenu"
         class="hidden absolute left-0 right-0 top-full z-20 w-full flex-col gap-4 border-b border-slate-200 bg-white/95 px-4 pb-4 pt-3 shadow-sm dark:border-slate-800 dark:bg-slate-900/95 md:static md:z-auto md:flex md:w-auto md:flex-row md:items-center md:gap-6 md:border-none md:bg-transparent md:p-0 md:shadow-none"
@@ -73,18 +90,25 @@
           <li><a href="#projects" class="transition hover:text-primary-600 dark:hover:text-primary-400">Projects</a></li>
           <li><a href="#achievements" class="transition hover:text-primary-600 dark:hover:text-primary-400">Achievements</a></li>
           <li><a href="#skills" class="transition hover:text-primary-600 dark:hover:text-primary-400">Skills</a></li>
-          <li><a href="#contact" class="transition hover:text-primary-600 dark:hover:text-primary-400">Contact</a></li>
+          <li class="flex items-center gap-3">
+            <a href="#contact" class="transition hover:text-primary-600 dark:hover:text-primary-400">Contact</a>
+            <button
+              id="theme-toggle"
+              type="button"
+              class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-700 shadow-sm transition hover:bg-slate-100 hover:text-slate-900 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+              aria-label="Toggle light or dark mode"
+            >
+              <!-- Sun icon (light mode) -->
+              <span class="inline-flex dark:hidden">
+                <span class="iconify" data-icon="ph:sun-fill" data-inline="false"></span>
+              </span>
+              <!-- Moon icon (dark mode) -->
+              <span class="hidden dark:inline-flex">
+                <span class="iconify" data-icon="ph:moon-fill" data-inline="false"></span>
+              </span>
+            </button>
+          </li>
         </ul>
-
-        <div class="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
-          <span>Light</span>
-          <label class="relative inline-flex h-6 w-11 cursor-pointer items-center">
-            <input id="theme-toggle" type="checkbox" class="peer sr-only">
-            <span class="pointer-events-none flex h-6 w-11 items-center rounded-full bg-slate-200 px-0.5 transition peer-checked:bg-primary-600 dark:bg-slate-700" aria-hidden="true"></span>
-            <span class="pointer-events-none absolute left-0.5 top-1/2 h-5 w-5 -translate-y-1/2 rounded-full bg-white shadow-sm ring-1 ring-slate-200 transition peer-checked:translate-x-5 peer-checked:ring-primary-300" aria-hidden="true"></span>
-          </label>
-          <span>Dark</span>
-        </div>
       </div>
     </nav>
   </header>
@@ -98,6 +122,12 @@
           <h1 class="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
             Hello World, I'm <br><span class="text-gradient" id="typewriter-name">John Marvin Bautista</span>
           </h1>
+          <!-- Mobile profile image directly after name -->
+          <div class="mt-6 flex justify-center md:hidden">
+            <div class="profile-wrapper mx-auto shadow-lg shadow-primary-500/20">
+              <img src="profile.webp" alt="Profile photo" class="profile-img">
+            </div>
+          </div>
           <p class="text-lg leading-relaxed text-slate-700 dark:text-slate-200">
             I build reliable, user-focused software that blends clean architecture with thoughtful design. Currently exploring AI-assisted automation and modern web stacks.
           </p>
@@ -128,7 +158,7 @@
             <div class="pill">Based in General Santos</div>
           </div>
         </div>
-        <div class="flex justify-center md:justify-end reveal-on-scroll">
+        <div class="hidden md:flex justify-center md:justify-end reveal-on-scroll">
           <div class="profile-wrapper mx-auto shadow-lg shadow-primary-500/20">
             <img src="profile.webp" alt="Profile photo" class="profile-img">
           </div>
@@ -167,6 +197,43 @@
                 <div>🚀 Goal: Build products that scale with clarity.</div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section
+      id="gallery"
+      class="border-t border-slate-200/70 bg-white/80 py-16 sm:py-20 dark:border-slate-800 dark:bg-slate-900/60"
+    >
+      <div class="mx-auto max-w-6xl px-4">
+        <div class="mb-6 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+          <h2 class="text-3xl font-semibold tracking-tight sm:text-4xl">Gallery</h2>
+          <p class="max-w-md text-sm text-slate-600 dark:text-slate-300">
+            A quick look behind the scenes – moments from building, learning, and shipping.
+          </p>
+        </div>
+
+        <!-- Outer container provides padding and background -->
+        <div
+          id="gallery-container"
+          class="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-50/80 p-4 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/70"
+        >
+          <!-- Fading edges to hint more content -->
+          <div
+            class="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-white via-white/60 to-transparent dark:from-slate-950 dark:via-slate-950/70"
+          ></div>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-white via-white/60 to-transparent dark:from-slate-950 dark:via-slate-950/70"
+          ></div>
+
+          <!-- Draggable, transform-based infinite track (no scrollLeft) -->
+          <div
+            id="gallery-track"
+            class="gallery-track relative flex cursor-grab select-none gap-4 py-2 will-change-transform"
+          >
+            <!-- Images are injected by JavaScript for flexible infinite looping -->
           </div>
         </div>
       </div>
@@ -272,7 +339,6 @@
           <!-- Certificates -->
           <div class="reveal-on-scroll achievement-card rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300">
             <h3 class="mb-4 text-lg font-semibold text-slate-900 dark:text-slate-50">Certificates</h3>
-            <p class="mb-4 text-xs text-slate-500 dark:text-slate-400">Tap a certificate to view it full screen. PDFs are available via the links below each preview.</p>
             <div class="space-y-4">
               <figure class="achievement-item overflow-hidden rounded-xl border border-slate-200/80 bg-slate-50/80 text-left dark:border-slate-700 dark:bg-slate-900/60 cursor-pointer" data-lightbox-img="cert1.png">
                 <img src="cert1.png" alt="Certificate 1" class="achievement-thumb h-40 w-full object-cover sm:h-52">
@@ -300,7 +366,6 @@
           <!-- Competitions -->
           <div class="reveal-on-scroll achievement-card rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300">
             <h3 class="mb-4 text-lg font-semibold text-slate-900 dark:text-slate-50">Programming Competitions</h3>
-            <p class="mb-4 text-xs text-slate-500 dark:text-slate-400">Moments from contests and results. Click any image to view it larger.</p>
             <div class="grid gap-3 sm:grid-cols-2">
               <figure class="overflow-hidden rounded-xl border border-slate-200/80 bg-slate-900/5 dark:border-slate-800 dark:bg-slate-900/60 cursor-pointer achievement-item" data-lightbox-img="res1.jpg">
                 <img src="res1.jpg" alt="Programming competition photo 1" class="achievement-thumb h-32 w-full object-cover sm:h-40">
