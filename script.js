@@ -270,12 +270,16 @@ function showToast({ title, message, variant }) {
     'text-red-50',
   );
 
+  const iconCheck = toastIconEl?.querySelector('.toast-icon-check');
+  const iconError = toastIconEl?.querySelector('.toast-icon-error');
   if (variant === 'error') {
     toastEl.classList.add('border-red-500', 'bg-red-600/95', 'text-red-50');
-    toastIconEl.textContent = '!';
+    if (iconCheck) iconCheck.classList.add('hidden');
+    if (iconError) iconError.classList.remove('hidden');
   } else {
     toastEl.classList.add('border-emerald-500', 'bg-emerald-600/95', 'text-emerald-50');
-    toastIconEl.textContent = '✓';
+    if (iconCheck) iconCheck.classList.remove('hidden');
+    if (iconError) iconError.classList.add('hidden');
   }
 
   toastEl.classList.remove('hidden');

@@ -44,13 +44,13 @@
       >
         <span class="inline-flex h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.85)]"></span>
         <span class="inline-flex items-center gap-1 rounded-full bg-slate-100/80 px-2 py-0.5 dark:bg-slate-900/60">
-          <span class="text-slate-500 dark:text-slate-400">&lt;</span>
+          <span class="iconify text-slate-500 dark:text-slate-400" data-icon="ph:caret-left" data-inline="false"></span>
           <span class="text-gradient">marvin_dev</span>
-          <span class="text-slate-500 dark:text-slate-400">/&gt;</span>
+          <span class="iconify text-slate-500 dark:text-slate-400" data-icon="ph:caret-right" data-inline="false"></span>
         </span>
       </a>
 
-      <!-- Mobile nav toggle (theme toggle handled globally) -->
+      <!-- Mobile: theme left of hamburger (no theme beside Contact in menu) -->
       <div class="flex items-center gap-2 md:hidden">
         <button
           type="button"
@@ -58,7 +58,6 @@
           aria-label="Toggle light or dark mode"
           onclick="toggleTheme()"
         >
-          <!-- Show moon in light mode, sun in dark mode -->
           <span class="inline-flex dark:hidden">
             <span class="iconify" data-icon="ph:moon-fill" data-inline="false"></span>
           </span>
@@ -93,6 +92,20 @@
           <li><a href="#skills" class="transition hover:text-primary-600 dark:hover:text-primary-400">Skills</a></li>
           <li><a href="#contact" class="transition hover:text-primary-600 dark:hover:text-primary-400">Contact</a></li>
         </ul>
+        <!-- Desktop only: theme toggle outside nav list, beside Contact -->
+        <button
+          id="theme-toggle"
+          type="button"
+          class="hidden md:inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-700 shadow-sm transition hover:bg-slate-100 hover:text-slate-900 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+          aria-label="Toggle light or dark mode"
+        >
+          <span class="inline-flex dark:hidden">
+            <span class="iconify" data-icon="ph:moon-fill" data-inline="false"></span>
+          </span>
+          <span class="hidden dark:inline-flex">
+            <span class="iconify" data-icon="ph:sun-fill" data-inline="false"></span>
+          </span>
+        </button>
       </div>
     </nav>
   </header>
@@ -130,10 +143,11 @@
               Contact Me
             </a>
             <a
-              class="inline-flex items-center text-sm font-medium text-primary-700 underline-offset-4 hover:underline dark:text-primary-300"
+              class="inline-flex items-center gap-1 text-sm font-medium text-primary-700 underline-offset-4 hover:underline dark:text-primary-300"
               href="#projects"
             >
-              <span class="mr-1">↓</span>See Projects
+              <span class="iconify" data-icon="ph:arrow-down" data-inline="false"></span>
+              See Projects
             </a>
           </div>
           <div class="mt-5 flex flex-wrap gap-3">
@@ -174,11 +188,26 @@
             <div class="card-animated flex h-full flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80">
               <h3 class="text-xs sm:text-sm font-semibold uppercase tracking-wide text-primary-600">Quick Facts</h3>
               <div class="mt-4 space-y-2 text-sm sm:text-base text-slate-600 dark:text-slate-300">
-                <div>📍 Based in: General Santos City</div>
-                <div>⏰ Timezone: UTC +8</div>
-                <div>🎨 Interests: AI, developer tooling, clean UI</div>
-                <div>🏆 Loves joining programming competitions</div>
-                <div>🚀 Goal: Build products that scale with clarity.</div>
+                <div class="flex items-center gap-2">
+                  <span class="iconify h-4 w-4 text-emerald-500 dark:text-emerald-400" data-icon="ph:map-pin-fill" data-inline="false"></span>
+                  <span>Based in: General Santos City</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="iconify h-4 w-4 text-sky-500 dark:text-sky-400" data-icon="ph:clock-fill" data-inline="false"></span>
+                  <span>Timezone: UTC +8</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="iconify h-4 w-4 text-pink-500 dark:text-pink-400" data-icon="ph:palette-fill" data-inline="false"></span>
+                  <span>Interests: AI, developer tooling, clean UI</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="iconify h-4 w-4 text-amber-500 dark:text-amber-400" data-icon="ph:trophy-fill" data-inline="false"></span>
+                  <span>Loves joining programming competitions</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="iconify h-4 w-4 text-violet-500 dark:text-violet-400" data-icon="ph:rocket-launch-fill" data-inline="false"></span>
+                  <span>Goal: Build products that scale with clarity.</span>
+                </div>
               </div>
             </div>
           </div>
@@ -252,21 +281,21 @@
         <div class="grid gap-6 md:grid-cols-3">
           <div class="hover-card card-animated h-full rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300 reveal-on-scroll">
             <h3 class="mb-2 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-slate-50">
-              <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200">⚙️</span>
+              <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200"><span class="iconify" data-icon="ph:gear-fill" data-inline="false"></span></span>
               Backend &amp; APIs
             </h3>
             <p class="text-sm sm:text-base">Designing reliable REST/GraphQL services, data models, and integrations that stay scalable and secure.</p>
           </div>
           <div class="hover-card card-animated h-full rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300 reveal-on-scroll">
             <h3 class="mb-2 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-slate-50">
-              <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200">💻</span>
+              <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200"><span class="iconify" data-icon="ph:monitor-fill" data-inline="false"></span></span>
               Frontend &amp; UX
             </h3>
             <p class="text-sm sm:text-base">Building responsive, accessible UIs with clean component systems and thoughtful interactions.</p>
           </div>
           <div class="hover-card card-animated h-full rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300 reveal-on-scroll">
             <h3 class="mb-2 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-slate-50">
-              <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200">🤖</span>
+              <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200"><span class="iconify" data-icon="ph:robot-fill" data-inline="false"></span></span>
               Automation &amp; AI
             </h3>
             <p class="text-sm sm:text-base">Automating workflows with Python, OpenCV, and scripts to reduce manual ops and increase reliability.</p>
@@ -351,14 +380,18 @@
           <!-- Languages -->
           <div class="card-animated rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
             <h3 class="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-slate-50">
-              <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200">&lt;/&gt;</span>
+              <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200"><span class="iconify" data-icon="ph:code-fill" data-inline="false"></span></span>
               Languages &amp; Stack
             </h3>
             <div class="space-y-3 text-xs sm:text-sm">
               <!-- Java 80% -->
               <div class="skill-bar" data-percent="80">
-                <div class="flex items-center justify-between">
-                  <span class="font-medium text-slate-800 dark:text-slate-100">Java</span>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="flex items-center gap-2 font-medium text-slate-800 dark:text-slate-100">
+                    <!-- Use the full-color logos set so Java is clearly visible -->
+                    <span class="iconify h-6 w-6 shrink-0" data-icon="logos:java" data-inline="false"></span>
+                    Java
+                  </span>
                   <span class="skill-percentage text-slate-500 dark:text-slate-400">0%</span>
                 </div>
                 <div class="mt-1 h-2 overflow-hidden rounded-full bg-slate-200/80 dark:bg-slate-800">
@@ -367,8 +400,11 @@
               </div>
               <!-- Python 60% -->
               <div class="skill-bar" data-percent="60">
-                <div class="flex items-center justify-between">
-                  <span class="font-medium text-slate-800 dark:text-slate-100">Python</span>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="flex items-center gap-2 font-medium text-slate-800 dark:text-slate-100">
+                    <span class="iconify h-5 w-5 shrink-0 text-[#3776ab]" data-icon="simple-icons:python" data-inline="false"></span>
+                    Python
+                  </span>
                   <span class="skill-percentage text-slate-500 dark:text-slate-400">0%</span>
                 </div>
                 <div class="mt-1 h-2 overflow-hidden rounded-full bg-slate-200/80 dark:bg-slate-800">
@@ -377,28 +413,37 @@
               </div>
               <!-- JavaScript 60% -->
               <div class="skill-bar" data-percent="60">
-                <div class="flex items-center justify-between">
-                  <span class="font-medium text-slate-800 dark:text-slate-100">JavaScript</span>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="flex items-center gap-2 font-medium text-slate-800 dark:text-slate-100">
+                    <span class="iconify h-5 w-5 shrink-0 text-[#f7df1e]" data-icon="simple-icons:javascript" data-inline="false"></span>
+                    JavaScript
+                  </span>
                   <span class="skill-percentage text-slate-500 dark:text-slate-400">0%</span>
                 </div>
                 <div class="mt-1 h-2 overflow-hidden rounded-full bg-slate-200/80 dark:bg-slate-800">
                   <div class="skill-bar-fill h-full rounded-full bg-primary-500/90 dark:bg-primary-400/90" style="width: 0%"></div>
                 </div>
               </div>
-              <!-- PHP 100% -->
+              <!-- PHP 85% -->
               <div class="skill-bar" data-percent="85">
-                <div class="flex items-center justify-between">
-                  <span class="font-medium text-slate-800 dark:text-slate-100">PHP</span>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="flex items-center gap-2 font-medium text-slate-800 dark:text-slate-100">
+                    <span class="iconify h-5 w-5 shrink-0 text-[#777bb4]" data-icon="simple-icons:php" data-inline="false"></span>
+                    PHP
+                  </span>
                   <span class="skill-percentage text-slate-500 dark:text-slate-400">0%</span>
                 </div>
                 <div class="mt-1 h-2 overflow-hidden rounded-full bg-slate-200/80 dark:bg-slate-800">
                   <div class="skill-bar-fill h-full rounded-full bg-primary-500/90 dark:bg-primary-400/90" style="width: 0%"></div>
                 </div>
               </div>
-              <!-- MySQL 100% -->
+              <!-- MySQL 70% -->
               <div class="skill-bar" data-percent="70">
-                <div class="flex items-center justify-between">
-                  <span class="font-medium text-slate-800 dark:text-slate-100">MySQL</span>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="flex items-center gap-2 font-medium text-slate-800 dark:text-slate-100">
+                    <span class="iconify h-5 w-5 shrink-0 text-[#00618a]" data-icon="simple-icons:mysql" data-inline="false"></span>
+                    MySQL
+                  </span>
                   <span class="skill-percentage text-slate-500 dark:text-slate-400">0%</span>
                 </div>
                 <div class="mt-1 h-2 overflow-hidden rounded-full bg-slate-200/80 dark:bg-slate-800">
@@ -407,8 +452,11 @@
               </div>
               <!-- Nuxt / Vue 60% -->
               <div class="skill-bar" data-percent="60">
-                <div class="flex items-center justify-between">
-                  <span class="font-medium text-slate-800 dark:text-slate-100">Nuxt / Vue</span>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="flex items-center gap-2 font-medium text-slate-800 dark:text-slate-100">
+                    <span class="iconify h-5 w-5 shrink-0 text-[#00dc82]" data-icon="simple-icons:nuxtdotjs" data-inline="false"></span>
+                    Nuxt / Vue
+                  </span>
                   <span class="skill-percentage text-slate-500 dark:text-slate-400">0%</span>
                 </div>
                 <div class="mt-1 h-2 overflow-hidden rounded-full bg-slate-200/80 dark:bg-slate-800">
@@ -417,8 +465,11 @@
               </div>
               <!-- Tailwind CSS 70% -->
               <div class="skill-bar" data-percent="70">
-                <div class="flex items-center justify-between">
-                  <span class="font-medium text-slate-800 dark:text-slate-100">Tailwind CSS</span>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="flex items-center gap-2 font-medium text-slate-800 dark:text-slate-100">
+                    <span class="iconify h-5 w-5 shrink-0 text-[#38bdf8]" data-icon="simple-icons:tailwindcss" data-inline="false"></span>
+                    Tailwind CSS
+                  </span>
                   <span class="skill-percentage text-slate-500 dark:text-slate-400">0%</span>
                 </div>
                 <div class="mt-1 h-2 overflow-hidden rounded-full bg-slate-200/80 dark:bg-slate-800">
@@ -427,8 +478,11 @@
               </div>
               <!-- PostgreSQL 50% -->
               <div class="skill-bar" data-percent="50">
-                <div class="flex items-center justify-between">
-                  <span class="font-medium text-slate-800 dark:text-slate-100">PostgreSQL</span>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="flex items-center gap-2 font-medium text-slate-800 dark:text-slate-100">
+                    <span class="iconify h-5 w-5 shrink-0 text-[#4169e1]" data-icon="simple-icons:postgresql" data-inline="false"></span>
+                    PostgreSQL
+                  </span>
                   <span class="skill-percentage text-slate-500 dark:text-slate-400">0%</span>
                 </div>
                 <div class="mt-1 h-2 overflow-hidden rounded-full bg-slate-200/80 dark:bg-slate-800">
@@ -440,7 +494,7 @@
           <!-- Platforms & Tools -->
           <div class="card-animated rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
             <h3 class="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-slate-50">
-              <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200">🛠</span>
+              <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200"><span class="iconify" data-icon="ph:wrench-fill" data-inline="false"></span></span>
               Platforms &amp; Tools
             </h3>
             <div class="space-y-3 text-xs sm:text-sm">
@@ -478,7 +532,7 @@
           <!-- Strengths -->
           <div class="card-animated rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
             <h3 class="mb-3 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-slate-50">
-              <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200">📈</span>
+              <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200"><span class="iconify" data-icon="ph:trend-up-fill" data-inline="false"></span></span>
               Strengths
             </h3>
             <ul class="space-y-2 text-base text-slate-600 dark:text-slate-300">
@@ -554,15 +608,15 @@
                 <h3 class="mb-3 text-base font-semibold text-slate-900 dark:text-slate-50">Other ways to reach me</h3>
                 <div class="space-y-2">
                   <div class="flex items-center gap-2">
-                    <span class="text-primary-600 dark:text-primary-300">✉️</span>
+                    <span class="iconify h-5 w-5 text-emerald-500 dark:text-emerald-400" data-icon="ph:envelope-simple-fill" data-inline="false"></span>
                     <span>johnmarvinbautista@gmail.com</span>
                   </div>
                   <div class="flex items-center gap-2">
-                    <span class="text-primary-600 dark:text-primary-300">📞</span>
+                    <span class="iconify h-5 w-5 text-sky-500 dark:text-sky-400" data-icon="ph:phone-fill" data-inline="false"></span>
                     <span>+63 909 695 3266</span>
                   </div>
                   <div class="flex items-center gap-2">
-                    <span class="text-primary-600 dark:text-primary-300">🐙</span>
+                    <span class="iconify h-5 w-5 text-slate-900 dark:text-slate-100" data-icon="ph:github-logo-fill" data-inline="false"></span>
                     <span>github.com/mrvnzxc</span>
                   </div>
                 </div>
@@ -585,8 +639,9 @@
         id="lightbox-close"
         type="button"
         class="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 text-slate-200 hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+        aria-label="Close"
       >
-        ✕
+        <span class="iconify" data-icon="ph:x" data-inline="false"></span>
       </button>
       <div id="lightbox-image-wrapper" class="hidden h-full w-full">
         <img id="lightbox-image" alt="Lightbox preview" class="h-full w-full max-h-[80vh] rounded-xl object-contain" />
@@ -604,7 +659,7 @@
       class="pointer-events-auto hidden max-w-md rounded-xl border border-emerald-500 bg-emerald-600/95 px-4 py-3 text-sm text-emerald-50 shadow-lg shadow-emerald-900/40 dark:border-emerald-400 dark:bg-emerald-600/95"
     >
       <div class="flex items-start gap-3">
-        <span id="toast-icon" class="mt-0.5 text-lg">✓</span>
+        <span id="toast-icon" class="mt-0.5 flex items-center text-lg" aria-hidden="true"><span class="iconify toast-icon-check" data-icon="ph:check-circle-fill" data-inline="false"></span><span class="iconify toast-icon-error hidden" data-icon="ph:warning-circle-fill" data-inline="false"></span></span>
         <div>
           <p id="toast-title" class="text-sm font-semibold">Message sent</p>
           <p id="toast-message" class="mt-0.5 text-xs text-emerald-100">
