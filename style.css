@@ -233,17 +233,17 @@ body.dark-mode section + section {
 }
 
 .nav-toggle.is-open .nav-toggle-bar--top {
-  transform: translateY(6px) rotate(45deg);
+  transform: translateY(-2px);
+  width: 100%;
 }
 
 .nav-toggle.is-open .nav-toggle-bar--mid {
-  opacity: 0;
-  transform: translateX(6px);
+  transform: scaleX(0.7);
 }
 
 .nav-toggle.is-open .nav-toggle-bar--bottom {
+  transform: translateY(2px);
   width: 100%;
-  transform: translateY(-6px) rotate(-45deg);
 }
 
 @media (max-width: 767px) {
