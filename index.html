@@ -68,15 +68,15 @@
         <button
           id="nav-toggle"
           type="button"
-          class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-700/40 bg-slate-900/40 text-slate-100 hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+          class="nav-toggle inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-700/40 bg-slate-900/40 text-slate-100 transition-transform duration-200 hover:scale-[1.04] hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           aria-controls="navMenu"
           aria-expanded="false"
         >
           <span class="sr-only">Toggle navigation</span>
-          <span class="flex h-4 w-5 flex-col items-center justify-between">
-            <span class="block h-0.5 w-full rounded-full bg-current"></span>
-            <span class="block h-0.5 w-4 rounded-full bg-current"></span>
-            <span class="block h-0.5 w-3 rounded-full bg-current"></span>
+          <span class="nav-toggle-bars flex h-4 w-5 flex-col items-center justify-between">
+            <span class="nav-toggle-bar nav-toggle-bar--top block h-0.5 w-full rounded-full bg-current"></span>
+            <span class="nav-toggle-bar nav-toggle-bar--mid block h-0.5 w-4 rounded-full bg-current"></span>
+            <span class="nav-toggle-bar nav-toggle-bar--bottom block h-0.5 w-3 rounded-full bg-current"></span>
           </span>
         </button>
       </div>

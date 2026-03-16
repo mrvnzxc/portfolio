@@ -159,8 +159,10 @@ const navMenu = document.getElementById('navMenu');
 if (navToggle && navMenu) {
   navToggle.addEventListener('click', () => {
     const isOpen = !navMenu.classList.contains('hidden');
+    const nextIsOpen = !isOpen;
     navMenu.classList.toggle('hidden', isOpen);
-    navToggle.setAttribute('aria-expanded', String(!isOpen));
+    navToggle.setAttribute('aria-expanded', String(nextIsOpen));
+    navToggle.classList.toggle('is-open', nextIsOpen);
   });
 }
 

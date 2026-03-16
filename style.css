@@ -227,6 +227,25 @@ body.dark-mode section + section {
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.nav-toggle-bar {
+  transition: transform 0.22s ease, opacity 0.22s ease, width 0.22s ease;
+  transform-origin: center;
+}
+
+.nav-toggle.is-open .nav-toggle-bar--top {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.nav-toggle.is-open .nav-toggle-bar--mid {
+  opacity: 0;
+  transform: translateX(6px);
+}
+
+.nav-toggle.is-open .nav-toggle-bar--bottom {
+  width: 100%;
+  transform: translateY(-6px) rotate(-45deg);
+}
+
 @media (max-width: 767px) {
   .profile-wrapper {
     width: 240px;
