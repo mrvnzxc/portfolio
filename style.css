@@ -251,7 +251,11 @@ body.dark-mode section + section {
 }
 
 .nav-menu.nav-menu--open {
-  animation: navMenuDrop 0.35s ease-out;
+  animation: navMenuDrop 0.35s ease-out forwards;
+}
+
+.nav-menu.nav-menu--closing {
+  animation: navMenuClose 0.3s ease-in forwards;
 }
 
 @keyframes navMenuDrop {
@@ -262,6 +266,17 @@ body.dark-mode section + section {
   100% {
     opacity: 1;
     transform: translateY(0) scaleY(1);
+  }
+}
+
+@keyframes navMenuClose {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-6px) scaleY(0.98);
   }
 }
 

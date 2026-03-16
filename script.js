@@ -157,21 +157,43 @@ const navToggle = document.getElementById('nav-toggle');
 const navMenu = document.getElementById('navMenu');
 
 if (navToggle && navMenu) {
+  function openNavMenu() {
+    navMenu.classList.remove('hidden', 'nav-menu--closing');
+    // Retrigger drop animation each time it opens
+    navMenu.classList.remove('nav-menu--open');
+    // Force reflow so animation restarts
+    // eslint-disable-next-line no-unused-expressions
+    navMenu.offsetHeight;
+    navMenu.classList.add('nav-menu--open');
+    navToggle.classList.add('is-open');
+    navToggle.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeNavMenu() {
+    // If already hidden, nothing to do
+    if (navMenu.classList.contains('hidden')) return;
+
+    navMenu.classList.remove('nav-menu--open');
+    navMenu.classList.add('nav-menu--closing');
+    navToggle.classList.remove('is-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+
+    const handleAnimationEnd = (event) => {
+      if (event.target !== navMenu) return;
+      navMenu.classList.add('hidden');
+      navMenu.classList.remove('nav-menu--closing');
+      navMenu.removeEventListener('animationend', handleAnimationEnd);
+    };
+
+    navMenu.addEventListener('animationend', handleAnimationEnd);
+  }
+
   navToggle.addEventListener('click', () => {
-    const isOpen = !navMenu.classList.contains('hidden');
-    const nextIsOpen = !isOpen;
-    navMenu.classList.toggle('hidden', isOpen);
-    navToggle.setAttribute('aria-expanded', String(nextIsOpen));
-    navToggle.classList.toggle('is-open', nextIsOpen);
-    if (nextIsOpen) {
-      // Retrigger drop animation each time it opens
-      navMenu.classList.remove('nav-menu--open');
-      // Force reflow so animation restarts
-      // eslint-disable-next-line no-unused-expressions
-      navMenu.offsetHeight;
-      navMenu.classList.add('nav-menu--open');
+    const isCurrentlyHidden = navMenu.classList.contains('hidden');
+    if (isCurrentlyHidden) {
+      openNavMenu();
     } else {
-      navMenu.classList.remove('nav-menu--open');
+      closeNavMenu();
     }
   });
 
@@ -183,10 +205,7 @@ if (navToggle && navMenu) {
     const isCurrentlyOpen = !navMenu.classList.contains('hidden');
 
     if (isCurrentlyOpen && !isClickInsideMenu && !isClickOnToggle) {
-      navMenu.classList.add('hidden');
-      navMenu.classList.remove('nav-menu--open');
-      navToggle.classList.remove('is-open');
-      navToggle.setAttribute('aria-expanded', 'false');
+      closeNavMenu();
     }
   });
 }
