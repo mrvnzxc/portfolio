@@ -251,7 +251,7 @@ body.dark-mode section + section {
 }
 
 .nav-menu.nav-menu--open {
-  animation: navMenuDrop 0.2s ease-out;
+  animation: navMenuDrop 0.35s ease-out;
 }
 
 @keyframes navMenuDrop {
