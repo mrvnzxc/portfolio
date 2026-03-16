@@ -163,6 +163,31 @@ if (navToggle && navMenu) {
     navMenu.classList.toggle('hidden', isOpen);
     navToggle.setAttribute('aria-expanded', String(nextIsOpen));
     navToggle.classList.toggle('is-open', nextIsOpen);
+    if (nextIsOpen) {
+      // Retrigger drop animation each time it opens
+      navMenu.classList.remove('nav-menu--open');
+      // Force reflow so animation restarts
+      // eslint-disable-next-line no-unused-expressions
+      navMenu.offsetHeight;
+      navMenu.classList.add('nav-menu--open');
+    } else {
+      navMenu.classList.remove('nav-menu--open');
+    }
+  });
+
+  // Close menu when clicking outside on mobile
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    const isClickInsideMenu = navMenu.contains(target);
+    const isClickOnToggle = navToggle.contains(target);
+    const isCurrentlyOpen = !navMenu.classList.contains('hidden');
+
+    if (isCurrentlyOpen && !isClickInsideMenu && !isClickOnToggle) {
+      navMenu.classList.add('hidden');
+      navMenu.classList.remove('nav-menu--open');
+      navToggle.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
   });
 }
 

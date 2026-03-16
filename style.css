@@ -246,6 +246,25 @@ body.dark-mode section + section {
   width: 100%;
 }
 
+.nav-menu {
+  transform-origin: top;
+}
+
+.nav-menu.nav-menu--open {
+  animation: navMenuDrop 0.2s ease-out;
+}
+
+@keyframes navMenuDrop {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px) scaleY(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
+
 @media (max-width: 767px) {
   .profile-wrapper {
     width: 240px;
