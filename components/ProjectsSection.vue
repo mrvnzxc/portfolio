@@ -5,7 +5,7 @@
         <h2 class="mb-1 text-3xl font-semibold tracking-tight sm:text-4xl">Featured Project</h2>
         <span class="self-end text-right text-xs sm:self-auto sm:text-left sm:text-sm font-semibold uppercase tracking-wide text-primary-600">Built &amp; shipped</span>
       </div>
-      <article class="hover-card card-animated overflow-hidden rounded-2xl border border-slate-200/80 bg-white/90 shadow-lg shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
+      <article class="hover-card card-animated overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-50/80 shadow-lg shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
         <div class="grid gap-0 md:grid-cols-[minmax(0,1.6fr)_minmax(0,1.1fr)]">
           <div class="space-y-4 p-6 sm:p-8">
             <h3 class="text-2xl font-semibold tracking-tight">Payroll &amp; Attendance Automation</h3>
@@ -29,7 +29,7 @@
             </div>
           </div>
           <aside class="border-t border-slate-200/80 bg-slate-50/80 p-6 dark:border-slate-800 dark:bg-slate-900/70 md:border-l md:border-t-0 md:p-8">
-            <div class="flex h-full flex-col justify-between rounded-2xl border border-slate-200/70 bg-white/80 p-5 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-700 dark:bg-slate-900/80 dark:text-slate-300">
+            <div class="flex h-full flex-col justify-between rounded-2xl border border-slate-200/70 bg-slate-50/70 p-5 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-700 dark:bg-slate-900/80 dark:text-slate-300">
               <div>
                 <h4 class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Highlight outcomes</h4>
                 <ul class="mt-3 space-y-2">

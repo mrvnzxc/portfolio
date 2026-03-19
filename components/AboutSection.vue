@@ -1,5 +1,5 @@
 <template>
-  <section id="about" class="border-t border-slate-200/70 bg-white/80 py-16 sm:py-20 dark:border-slate-800 dark:bg-slate-900/60">
+  <section id="about" class="border-t border-slate-200/70 bg-slate-50/70 py-16 sm:py-20 dark:border-slate-800 dark:bg-slate-900/60">
     <div class="mx-auto max-w-6xl px-4">
       <div class="grid gap-12 md:grid-cols-[minmax(0,1.7fr)_minmax(0,1.1fr)] md:items-center">
         <div class="reveal-on-scroll">
@@ -19,7 +19,7 @@
           </ul>
         </div>
         <div class="h-full reveal-on-scroll">
-          <div class="card-animated flex h-full flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80">
+          <div class="card-animated flex h-full flex-col justify-between rounded-2xl border border-slate-200/80 bg-slate-50/70 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80">
             <h3 class="text-xs sm:text-sm font-semibold uppercase tracking-wide text-primary-600">Quick Facts</h3>
             <div class="mt-4 space-y-2 text-sm sm:text-base text-slate-600 dark:text-slate-300">
               <div class="flex items-center gap-2">

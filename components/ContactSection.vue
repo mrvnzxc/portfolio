@@ -5,7 +5,7 @@
         <div class="reveal-on-scroll flex h-full flex-col">
           <h2 class="text-3xl font-semibold tracking-tight sm:text-4xl">Contact Me</h2>
           <p class="mt-3 text-base leading-relaxed text-slate-600 dark:text-slate-300">Have a project in mind or want to collaborate? Reach out—I reply quickly.</p>
-          <form class="card-animated mt-6 flex flex-1 flex-col space-y-4 rounded-2xl border border-slate-200/80 bg-white/90 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80" novalidate @submit.prevent="submitForm">
+          <form class="card-animated mt-6 flex flex-1 flex-col space-y-4 rounded-2xl border border-slate-200/80 bg-slate-50/80 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80" novalidate @submit.prevent="submitForm">
             <div class="space-y-1">
               <label for="name" class="block text-sm font-medium text-slate-800 dark:text-slate-100">Name</label>
               <NeonBorderReveal color="#22d3ee" :duration="1.3" class="rounded-lg">
@@ -14,7 +14,7 @@
                   v-model="form.name"
                   required
                   placeholder="Your name"
-                  class="block w-full rounded-lg border-2 border-transparent bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 transition placeholder:text-slate-400 focus:border-transparent focus-visible:ring-2 focus-visible:ring-cyan-400/60 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-500 dark:shadow-slate-950/20"
+                  class="block w-full rounded-lg border-2 border-transparent bg-slate-50/80 px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 transition placeholder:text-slate-400 focus:border-transparent focus-visible:ring-2 focus-visible:ring-cyan-400/60 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-500 dark:shadow-slate-950/20"
                 >
               </NeonBorderReveal>
             </div>
@@ -27,7 +27,7 @@
                   type="email"
                   required
                   placeholder="you@example.com"
-                  class="block w-full rounded-lg border-2 border-transparent bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 transition placeholder:text-slate-400 focus:border-transparent focus-visible:ring-2 focus-visible:ring-cyan-400/60 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-500 dark:shadow-slate-950/20"
+                  class="block w-full rounded-lg border-2 border-transparent bg-slate-50/80 px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 transition placeholder:text-slate-400 focus:border-transparent focus-visible:ring-2 focus-visible:ring-cyan-400/60 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-500 dark:shadow-slate-950/20"
                 >
               </NeonBorderReveal>
             </div>
@@ -40,7 +40,7 @@
                   rows="4"
                   required
                   placeholder="Tell me about your project"
-                  class="block w-full resize-none rounded-lg border-2 border-transparent bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 transition placeholder:text-slate-400 focus:border-transparent focus-visible:ring-2 focus-visible:ring-cyan-400/60 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-500 dark:shadow-slate-950/20"
+                  class="block w-full resize-none rounded-lg border-2 border-transparent bg-slate-50/80 px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 transition placeholder:text-slate-400 focus:border-transparent focus-visible:ring-2 focus-visible:ring-cyan-400/60 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-500 dark:shadow-slate-950/20"
                 ></textarea>
               </NeonBorderReveal>
             </div>
@@ -48,7 +48,7 @@
           </form>
         </div>
         <div class="reveal-on-scroll h-full">
-          <div class="card-animated flex h-full flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300">
+        <div class="card-animated flex h-full flex-col justify-between rounded-2xl border border-slate-200/80 bg-slate-50/70 p-6 text-sm text-slate-600 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300">
             <div>
               <h3 class="mb-3 text-base font-semibold text-slate-900 dark:text-slate-50">Other ways to reach me</h3>
               <div class="space-y-2">

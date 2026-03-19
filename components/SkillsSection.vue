@@ -1,12 +1,12 @@
 <template>
-  <section id="skills" class="border-t border-slate-200/70 bg-white/80 py-16 sm:py-20 dark:border-slate-800 dark:bg-slate-900/60">
+  <section id="skills" class="border-t border-slate-200/70 bg-slate-50/70 py-16 sm:py-20 dark:border-slate-800 dark:bg-slate-900/60">
     <div class="mx-auto max-w-6xl px-4">
       <div class="mb-4 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 reveal-on-scroll">
         <h2 class="mb-1 text-3xl font-semibold tracking-tight sm:text-4xl">Comfortable With</h2>
         <span class="self-end text-right text-xs sm:self-auto sm:text-left sm:text-sm font-semibold uppercase tracking-wide text-primary-600">Daily drivers</span>
       </div>
       <div class="grid gap-6 md:grid-cols-3">
-        <div class="card-animated rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
+        <div class="card-animated rounded-2xl border border-slate-200/80 bg-slate-50/70 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
           <h3 class="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-slate-50">
             <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200"><Icon icon="ph:code-fill" /></span>
             Languages &amp; Stack
@@ -27,7 +27,7 @@
           </div>
         </div>
 
-        <div class="card-animated rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
+        <div class="card-animated rounded-2xl border border-slate-200/80 bg-slate-50/70 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
           <h3 class="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-slate-50">
             <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200"><Icon icon="ph:wrench-fill" /></span>
             Platforms &amp; Tools
@@ -65,7 +65,7 @@
           </div>
         </div>
 
-        <div class="card-animated rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
+        <div class="card-animated rounded-2xl border border-slate-200/80 bg-slate-50/70 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80 reveal-on-scroll">
           <h3 class="mb-3 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-slate-50">
             <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200"><Icon icon="ph:trend-up-fill" /></span>
             Strengths

@@ -6,7 +6,7 @@
         <span class="self-end text-right text-xs sm:self-auto sm:text-left sm:text-sm font-semibold uppercase tracking-wide text-primary-600">Certificates &amp; contests</span>
       </div>
       <div class="grid gap-8 lg:grid-cols-2">
-        <div class="reveal-on-scroll achievement-card rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300">
+        <div class="reveal-on-scroll achievement-card rounded-2xl border border-slate-200/80 bg-slate-50/70 p-6 text-sm text-slate-600 shadow-sm dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300">
           <h3 class="mb-4 text-lg font-semibold text-slate-900 dark:text-slate-50">Certificates</h3>
           <div class="space-y-4">
             <NeonBorderReveal
@@ -52,7 +52,7 @@
             </NeonBorderReveal>
           </div>
         </div>
-        <div class="reveal-on-scroll achievement-card rounded-2xl border border-slate-200/80 bg-white/80 p-6 text-sm text-slate-600 shadow-sm dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300">
+        <div class="reveal-on-scroll achievement-card rounded-2xl border border-slate-200/80 bg-slate-50/70 p-6 text-sm text-slate-600 shadow-sm dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300">
           <h3 class="mb-4 text-lg font-semibold text-slate-900 dark:text-slate-50">Programming Competitions</h3>
           <div class="grid gap-3 sm:grid-cols-2">
             <NeonBorderReveal
