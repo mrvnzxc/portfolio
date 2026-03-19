@@ -31,6 +31,11 @@ body {
   background: var(--light-bg);
 }
 
+html.dark .light-bg,
+body.dark-mode .light-bg {
+  background: var(--dark-bg);
+}
+
 .text-gradient {
   background: var(--gradient-text);
   -webkit-background-clip: text;
