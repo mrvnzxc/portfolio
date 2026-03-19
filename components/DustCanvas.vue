@@ -33,7 +33,7 @@ onMounted(() => {
 
   const createParticles = () => {
     const area = viewportWidth * viewportHeight
-    const count = Math.max(220, Math.min(560, Math.floor(area / 7000)))
+    const count = Math.max(150, Math.min(390, Math.floor(area / 10000)))
     particles.length = 0
     for (let i = 0; i < count; i += 1) {
       particles.push({
@@ -85,7 +85,7 @@ onMounted(() => {
       }
     })
 
-    if (now - lastShootingStarTime > 1600 && Math.random() > 0.2) {
+    if (shootingStars.length === 0 && now - lastShootingStarTime > 2600 && Math.random() > 0.45) {
       spawnShootingStar()
       lastShootingStarTime = now
     }
@@ -117,10 +117,6 @@ onMounted(() => {
 
   resizeCanvas()
   createParticles()
-  spawnShootingStar()
-  setTimeout(() => spawnShootingStar(), 450)
-  setTimeout(() => spawnShootingStar(), 900)
-  setTimeout(() => spawnShootingStar(), 1400)
   animationId = requestAnimationFrame(draw)
 
   const handleResize = () => {
