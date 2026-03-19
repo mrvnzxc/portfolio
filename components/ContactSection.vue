@@ -8,15 +8,41 @@
           <form class="card-animated mt-6 flex flex-1 flex-col space-y-4 rounded-2xl border border-slate-200/80 bg-white/90 p-6 shadow-sm shadow-slate-950/5 dark:border-slate-800 dark:bg-slate-900/80" novalidate @submit.prevent="submitForm">
             <div class="space-y-1">
               <label for="name" class="block text-sm font-medium text-slate-800 dark:text-slate-100">Name</label>
-              <input id="name" v-model="form.name" required placeholder="Your name" class="block w-full rounded-lg border-2 border-fuchsia-400/75 bg-white px-3 py-2 text-sm text-slate-900 shadow-[0_0_0_1px_rgba(244,114,182,0.2),0_0_20px_rgba(217,70,239,0.16)] outline-none ring-0 transition placeholder:text-slate-400 focus:border-violet-500 focus:shadow-[0_0_0_1px_rgba(168,85,247,0.35),0_0_26px_rgba(168,85,247,0.26)] dark:border-cyan-300/80 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-500 dark:shadow-[0_0_0_1px_rgba(34,211,238,0.28),0_0_24px_rgba(34,211,238,0.22)] dark:focus:border-cyan-200 dark:focus:shadow-[0_0_0_1px_rgba(103,232,249,0.4),0_0_28px_rgba(103,232,249,0.3)]">
+              <NeonBorderReveal color="#22d3ee" :duration="1.3" class="rounded-lg">
+                <input
+                  id="name"
+                  v-model="form.name"
+                  required
+                  placeholder="Your name"
+                  class="block w-full rounded-lg border-2 border-transparent bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 transition placeholder:text-slate-400 focus:border-transparent focus-visible:ring-2 focus-visible:ring-cyan-400/60 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-500 dark:shadow-slate-950/20"
+                >
+              </NeonBorderReveal>
             </div>
             <div class="space-y-1">
               <label for="email" class="block text-sm font-medium text-slate-800 dark:text-slate-100">Email</label>
-              <input id="email" v-model="form.email" type="email" required placeholder="you@example.com" class="block w-full rounded-lg border-2 border-fuchsia-400/75 bg-white px-3 py-2 text-sm text-slate-900 shadow-[0_0_0_1px_rgba(244,114,182,0.2),0_0_20px_rgba(217,70,239,0.16)] outline-none ring-0 transition placeholder:text-slate-400 focus:border-violet-500 focus:shadow-[0_0_0_1px_rgba(168,85,247,0.35),0_0_26px_rgba(168,85,247,0.26)] dark:border-cyan-300/80 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-500 dark:shadow-[0_0_0_1px_rgba(34,211,238,0.28),0_0_24px_rgba(34,211,238,0.22)] dark:focus:border-cyan-200 dark:focus:shadow-[0_0_0_1px_rgba(103,232,249,0.4),0_0_28px_rgba(103,232,249,0.3)]">
+              <NeonBorderReveal color="#22d3ee" :duration="1.3" class="rounded-lg">
+                <input
+                  id="email"
+                  v-model="form.email"
+                  type="email"
+                  required
+                  placeholder="you@example.com"
+                  class="block w-full rounded-lg border-2 border-transparent bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 transition placeholder:text-slate-400 focus:border-transparent focus-visible:ring-2 focus-visible:ring-cyan-400/60 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-500 dark:shadow-slate-950/20"
+                >
+              </NeonBorderReveal>
             </div>
             <div class="space-y-1">
               <label for="message" class="block text-sm font-medium text-slate-800 dark:text-slate-100">Message</label>
-              <textarea id="message" v-model="form.message" rows="4" required placeholder="Tell me about your project" class="block w-full rounded-lg border-2 border-fuchsia-400/75 bg-white px-3 py-2 text-sm text-slate-900 shadow-[0_0_0_1px_rgba(244,114,182,0.2),0_0_20px_rgba(217,70,239,0.16)] outline-none ring-0 transition placeholder:text-slate-400 focus:border-violet-500 focus:shadow-[0_0_0_1px_rgba(168,85,247,0.35),0_0_26px_rgba(168,85,247,0.26)] dark:border-cyan-300/80 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-500 dark:shadow-[0_0_0_1px_rgba(34,211,238,0.28),0_0_24px_rgba(34,211,238,0.22)] dark:focus:border-cyan-200 dark:focus:shadow-[0_0_0_1px_rgba(103,232,249,0.4),0_0_28px_rgba(103,232,249,0.3)]"></textarea>
+              <NeonBorderReveal color="#22d3ee" :duration="1.3" class="rounded-lg">
+                <textarea
+                  id="message"
+                  v-model="form.message"
+                  rows="4"
+                  required
+                  placeholder="Tell me about your project"
+                  class="block w-full resize-none rounded-lg border-2 border-transparent bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 transition placeholder:text-slate-400 focus:border-transparent focus-visible:ring-2 focus-visible:ring-cyan-400/60 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-500 dark:shadow-slate-950/20"
+                ></textarea>
+              </NeonBorderReveal>
             </div>
             <button type="submit" class="inline-flex w-full items-center justify-center rounded-lg bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm ring-1 ring-transparent transition hover:-translate-y-0.5 hover:bg-primary-500 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900">Send Message</button>
           </form>
