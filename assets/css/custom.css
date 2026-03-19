@@ -5,7 +5,9 @@
 /* Base styling */
 :root {
   --gradient-text: linear-gradient(90deg, #0d6efd, #6610f2);
-  --light-bg: radial-gradient(circle at 22% 18%, #f3f8ff 0%, #dfeaff 45%, #c5d9ff 100%);
+  --light-bg:
+    radial-gradient(circle at 18% 12%, #deeeff 0%, #cfe2ff 35%, rgba(188, 213, 255, 0.86) 62%, rgba(170, 203, 255, 0.5) 100%),
+    linear-gradient(180deg, #e7f1ff 0%, #cfe2ff 100%);
   --dark-bg: radial-gradient(circle at 20% 20%, #0b1d3a, #030712 60%);
   --dark-surface: rgba(255, 255, 255, 0.06);
 }
@@ -28,7 +30,9 @@ body {
 }
 
 .light-bg {
+  background-color: #d8e8ff;
   background: var(--light-bg);
+  background-attachment: fixed;
 }
 
 html.dark .light-bg,
@@ -223,12 +227,18 @@ body.dark-mode .badge.text-bg-light {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.4;
+  opacity: 0.68;
   transition: opacity 0.5s ease;
 }
 
 body.dark-mode #dust-canvas {
-  opacity: 0.65;
+  opacity: 0.72;
+}
+
+@media (min-width: 1400px) {
+  #dust-canvas {
+    opacity: 0.78;
+  }
 }
 
 /* Spacing tweaks */
