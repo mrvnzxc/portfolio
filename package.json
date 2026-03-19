@@ -1,0 +1,17 @@
+{
+  "name": "portfolio-nuxt",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview"
+  },
+  "dependencies": {
+    "@iconify/vue": "latest",
+    "nuxt": "latest"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "latest"
+  }
+}

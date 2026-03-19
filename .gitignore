@@ -18,3 +18,10 @@ pnpm-debug.log*
 
 # Ignore markdown docs in this repo
 *.md
+
+# Build and tool caches
+.cache/
+.eslintcache
+dist/
+coverage/
+*.tsbuildinfo
