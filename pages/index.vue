@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-h-screen text-slate-900 dark:text-slate-50">
+  <div class="light-bg relative min-h-screen text-slate-900 dark:bg-slate-950 dark:text-slate-50">
     <DustCanvas />
     <AppHeader />
     <main>
@@ -19,6 +19,7 @@
 
 <script setup lang="ts">
 import { onMounted, useHead, watch } from '#imports'
+import HeroSection from '~/components/HeroSection.vue'
 import { useLightbox } from '~/composables/useLightbox'
 import { useScrollReveal } from '~/composables/useScrollReveal'
 import { useTheme } from '~/composables/useTheme'
