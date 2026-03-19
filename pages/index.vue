@@ -28,7 +28,16 @@ const { openImage } = useLightbox()
 const { observeElements } = useScrollReveal()
 const { isDark } = useTheme()
 
-useHead({ htmlAttrs: { class: 'scroll-smooth' } })
+useHead({
+  htmlAttrs: { class: 'scroll-smooth' },
+  script: [
+    {
+      id: 'theme-init',
+      innerHTML:
+        "(function(){try{var t=localStorage.getItem('theme');var dark=(t==='light'||t==='dark')?t==='dark':true;document.documentElement.classList.toggle('dark',dark);var setBody=function(){if(document.body){document.body.classList.toggle('dark-mode',dark);}};if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',setBody,{once:true});}else{setBody();}}catch(e){document.documentElement.classList.add('dark');if(document.body){document.body.classList.add('dark-mode');}}})();"
+    }
+  ]
+})
 
 watch(isDark, () => {
   // keep canvas and dark classes in sync reactively
