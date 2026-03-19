@@ -1,5 +1,5 @@
 <template>
-  <section id="contact" class="border-t border-slate-200/70 bg-white/80 py-16 sm:py-20 dark:border-slate-800 dark:bg-slate-900/60">
+  <section id="contact" class="border-t border-slate-200/70 py-16 sm:py-20 dark:border-slate-800">
     <div class="mx-auto max-w-6xl px-4">
       <div class="grid gap-12 items-stretch lg:grid-cols-2">
         <div class="reveal-on-scroll flex h-full flex-col">
