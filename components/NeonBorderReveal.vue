@@ -7,16 +7,12 @@
     <svg
       v-if="isMounted"
       ref="svgRef"
-      class="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
+      class="nb-svg-layer pointer-events-none absolute inset-0 h-full w-full overflow-visible"
+      :class="{ 'nb-svg-glow': props.glow }"
       :aria-hidden="true"
       role="presentation"
       :viewBox="svgViewBox"
       preserveAspectRatio="none"
-      :style="{
-        filter: props.glow
-          ? 'drop-shadow(0 0 6px var(--nb-glow)) drop-shadow(0 0 18px var(--nb-glow))'
-          : 'none',
-      }"
     >
       <path
         ref="pathRef"
@@ -71,6 +67,9 @@ const rootStyle = computed(() => ({
 
 let observer: IntersectionObserver | null = null
 let resizeObserver: ResizeObserver | null = null
+let resizeDebounceTimer: number | undefined
+let lastSyncedW = 0
+let lastSyncedH = 0
 
 let dashLength = 0
 let isInView = false
@@ -123,15 +122,26 @@ function buildRoundedRectPath(opts: { w: number; h: number; r: number }) {
   ].join(' ')
 }
 
-function syncPathGeometry() {
+function syncPathGeometry(): boolean {
   const rootEl = rootRef.value
   const pathEl = pathRef.value
   const svgEl = svgRef.value
-  if (!rootEl || !pathEl || !svgEl) return
+  if (!rootEl || !pathEl || !svgEl) return false
 
   const rect = rootEl.getBoundingClientRect()
   // If the element is not measurable yet, avoid NaNs.
-  if (rect.width <= 0 || rect.height <= 0) return
+  if (rect.width <= 0 || rect.height <= 0) return false
+
+  // Skip subpixel / toolbar jitter during scroll (ResizeObserver can fire often on mobile).
+  if (
+    lastSyncedW > 0 &&
+    Math.abs(rect.width - lastSyncedW) < 1 &&
+    Math.abs(rect.height - lastSyncedH) < 1
+  ) {
+    return false
+  }
+  lastSyncedW = rect.width
+  lastSyncedH = rect.height
 
   const style = window.getComputedStyle(rootEl)
   const borderRadiusPx = parseFloat(style.borderTopLeftRadius || '0') || 0
@@ -154,6 +164,8 @@ function syncPathGeometry() {
     // Ensure we start hidden (pre-reveal).
     applyHiddenState()
   })
+
+  return true
 }
 
 function applyHiddenState() {
@@ -305,19 +317,28 @@ onMounted(() => {
 
   // Keep the SVG path matching border-radius and size.
   if ('ResizeObserver' in window && rootRef.value) {
-    resizeObserver = new ResizeObserver(() => {
-      // Avoid interrupting a playing stroke.
+    const runResizeSync = () => {
       if (isAnimating) return
-      syncPathGeometry()
-      // Restore intended state after geometry updates.
+      if (!syncPathGeometry()) return
       if (isComplete && isInView) nextTick(() => applyCompleteState())
       else nextTick(() => applyHiddenState())
+    }
+
+    resizeObserver = new ResizeObserver(() => {
+      if (isAnimating) return
+      window.clearTimeout(resizeDebounceTimer)
+      resizeDebounceTimer = window.setTimeout(() => {
+        resizeDebounceTimer = undefined
+        runResizeSync()
+      }, 120)
     })
     resizeObserver.observe(rootRef.value)
   }
 })
 
 onBeforeUnmount(() => {
+  window.clearTimeout(resizeDebounceTimer)
+  resizeDebounceTimer = undefined
   observer?.disconnect()
   observer = null
   resizeObserver?.disconnect()
@@ -332,6 +353,21 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+.nb-svg-layer {
+  transform: translateZ(0);
+}
+
+.nb-svg-glow {
+  filter: drop-shadow(0 0 6px var(--nb-glow)) drop-shadow(0 0 18px var(--nb-glow));
+}
+
+@media (max-width: 768px) {
+  .nb-svg-glow {
+    /* One lighter shadow — fewer filter passes, much cheaper while scrolling. */
+    filter: drop-shadow(0 0 5px var(--nb-glow));
+  }
+}
+
 .nb-border-path {
   stroke-dasharray: 0;
   stroke-dashoffset: 0;
@@ -356,6 +392,23 @@ onBeforeUnmount(() => {
   100% {
     filter: drop-shadow(0 0 7px var(--nb-glow)) drop-shadow(0 0 16px var(--nb-glow));
     opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .nb-pulse-once {
+    /* Avoid animating filter (heavy); quick opacity tick reads as a pulse. */
+    animation: nbNeonPulseMobile 500ms ease-out 1 both;
+  }
+}
+
+@keyframes nbNeonPulseMobile {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.88;
   }
 }
 

@@ -31,6 +31,21 @@ onMounted(() => {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
   }
 
+  /** Keep distribution when the viewport resizes (mobile URL bar, rotation) — do not re-randomize. */
+  const remapParticlesToViewport = (prevW: number, prevH: number) => {
+    if (prevW <= 0 || prevH <= 0) return
+    const sx = viewportWidth / prevW
+    const sy = viewportHeight / prevH
+    particles.forEach((p) => {
+      p.x *= sx
+      p.y *= sy
+    })
+    shootingStars.forEach((s) => {
+      s.x *= sx
+      s.y *= sy
+    })
+  }
+
   const createParticles = () => {
     const area = viewportWidth * viewportHeight
     const count = Math.max(150, Math.min(390, Math.floor(area / 10000)))
@@ -120,8 +135,10 @@ onMounted(() => {
   animationId = requestAnimationFrame(draw)
 
   const handleResize = () => {
+    const prevW = viewportWidth
+    const prevH = viewportHeight
     resizeCanvas()
-    createParticles()
+    remapParticlesToViewport(prevW, prevH)
   }
 
   window.addEventListener('resize', handleResize)
