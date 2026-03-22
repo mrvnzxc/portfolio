@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/custom.css'],
   app: {
     head: {
-      title: 'My Portfolio',
+      title: 'John Marvin Bautista | Portfolio',
       link: [{ rel: 'icon', type: 'image/webp', href: '/profile.webp' }]
     }
   },
