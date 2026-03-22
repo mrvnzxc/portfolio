@@ -1,5 +1,5 @@
 <template>
-  <header id="top-nav" class="sticky top-0 z-30 border-b border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/50 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/80 dark:shadow-none">
+  <header id="top-nav" class="sticky top-0 z-30 border-b border-slate-200/80 bg-white/70 shadow-sm shadow-slate-200/50 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/80 dark:shadow-none">
     <nav ref="navRoot" class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
       <a href="#hero" class="inline-flex items-center gap-2 rounded-full border border-slate-300/80 bg-slate-50/90 px-3 py-1 text-sm font-mono text-slate-900 shadow-sm shadow-slate-200/80 dark:border-slate-700/60 dark:bg-slate-900/80 dark:text-slate-100 dark:shadow-slate-900/60">
         <span class="inline-flex h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.85)]"></span>
