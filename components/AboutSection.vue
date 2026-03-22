@@ -1,5 +1,5 @@
 <template>
-  <section id="about" class="border-t border-slate-200/70 bg-slate-50/70 py-16 sm:py-20 dark:border-slate-800 dark:bg-slate-900/60">
+  <section id="about" class="section-band-a">
     <div class="mx-auto max-w-6xl px-4">
       <div class="grid gap-12 md:grid-cols-[minmax(0,1.7fr)_minmax(0,1.1fr)] md:items-center">
         <div class="reveal-on-scroll">

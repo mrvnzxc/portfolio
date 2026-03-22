@@ -1,5 +1,5 @@
 <template>
-  <section id="projects" class="py-16 sm:py-20">
+  <section id="projects" class="section-band-a">
     <div class="mx-auto max-w-6xl px-4">
       <div class="mb-4 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 reveal-on-scroll">
         <h2 class="mb-1 text-3xl font-semibold tracking-tight sm:text-4xl">Featured Project</h2>

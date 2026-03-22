@@ -2,6 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Alternating stripes: A = white / slate-900 tint, B = sky / slate-950 tint. Both use alpha so fixed #dust-canvas shows through—no extra star layers. */
+@layer components {
+  .section-band-a {
+    @apply border-t border-slate-200/70 py-16 sm:py-20 dark:border-slate-800;
+    background-color: rgb(255 255 255 / 0.62);
+  }
+
+  .dark .section-band-a {
+    background-color: rgb(15 23 42 / 0.52);
+  }
+
+  .section-band-b {
+    @apply border-t border-slate-200/70 py-16 sm:py-20 dark:border-slate-800;
+    background-color: rgb(240 249 255 / 0.6);
+  }
+
+  .dark .section-band-b {
+    background-color: rgb(2 6 23 / 0.55);
+  }
+
+  .section-band-b-first {
+    @apply py-16 sm:py-20;
+    background-color: rgb(240 249 255 / 0.6);
+  }
+
+  .dark .section-band-b-first {
+    background-color: rgb(2 6 23 / 0.55);
+  }
+
+  .footer-band-b {
+    @apply border-t border-slate-200/80 py-6 text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400;
+    background-color: rgb(240 249 255 / 0.6);
+  }
+
+  .dark .footer-band-b {
+    background-color: rgb(2 6 23 / 0.55);
+  }
+}
+
 /* Base styling */
 :root {
   --gradient-text: linear-gradient(90deg, #0d6efd, #6610f2);
@@ -221,24 +260,34 @@ body.dark-mode .badge.text-bg-light {
   color: #fff !important;
 }
 
-/* Floating dust canvas */
+/* Floating dust canvas — sits under main (z-index) so translucent stripes can show particles */
 #dust-canvas {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.68;
+  opacity: 0.92;
   transition: opacity 0.5s ease;
 }
 
 body.dark-mode #dust-canvas {
-  opacity: 0.72;
+  opacity: 0.97;
 }
 
 @media (min-width: 1400px) {
   #dust-canvas {
-    opacity: 0.78;
+    opacity: 0.95;
   }
+
+  body.dark-mode #dust-canvas {
+    opacity: 1;
+  }
+}
+
+/* Stack page content above the dust layer; transparent areas reveal the canvas */
+main {
+  position: relative;
+  z-index: 1;
 }
 
 /* Spacing tweaks */
@@ -377,5 +426,15 @@ body.dark-mode section + section {
 #toast-content.toast-show {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Horizontal gallery: hide scrollbar, keep scroll */
+.gallery-x-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.gallery-x-scroll::-webkit-scrollbar {
+  display: none;
 }
 

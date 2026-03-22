@@ -57,7 +57,8 @@ onMounted(() => {
         r: Math.random() * 1.8 + 0.7,
         vx: (Math.random() - 0.5) * 0.3,
         vy: (Math.random() - 0.5) * 0.3,
-        alpha: Math.random() * 0.55 + 0.35
+        /* base alpha; draw() boosts light vs dark for visibility */
+        alpha: Math.random() * 0.4 + 0.45
       })
     }
   }
@@ -82,13 +83,16 @@ onMounted(() => {
     if (!canvas.value) return
 
     ctx.clearRect(0, 0, viewportWidth, viewportHeight)
-    const particleColor = document.body.classList.contains('dark-mode') ? 'rgba(255,255,255,0.92)' : 'rgba(30,58,138,0.95)'
-    ctx.fillStyle = particleColor
+    const isDark = document.body.classList.contains('dark-mode')
+    /* Light: near-black specks on pale bands; dark: bright white “stardust” */
+    ctx.fillStyle = isDark ? 'rgba(255,255,255,0.99)' : 'rgba(15,23,42,0.98)'
 
     particles.forEach((particle) => {
-      ctx.globalAlpha = particle.alpha
+      const boost = isDark ? 1.22 : 1.35
+      ctx.globalAlpha = Math.min(1, particle.alpha * boost)
+      const radius = isDark ? particle.r * 1.12 : particle.r * 1.08
       ctx.beginPath()
-      ctx.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2)
+      ctx.arc(particle.x, particle.y, radius, 0, Math.PI * 2)
       ctx.fill()
 
       particle.x += particle.vx
@@ -107,12 +111,18 @@ onMounted(() => {
 
     ctx.globalAlpha = 1
     shootingStars.forEach((star, index) => {
-      const isDark = document.body.classList.contains('dark-mode')
       const gradient = ctx.createLinearGradient(star.x, star.y, star.x - star.vx * 4, star.y - star.vy * 4)
-      gradient.addColorStop(0, isDark ? 'rgba(255,255,255,0.98)' : 'rgba(15,23,42,0.98)')
-      gradient.addColorStop(1, 'rgba(148,163,184,0)')
+      if (isDark) {
+        gradient.addColorStop(0, 'rgba(255,255,255,1)')
+        gradient.addColorStop(0.35, 'rgba(224,242,254,0.85)')
+        gradient.addColorStop(1, 'rgba(148,163,184,0)')
+      } else {
+        gradient.addColorStop(0, 'rgba(15,23,42,0.98)')
+        gradient.addColorStop(0.4, 'rgba(30,41,59,0.55)')
+        gradient.addColorStop(1, 'rgba(148,163,184,0)')
+      }
       ctx.strokeStyle = gradient
-      ctx.lineWidth = isDark ? 2.2 : 2.5
+      ctx.lineWidth = isDark ? 2.65 : 2.85
       ctx.beginPath()
       ctx.moveTo(star.x, star.y)
       ctx.lineTo(star.x - star.vx * (star.length / 10), star.y - star.vy * (star.length / 10))

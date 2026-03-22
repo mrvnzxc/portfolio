@@ -1,5 +1,5 @@
 <template>
-  <section id="achievements" class="border-t border-slate-200/70 py-16 sm:py-20 dark:border-slate-800">
+  <section id="achievements" class="section-band-a">
     <div class="mx-auto max-w-6xl px-4">
       <div class="mb-4 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 reveal-on-scroll">
         <h2 class="mb-1 text-3xl font-semibold tracking-tight sm:text-4xl">Achievements</h2>

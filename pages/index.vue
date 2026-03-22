@@ -5,6 +5,7 @@
     <main>
       <HeroSection />
       <AboutSection />
+      <GallerySection />
       <ProjectsSection />
       <ServicesSection />
       <AchievementsSection @open-image="openImage" />

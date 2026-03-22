@@ -18,7 +18,7 @@
         ref="pathRef"
         class="nb-border-path"
         :d="pathD"
-        :stroke="color"
+        :stroke="effectiveColor"
         fill="none"
         stroke-linejoin="round"
         stroke-linecap="round"
@@ -30,10 +30,13 @@
 
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
+import { useTheme } from '~/composables/useTheme'
 
 const props = withDefaults(
   defineProps<{
     color?: string
+    /** Used in light mode when set; dark mode always uses `color`. */
+    lightColor?: string
     duration?: number
     glow?: boolean
   }>(),
@@ -43,6 +46,14 @@ const props = withDefaults(
     glow: true,
   },
 )
+
+const { isDark } = useTheme()
+
+const effectiveColor = computed(() => {
+  if (isDark.value) return props.color
+  if (props.lightColor != null && props.lightColor !== '') return props.lightColor
+  return props.color
+})
 
 const attrs = useAttrs()
 
@@ -59,10 +70,10 @@ const paddingPx = computed(() => strokeWidthPx / 2)
 
 const rootStyle = computed(() => ({
   ...(typeof attrs.style === 'object' && attrs.style ? (attrs.style as Record<string, string>) : {}),
-  '--nb-color': props.color,
+  '--nb-color': effectiveColor.value,
   '--nb-duration': `${Math.max(0.05, props.duration)}s`,
   // Support user CSS that might read --nb-glow directly.
-  '--nb-glow': props.color,
+  '--nb-glow': effectiveColor.value,
 }))
 
 let observer: IntersectionObserver | null = null

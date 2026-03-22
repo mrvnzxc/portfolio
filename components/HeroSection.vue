@@ -1,5 +1,5 @@
 <template>
-    <section id="hero" class="py-16 sm:py-20">
+    <section id="hero" class="section-band-b-first">
       <div class="mx-auto flex max-w-6xl flex-col items-center gap-12 px-4 md:flex-row md:items-center md:justify-between">
         <div class="max-w-xl space-y-4 sm:space-y-5 reveal-on-scroll">
           <p class="text-base sm:text-lg font-semibold uppercase tracking-wide text-primary-600">Full-Stack Developer</p>
