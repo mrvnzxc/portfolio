@@ -55,6 +55,32 @@
   scroll-behavior: smooth;
 }
 
+/* Global scrollbar theme (matches projects modal) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(103, 232, 249, 0.98) rgba(2, 6, 23, 0.92);
+}
+
+*::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+*::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, rgba(2, 6, 23, 0.96), rgba(15, 23, 42, 0.94));
+  border-left: 1px solid rgba(30, 41, 59, 0.8);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(165, 243, 252, 0.98), rgba(34, 211, 238, 0.98));
+  border-radius: 999px;
+  border: 2px solid rgba(2, 6, 23, 0.9);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(207, 250, 254, 1), rgba(103, 232, 249, 1));
+}
+
 html,
 body {
   max-width: 100%;
