@@ -8,7 +8,7 @@
 
     </div>
 
-    <div class="reveal-on-scroll">
+    <div class="mx-auto max-w-6xl px-4 reveal-on-scroll">
       <div
         ref="scrollerRef"
         class="gallery-x-scroll w-full cursor-grab touch-pan-x overflow-x-auto scroll-smooth pb-6 pt-2 selection:bg-transparent active:cursor-grabbing md:select-none"
@@ -20,7 +20,7 @@
         @pointercancel="onPointerUp"
         @pointerleave="onPointerLeave"
       >
-        <div class="mx-auto flex w-max gap-6 px-4 sm:px-6 md:gap-8 md:px-10">
+        <div class="mx-auto flex w-max gap-6 px-1 sm:px-2 md:gap-8 md:px-3">
         <div
           v-for="(item, idx) in displayItems"
           :key="item.key"
@@ -30,12 +30,13 @@
           <button
             type="button"
             :ref="(el) => setCardRef(el, idx)"
-            class="gallery-glass-card group relative flex min-w-[250px] flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-50/80 p-3 text-left shadow-sm shadow-slate-950/5 outline-none backdrop-blur-md transition-[transform,opacity,filter,box-shadow] duration-300 ease-out focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-white/10 dark:bg-white/5 dark:shadow-lg dark:shadow-black/25 dark:backdrop-blur-lg dark:focus-visible:ring-offset-slate-950 md:min-w-[260px] md:p-2.5 lg:min-w-[280px] dark:shadow-cyan-950/20"
+            class="gallery-glass-card group relative flex min-w-[220px] flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-50/80 p-3 text-left shadow-sm shadow-slate-950/5 outline-none backdrop-blur-md transition-[transform,opacity,filter,box-shadow] duration-300 ease-out focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-white/10 dark:bg-white/5 dark:shadow-lg dark:shadow-black/25 dark:backdrop-blur-lg dark:focus-visible:ring-offset-slate-950 md:min-w-[235px] md:p-2.5 lg:min-w-[250px] dark:shadow-cyan-950/20"
             :class="cardStateClass(idx)"
+            @pointerdown.stop
             @click="onCardActivate(item.logicalIndex)"
           >
             <div
-              class="relative flex h-[260px] w-full items-center justify-center sm:h-[300px] md:h-[280px] lg:h-[300px]"
+              class="relative flex h-[220px] w-full items-center justify-center sm:h-[250px] md:h-[240px] lg:h-[250px]"
             >
               <img
                 :src="item.src"
@@ -43,7 +44,7 @@
                 draggable="false"
                 loading="lazy"
                 decoding="async"
-                class="gallery-strip-img pointer-events-none max-h-full max-w-full object-contain object-center transition-[filter] duration-300 select-none"
+                class="gallery-strip-img pointer-events-none mx-auto max-h-[90%] max-w-[90%] object-contain object-center transition-[filter] duration-300 select-none"
                 :class="
                   idx === centeredSlotIndex
                     ? 'brightness-[1.03] contrast-[1.02] dark:brightness-110'
@@ -166,9 +167,9 @@ const cardStateClass = (idx: number) => {
   const isCenter = idx === centeredSlotIndex.value
   return [
     isCenter
-      ? 'scale-105 opacity-100 z-[1]'
-      : 'scale-100 z-0 opacity-100 dark:opacity-[0.72]',
-    'group-hover:scale-[1.06] group-hover:opacity-100 group-hover:shadow-md group-hover:shadow-primary-500/15 dark:group-hover:shadow-[0_0_20px_rgba(0,255,255,0.3)]'
+      ? 'scale-100 opacity-100 z-[1]'
+      : 'scale-100 z-0 opacity-100 dark:opacity-[0.8]',
+    'group-hover:opacity-100 group-hover:shadow-md group-hover:shadow-primary-500/15 dark:group-hover:shadow-[0_0_20px_rgba(0,255,255,0.3)]'
   ]
 }
 
