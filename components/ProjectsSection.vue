@@ -112,7 +112,7 @@
         />
         <Icon
           icon="ph:meteor-fill"
-          class="pointer-events-none absolute left-[34%] -bottom-3 z-20 text-[52px] text-amber-300 drop-shadow-[0_0_14px_rgba(252,211,77,0.45)]"
+          class="pointer-events-none absolute left-[34%] -bottom-3 z-10 text-[52px] text-amber-300 drop-shadow-[0_0_14px_rgba(252,211,77,0.45)]"
           aria-hidden="true"
         />
         <Icon
