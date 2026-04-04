@@ -3,6 +3,10 @@
     <ClientOnly>
       <WarpLoader v-if="showWarpLoader" @complete="onWarpComplete" />
     </ClientOnly>
+    <!--
+      Intro uses opacity only (no transform). Transform on this wrapper would break
+      position:fixed #dust-canvas inside the page — it would stick to the hero band.
+    -->
     <div
       class="portfolio-reveal min-h-screen"
       :class="portfolioRevealClass"
@@ -22,9 +26,9 @@ const minimumTimerElapsed = ref(false)
 
 const portfolioRevealClass = computed(() => {
   if (portfolioVisible.value) {
-    return 'portfolio-reveal--in pointer-events-auto opacity-100 translate-y-0'
+    return 'portfolio-reveal--in pointer-events-auto opacity-100'
   }
-  return 'pointer-events-none select-none opacity-0 translate-y-[20px]'
+  return 'pointer-events-none select-none opacity-0'
 })
 
 onMounted(() => {
@@ -55,7 +59,7 @@ function onWarpComplete() {
 
 <style scoped>
 .portfolio-reveal {
-  transition-property: opacity, transform;
+  transition-property: opacity;
   transition-duration: 1.85s;
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -64,10 +68,6 @@ function onWarpComplete() {
   .portfolio-reveal {
     transition-duration: 0.4s;
     transition-timing-function: ease-out;
-  }
-
-  .portfolio-reveal:not(.portfolio-reveal--in) {
-    transform: translate3d(0, 0, 0);
   }
 }
 </style>
