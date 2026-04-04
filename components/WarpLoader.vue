@@ -126,7 +126,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 const emit = defineEmits<{ complete: [] }>()
 
 /** Minimum time before warp collapse + reveal (ms). */
-const MIN_WARP_MS = 3000
+const MIN_WARP_MS = 4250
 /** Post-warp: flash + fade out (ms). */
 const ARRIVAL_MS = 900
 
