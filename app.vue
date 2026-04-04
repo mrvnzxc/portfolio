@@ -23,6 +23,7 @@ const showWarpLoader = ref(true)
 const portfolioVisible = ref(false)
 const warpSequenceDone = ref(false)
 const minimumTimerElapsed = ref(false)
+const introContentReady = useIntroContentReady()
 
 const portfolioRevealClass = computed(() => {
   if (portfolioVisible.value) {
@@ -46,6 +47,7 @@ watch([warpSequenceDone, minimumTimerElapsed], ([warp, min]) => {
       requestAnimationFrame(() => {
         window.setTimeout(() => {
           portfolioVisible.value = true
+          introContentReady.value = true
         }, 72)
       })
     })

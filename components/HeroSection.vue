@@ -19,16 +19,19 @@
   </template>
   <script setup lang="ts">
   import { Icon } from '@iconify/vue'
-  import { onMounted, ref } from 'vue'
-  
+  import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+
   const fullName = 'John Marvin Bautista'
-  const name = ref(fullName)
-  onMounted(() => {
+  /** Empty until warp handoff; avoids typing under the loader or a full-name flash. */
+  const name = ref('')
+  const introContentReady = useIntroContentReady()
+
+  function runTypewriter() {
     let currentIndex = 0
     let isDeleting = false
     const typeSpeed = 100
     name.value = ''
-  
+
     const tick = () => {
       if (!isDeleting && currentIndex < fullName.length) {
         name.value = fullName.substring(0, currentIndex + 1)
@@ -48,7 +51,25 @@
         setTimeout(tick, 500)
       }
     }
-  
+
     tick()
+  }
+
+  onMounted(() => {
+    if (introContentReady.value) {
+      runTypewriter()
+      return
+    }
+    const stop = watch(
+      introContentReady,
+      (ready) => {
+        if (ready) {
+          stop()
+          runTypewriter()
+        }
+      },
+      { immediate: true }
+    )
+    onBeforeUnmount(stop)
   })
   </script>
