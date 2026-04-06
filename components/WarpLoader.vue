@@ -45,7 +45,7 @@
       Entering Hyperspace...
     </p>
 
-    <!-- Spaceship + thruster (winged silhouette — reads as craft, not a single arrow) -->
+    <!-- Spaceship + thruscter (winged silhouette — reads as craft, not a single arrow) -->
     <div
       class="pointer-events-none relative z-10 mb-[min(8vh,4rem)] flex flex-col items-center"
       :style="shipLiftStyle"
