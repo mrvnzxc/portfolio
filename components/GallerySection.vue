@@ -6,9 +6,23 @@
         <span class="self-end text-right text-xs sm:self-auto sm:text-left sm:text-sm font-semibold uppercase tracking-wide text-primary-600">Moments</span>
       </div>
 
-    </div>
-
-    <div class="reveal-on-scroll">
+    <div class="reveal-on-scroll relative">
+      <button
+        type="button"
+        class="absolute left-1 top-1/2 z-20 hidden -translate-y-1/2 items-center justify-center rounded-full border border-slate-300/80 bg-white/90 p-2.5 text-slate-700 shadow-md shadow-slate-900/10 backdrop-blur-sm transition hover:border-primary-400/50 hover:bg-white hover:text-primary-700 sm:left-2 sm:flex md:p-3 dark:border-white/15 dark:bg-slate-900/90 dark:text-slate-100 dark:hover:border-cyan-400/40 dark:hover:bg-slate-800"
+        aria-label="Scroll gallery left"
+        @click="scrollGalleryStrip(-1)"
+      >
+        <Icon icon="ph:caret-left" class="h-6 w-6 md:h-7 md:w-7" />
+      </button>
+      <button
+        type="button"
+        class="absolute right-1 top-1/2 z-20 hidden -translate-y-1/2 items-center justify-center rounded-full border border-slate-300/80 bg-white/90 p-2.5 text-slate-700 shadow-md shadow-slate-900/10 backdrop-blur-sm transition hover:border-primary-400/50 hover:bg-white hover:text-primary-700 sm:right-2 sm:flex md:p-3 dark:border-white/15 dark:bg-slate-900/90 dark:text-slate-100 dark:hover:border-cyan-400/40 dark:hover:bg-slate-800"
+        aria-label="Scroll gallery right"
+        @click="scrollGalleryStrip(1)"
+      >
+        <Icon icon="ph:caret-right" class="h-6 w-6 md:h-7 md:w-7" />
+      </button>
       <div
         ref="scrollerRef"
         class="gallery-x-scroll w-full cursor-grab touch-pan-x overflow-x-auto scroll-smooth pb-6 pt-2 selection:bg-transparent active:cursor-grabbing md:select-none"
@@ -20,7 +34,7 @@
         @pointercancel="onPointerUp"
         @pointerleave="onPointerLeave"
       >
-        <div class="mx-auto flex w-max gap-6 px-4 sm:px-6 md:gap-8 md:px-10">
+        <div class="mx-auto flex w-max gap-6 md:gap-8">
         <div
           v-for="(item, idx) in displayItems"
           :key="item.key"
@@ -55,6 +69,7 @@
           </button>
         </div>
       </div>
+    </div>
     </div>
     </div>
 
@@ -111,7 +126,8 @@ import {
   onBeforeUnmount,
   onMounted,
   ref,
-  watch
+  watch,
+  type ComponentPublicInstance
 } from 'vue'
 
 const baseImages = [
@@ -142,8 +158,17 @@ const displayItems = computed(() => {
 const scrollerRef = ref<HTMLElement | null>(null)
 const cardRefs = ref<(HTMLElement | null)[]>([])
 
-const setCardRef = (el: Element | null, idx: number) => {
-  cardRefs.value[idx] = el as HTMLElement | null
+const setCardRef = (
+  el: Element | ComponentPublicInstance | null,
+  idx: number
+) => {
+  const node =
+    el instanceof HTMLElement
+      ? el
+      : el && '$el' in el && el.$el instanceof HTMLElement
+        ? el.$el
+        : null
+  cardRefs.value[idx] = node
 }
 
 const segmentWidth = ref(0)
@@ -236,6 +261,9 @@ const onScrollerScroll = () => {
 
 const onPointerDown = (e: PointerEvent) => {
   if (e.pointerType === 'touch') return
+  const target = e.target as HTMLElement | null
+  if (target?.closest('button')) return
+
   const el = scrollerRef.value
   if (!el) return
 
@@ -297,6 +325,15 @@ const onCardActivate = (logicalIndex: number) => {
   if (suppressClick.value) return
   lightboxIndex.value = logicalIndex
   lightboxOpen.value = true
+}
+
+const scrollGalleryStrip = (dir: number) => {
+  const el = scrollerRef.value
+  if (!el) return
+  const firstCard = cardRefs.value.find((c) => c != null)
+  const gap = 24
+  const step = firstCard ? firstCard.offsetWidth + gap : 300
+  el.scrollBy({ left: dir * step, behavior: 'smooth' })
 }
 
 const closeLightbox = () => {
