@@ -1,5 +1,5 @@
 <template>
-  <section id="projects" class="section-band-a featured-projects">
+  <section id="projects" ref="projectsSectionRef" class="section-band-a featured-projects pb-2 sm:pb-3">
     <div class="mx-auto max-w-6xl px-4">
       <header class="mb-10 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
@@ -9,21 +9,26 @@
 
       </header>
 
-      <div class="space-y-12 sm:space-y-16 lg:space-y-20">
+      <div class="project-stack" :style="{ '--project-count': visibleProjects.length }">
+        <div class="project-stage">
         <article
-          v-for="(project, index) in projects"
+          v-for="(project, index) in visibleProjects"
           :key="project.title"
-          :data-index="index"
-          :ref="setCardRef"
-          class="project-reveal group relative cursor-pointer overflow-hidden rounded-2xl border border-slate-200/80 bg-white/95 shadow-[0_24px_55px_rgba(15,23,42,0.12)] ring-1 ring-white/50 transition-[opacity,transform,box-shadow] duration-700 ease-out dark:border-white/10 dark:bg-slate-950/95 dark:shadow-[0_0_18px_rgba(56,189,248,0.08)] dark:ring-cyan-300/10"
-          :class="{ 'is-visible': revealed[index] }"
-          tabindex="0"
-          role="button"
-          :aria-label="`Open details for ${project.title}`"
-          @click="openProject(project)"
-          @keydown.enter.prevent="openProject(project)"
-          @keydown.space.prevent="openProject(project)"
+          class="project-stack-item"
+          :style="getProjectLayerStyle(index)"
         >
+          <div
+            :data-index="index"
+            :ref="setCardRef"
+            class="project-reveal group relative cursor-pointer overflow-hidden rounded-2xl border border-slate-200/80 bg-white/95 shadow-[0_24px_55px_rgba(15,23,42,0.12)] ring-1 ring-white/50 transition-[opacity,transform,box-shadow] duration-700 ease-out dark:border-white/10 dark:bg-slate-950/95 dark:shadow-[0_0_18px_rgba(56,189,248,0.08)] dark:ring-cyan-300/10"
+            :class="{ 'is-visible': revealed[index] }"
+            tabindex="0"
+            role="button"
+            :aria-label="`Open details for ${project.title}`"
+            @click="openProject(project)"
+            @keydown.enter.prevent="openProject(project)"
+            @keydown.space.prevent="openProject(project)"
+          >
           <div class="grid lg:grid-cols-[48%_52%]">
             <div
               class="project-media border-b border-slate-200/80 p-6 dark:border-white/10 lg:border-b-0"
@@ -87,7 +92,9 @@
               </div>
             </div>
           </div>
+          </div>
         </article>
+        </div>
       </div>
     </div>
 
@@ -254,10 +261,13 @@ import { Icon } from '@iconify/vue'
 import { onBeforeUnmount, onBeforeUpdate, onMounted, ref, watch } from 'vue'
 
 const observer = ref(null)
+const projectsSectionRef = ref(null)
 const cardRefs = ref([])
 const revealed = ref([])
 const selectedProject = ref(null)
 const imagePreview = ref({ src: '', alt: '' })
+const stackProgress = ref(0)
+let scrollRafId = 0
 
 const setCardRef = (el) => {
   if (el) cardRefs.value.push(el)
@@ -277,6 +287,42 @@ const openImagePreview = (src, alt) => {
 
 const closeImagePreview = () => {
   imagePreview.value = { src: '', alt: '' }
+}
+
+const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value))
+
+const updateStackProgress = () => {
+  if (!projectsSectionRef.value) return
+  const rect = projectsSectionRef.value.getBoundingClientRect()
+  const viewportHeight = window.innerHeight || 1
+  const totalScrollable = Math.max(1, rect.height - viewportHeight)
+  stackProgress.value = clamp(-rect.top / totalScrollable)
+}
+
+const scheduleStackProgressUpdate = () => {
+  if (scrollRafId) return
+  scrollRafId = window.requestAnimationFrame(() => {
+    updateStackProgress()
+    scrollRafId = 0
+  })
+}
+
+const getProjectLayerStyle = (index) => {
+  const count = visibleProjects.length
+  if (count <= 1) return { zIndex: index + 1, '--slide-y': '0%' }
+
+  const revealTrack = 1
+  const holdOffset = 0.02
+  const step = revealTrack / (count - 1)
+  const start = holdOffset + step * (index - 1)
+  const localProgress = index === 0 ? 1 : clamp((stackProgress.value - start) / step)
+  const travel = index === 1 ? 150 : 128
+  const slideY = index === 0 ? 0 : (1 - localProgress) * travel
+
+  return {
+    zIndex: index + 1,
+    '--slide-y': `${slideY}%`,
+  }
 }
 
 const handleEscClose = (event) => {
@@ -389,9 +435,61 @@ const projects = [
       'WebXR overlays for immersive destination guidance',
     ],
   },
+  {
+    label: 'Business Suite',
+    title: 'ReedGrey Sales and Inventory System',
+    image: '/sales.png',
+    description:
+      'A multi-branch sales and inventory platform that centralizes product movement, checkout, and reporting in one operational dashboard.',
+    problem:
+      'The system reduces manual product checking and spreadsheet reconciliation, while giving teams real-time visibility of stock and sales across branches.',
+    howItWorks: [
+      'Nuxt/Vue interfaces handle branch-level workflows for cataloging, stock intake, checkout, and sales review in a single connected experience.',
+      'Supabase auth enforces role-based access so cashiers, staff, and admins only see actions relevant to their responsibilities.',
+      'Inventory and transaction records are synced in Supabase, allowing branches to track stock levels, transfers, and low-stock states without manual tallying.',
+      'POS transactions update inventory counts instantly and feed branch-by-branch sales summaries for faster daily and weekly decision making.',
+    ],
+    stack: [
+      {
+        label: 'Nuxt/Vue - Application frontend',
+        icon: 'simple-icons:nuxtdotjs',
+        iconClass: 'h-4 w-4 shrink-0 text-[#00dc82]',
+      },
+      {
+        label: 'Tailwind CSS - UI styling system',
+        icon: 'simple-icons:tailwindcss',
+        iconClass: 'h-4 w-4 shrink-0 text-[#38bdf8]',
+      },
+      {
+        label: 'Supabase - Database and Auth',
+        icon: 'simple-icons:supabase',
+        iconClass: 'h-4 w-4 shrink-0 text-[#3ecf8e]',
+      },
+      {
+        label: 'POS Module - Checkout and sales processing',
+        icon: 'ph:shopping-cart-fill',
+        iconClass: 'h-4 w-4 shrink-0 text-emerald-400',
+      },
+    ],
+    features: [
+      'Product cataloging',
+      'Inventory stocking',
+      'Point-of-sale (POS)',
+      'Cross-branch sales tracking',
+      'Sales reporting',
+    ],
+    deepDive:
+      'The platform links catalog, stock, and POS flows so inventory movement and sales outcomes stay synchronized per branch without manual reconciliation cycles.',
+    highlights: [
+      'Branch-aware stock visibility and movement tracking',
+      'Unified catalog + POS operations in one interface',
+      'Supabase-backed auth and data consistency for operational controls',
+    ],
+  },
 ]
 
-revealed.value = projects.map(() => false)
+const visibleProjects = projects
+revealed.value = visibleProjects.map(() => false)
 
 onBeforeUpdate(() => {
   cardRefs.value = []
@@ -411,11 +509,17 @@ onMounted(() => {
 
   cardRefs.value.forEach((card) => observer.value?.observe(card))
   window.addEventListener('keydown', handleEscClose)
+  window.addEventListener('scroll', scheduleStackProgressUpdate, { passive: true })
+  window.addEventListener('resize', scheduleStackProgressUpdate)
+  scheduleStackProgressUpdate()
 })
 
 onBeforeUnmount(() => {
   observer.value?.disconnect()
   window.removeEventListener('keydown', handleEscClose)
+  window.removeEventListener('scroll', scheduleStackProgressUpdate)
+  window.removeEventListener('resize', scheduleStackProgressUpdate)
+  if (scrollRafId) window.cancelAnimationFrame(scrollRafId)
 })
 
 watch(selectedProject, (project) => {
@@ -429,17 +533,62 @@ watch(imagePreview, (preview) => {
 
 <style scoped>
 .project-reveal {
+  position: relative;
   opacity: 0;
-  transform: translateY(28px);
+  --reveal-y: 28px;
+  width: min(100%, 72rem);
+  transform: translateY(var(--reveal-y));
+  transform-origin: top center;
 }
 
 .project-reveal.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  --reveal-y: 0px;
 }
 
 .project-reveal.is-visible:hover {
-  transform: translateY(-4px);
+  --reveal-y: -4px;
+}
+
+.project-stack {
+  position: relative;
+  height: calc(18vh + (var(--project-count) - 1) * 58vh);
+}
+
+.project-stage {
+  position: sticky;
+  top: clamp(0.75rem, 4vh, 2.75rem);
+  height: min(60vh, 580px);
+}
+
+.project-stack-item {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  transform: translateY(var(--slide-y, 0%));
+  transition: none;
+}
+
+@media (min-width: 640px) {
+  .project-stack {
+    height: calc(10vh + (var(--project-count) - 1) * 64vh);
+  }
+
+  .project-stage {
+    height: min(62vh, 620px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .project-stack {
+    height: calc(6vh + (var(--project-count) - 1) * 70vh);
+  }
+
+  .project-stage {
+    height: min(64vh, 660px);
+  }
 }
 
 .project-media {
