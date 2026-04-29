@@ -1,7 +1,13 @@
 <template>
   <footer class="footer-band-b">
     <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 sm:flex-row">
-      <div>© {{ year }} John Marvin Bautista. All rights reserved.</div>
+      <div class="flex flex-col items-center gap-1 sm:items-start">
+        <div>© {{ year }} John Marvin Bautista. All rights reserved.</div>
+        <div class="text-xs text-slate-500 dark:text-slate-400">
+          Total page views:
+          <span class="font-semibold text-slate-700 dark:text-slate-200">{{ totalPageViewsLabel }}</span>
+        </div>
+      </div>
       <div class="flex flex-wrap items-center justify-center gap-4 sm:justify-end">
         <a class="transition hover:text-primary-600 dark:hover:text-primary-400" href="#hero">Back to top</a>
         <a class="transition hover:text-primary-600 dark:hover:text-primary-400" href="#projects">Projects</a>
@@ -42,4 +48,11 @@
 
 <script setup lang="ts">
 const year = new Date().getFullYear()
+const { data } = await useFetch('/api/page-views')
+
+const totalPageViewsLabel = computed(() => {
+  const total = data.value?.total
+  if (typeof total !== 'number') return 'N/A'
+  return new Intl.NumberFormat().format(total)
+})
 </script>
