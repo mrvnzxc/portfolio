@@ -376,6 +376,7 @@ const projects = [
       'Automated payroll',
       'Attendance monitoring',
       'Payroll reports',
+      'Govenment Benefits Monitoring',
     ],
     deepDive:
       'This system unifies attendance capture, identity validation, and payroll computation into a single operational pipeline for HR and finance teams.',
@@ -436,7 +437,7 @@ const projects = [
     ],
   },
   {
-    label: 'Business Suite',
+    label: 'Merchandising Suite',
     title: 'ReedGrey Sales and Inventory System',
     image: '/sales.png',
     description:
@@ -477,6 +478,8 @@ const projects = [
       'Point-of-sale (POS)',
       'Cross-branch sales tracking',
       'Sales reporting',
+      'Team Management',
+      'Inventory Monitoring',
     ],
     deepDive:
       'The platform links catalog, stock, and POS flows so inventory movement and sales outcomes stay synchronized per branch without manual reconciliation cycles.',

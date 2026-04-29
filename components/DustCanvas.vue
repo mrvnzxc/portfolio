@@ -157,4 +157,5 @@ onMounted(() => {
     window.removeEventListener('resize', handleResize)
   })
 })
+
 </script>

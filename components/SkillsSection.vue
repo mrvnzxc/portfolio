@@ -74,6 +74,7 @@
             <li>Reliable API design with clean contracts.</li>
             <li>UI systems that stay consistent and accessible.</li>
             <li>Data modeling for clear analytics and reporting.</li>
+            <li>AI Automation to streamline manual workflows.</li>
           </ul>
         </div>
       </div>

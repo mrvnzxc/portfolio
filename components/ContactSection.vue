@@ -91,6 +91,11 @@ const submitForm = async () => {
     showToast({ title: 'Invalid email', message: 'Please enter a valid email address (e.g. you@example.com).', variant: 'error' })
     return
   }
+  const nameRegex = /^[a-zA-Z\s]+$/
+  if (form.name.trim() && !nameRegex.test(form.name.trim())) {
+    showToast({ title: 'Invalid name', message: 'Please enter a valid name (letters only).', variant: 'error' })
+    return
+  }
 
   const formData = new FormData()
   formData.append('name', form.name)
