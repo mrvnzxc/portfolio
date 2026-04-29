@@ -1,5 +1,8 @@
 export default defineNuxtConfig({
-  modules: ['@nuxtjs/tailwindcss'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@vercel/analytics/nuxt'
+  ],
   css: ['~/assets/css/custom.css'],
   app: {
     head: {

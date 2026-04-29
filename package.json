@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@iconify/vue": "latest",
+    "@vercel/analytics": "^2.0.1",
     "nuxt": "latest"
   },
   "devDependencies": {
