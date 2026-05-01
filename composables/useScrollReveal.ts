@@ -1,29 +1,47 @@
-import { onBeforeUnmount } from 'vue'
+let sharedObserver: IntersectionObserver | null = null
 
+function ensureObserver(): IntersectionObserver | null {
+  if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+    return null
+  }
+  if (sharedObserver) return sharedObserver
+
+  sharedObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible')
+        } else {
+          entry.target.classList.remove('is-visible')
+        }
+      })
+    },
+    {
+      threshold: [0, 0.04, 0.12],
+      rootMargin: '0px 0px 12% 0px',
+    },
+  )
+
+  return sharedObserver
+}
+
+/**
+ * Observes `.reveal-on-scroll` nodes: adds `is-visible` while intersecting,
+ * removes when out of view so the reveal animation runs again on re-entry.
+ */
 export function useScrollReveal() {
-  let observer: IntersectionObserver | null = null
-
   const observeElements = (elements: Element[] | NodeListOf<Element>) => {
     if (process.server) return
+
     const list = Array.from(elements)
-    if (!('IntersectionObserver' in window)) {
+    const obs = ensureObserver()
+    if (!obs) {
       list.forEach((el) => el.classList.add('is-visible'))
       return
     }
 
-    observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          entry.target.classList.toggle('is-visible', entry.isIntersecting)
-        })
-      },
-      { threshold: 0.15 }
-    )
-
-    list.forEach((el) => observer?.observe(el))
+    list.forEach((el) => obs.observe(el))
   }
-
-  onBeforeUnmount(() => observer?.disconnect())
 
   return { observeElements }
 }

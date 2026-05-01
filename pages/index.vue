@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, useHead, watch } from '#imports'
+import { nextTick, onMounted, useHead, watch } from '#imports'
 import HeroSection from '~/components/HeroSection.vue'
 import { useLightbox } from '~/composables/useLightbox'
 import { useScrollReveal } from '~/composables/useScrollReveal'
@@ -45,6 +45,10 @@ watch(isDark, () => {
 })
 
 onMounted(() => {
-  observeElements(document.querySelectorAll('.reveal-on-scroll'))
+  nextTick(() => {
+    requestAnimationFrame(() => {
+      observeElements(document.querySelectorAll('.reveal-on-scroll'))
+    })
+  })
 })
 </script>

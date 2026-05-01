@@ -1,100 +1,141 @@
 <template>
-  <section id="projects" ref="projectsSectionRef" class="section-band-a featured-projects pb-2 sm:pb-3">
-    <div class="mx-auto max-w-6xl px-4">
-      <header class="mb-10 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h2 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Mission Control Projects</h2>
-        </div>
-        <span class="self-end text-right text-xs sm:self-auto sm:text-left sm:text-sm font-semibold uppercase tracking-wide text-primary-600">Featured Projects</span>
+  <section
+    id="projects"
+    ref="sectionRoot"
+    class="section-band-a featured-projects relative !py-7 sm:!py-9 pb-9 sm:pb-12"
+  >
+    <!-- overflow only on decorative layer — overflow-hidden on section breaks lg:sticky preview -->
+    <div
+      class="pointer-events-none absolute inset-0 overflow-hidden opacity-40 dark:opacity-30"
+      aria-hidden="true"
+    >
+      <div
+        class="absolute -left-1/4 top-0 h-[min(400px,50vh)] w-[min(546px,72vw)] rounded-full bg-gradient-to-br from-primary-400/25 via-sky-400/15 to-transparent blur-3xl dark:from-cyan-500/20 dark:via-primary-600/10"
+      />
+      <div
+        class="absolute -right-1/4 bottom-0 h-[min(357px,44vh)] w-[min(462px,66vw)] rounded-full bg-gradient-to-tl from-violet-400/20 via-primary-500/10 to-transparent blur-3xl dark:from-violet-500/15 dark:via-cyan-600/10"
+      />
+    </div>
 
-      </header>
+    <div class="relative mx-auto max-w-6xl px-4">
+      <!-- Same row layout as GallerySection: title left, label right (text-primary-600) -->
+      <div
+        class="mb-4 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 reveal-on-scroll sm:mb-5"
+      >
+        <h2 class="mb-1 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-50">
+          Mission Control Projects
+        </h2>
+        <span
+          class="self-end text-right text-xs font-semibold uppercase tracking-wide text-primary-600 sm:self-auto sm:text-left sm:text-sm"
+        >
+          Featured projects
+        </span>
+      </div>
 
-      <div class="project-stack" :style="{ '--project-count': visibleProjects.length }">
-        <div class="project-stage">
+      <!-- Uniform grid: equal visual weight for every project -->
+      <div
+        class="projects-uniform-grid grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3.5 lg:grid-cols-3 lg:gap-4"
+      >
         <article
           v-for="(project, index) in visibleProjects"
           :key="project.title"
-          class="project-stack-item"
-          :style="getProjectLayerStyle(index)"
+          role="button"
+          tabindex="0"
+          class="project-card reveal-on-scroll group relative flex h-full min-h-0 cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-200/75 bg-white/55 shadow-[0_8px_30px_-12px_rgba(15,23,42,0.12),inset_0_1px_0_0_rgba(255,255,255,0.75)] outline-none ring-1 ring-white/60 backdrop-blur-xl hover:-translate-y-1.5 hover:border-cyan-500/35 hover:shadow-[0_22px_50px_-14px_rgba(15,23,42,0.18),0_0_40px_-8px_rgba(34,211,238,0.22),inset_0_1px_0_0_rgba(255,255,255,0.85)] focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 dark:border-cyan-500/15 dark:bg-slate-950/50 dark:shadow-[0_12px_40px_-16px_rgba(0,0,0,0.45),inset_0_1px_0_0_rgba(255,255,255,0.06)] dark:ring-white/5 dark:hover:border-cyan-400/40 dark:hover:shadow-[0_26px_56px_-12px_rgba(0,0,0,0.55),0_0_48px_-6px_rgba(34,211,238,0.18)] dark:focus-visible:ring-cyan-400 dark:focus-visible:ring-offset-slate-950"
+          :style="{ '--reveal-stagger': index }"
+          :aria-label="`View project: ${project.title}`"
+          @click="openProject(project)"
+          @keydown.enter.prevent="openProject(project)"
+          @keydown.space.prevent="openProject(project)"
         >
           <div
-            :data-index="index"
-            :ref="setCardRef"
-            class="project-reveal group relative cursor-pointer overflow-hidden rounded-2xl border border-slate-200/80 bg-white/95 shadow-[0_24px_55px_rgba(15,23,42,0.12)] ring-1 ring-white/50 transition-[opacity,transform,box-shadow] duration-700 ease-out dark:border-white/10 dark:bg-slate-950/95 dark:shadow-[0_0_18px_rgba(56,189,248,0.08)] dark:ring-cyan-300/10"
-            :class="{ 'is-visible': revealed[index] }"
-            tabindex="0"
-            role="button"
-            :aria-label="`Open details for ${project.title}`"
-            @click="openProject(project)"
-            @keydown.enter.prevent="openProject(project)"
-            @keydown.space.prevent="openProject(project)"
+            class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            aria-hidden="true"
           >
-          <div class="grid lg:grid-cols-[48%_52%]">
             <div
-              class="project-media border-b border-slate-200/80 p-6 dark:border-white/10 lg:border-b-0"
-              :class="index % 2 ? 'lg:order-2 lg:border-l' : 'lg:border-r'"
-            >
-              <div class="flex min-h-[280px] items-center justify-center sm:min-h-[320px] lg:min-h-[360px]">
-                <button
-                  type="button"
-                  class="image-launch image-frame group/image w-full overflow-hidden rounded-2xl border border-slate-300/85 bg-slate-100/80 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_10px_20px_rgba(15,23,42,0.14)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-slate-700/90 dark:bg-slate-900/90 dark:shadow-[inset_0_1px_0_rgba(148,163,184,0.2),0_12px_24px_rgba(2,6,23,0.5)] dark:focus-visible:ring-cyan-300"
-                  :aria-label="`Expand ${project.title} preview image`"
-                  @click.stop="openImagePreview(project.image, project.title)"
-                >
-                  <img
-                    :src="project.image"
-                    :alt="project.title"
-                    class="h-auto max-h-[460px] w-full rounded-xl border border-slate-300/70 object-contain dark:border-slate-700/80"
-                    loading="lazy"
-                  />
-                </button>
-              </div>
-            </div>
-
-            <div class="space-y-4 p-6 sm:p-8" :class="index % 2 ? 'lg:order-1' : ''">
-              <div class="inline-flex max-w-full flex-wrap items-center gap-2 rounded-full border border-primary-500/25 bg-primary-500/10 px-3 py-1 text-[11px] font-semibold tracking-wide text-primary-700 dark:border-cyan-300/30 dark:bg-cyan-400/10 dark:text-cyan-200">
-                <span class="h-1.5 w-1.5 rounded-full bg-primary-500 dark:bg-cyan-300"></span>
-                <span class="break-words">{{ project.label }}</span>
-              </div>
-
-              <h3 class="text-2xl font-semibold tracking-tight">{{ project.title }}</h3>
-              <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-300">{{ project.description }}</p>
-
-              <div>
-                <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                  Tech Stack
-                </p>
-                <ul class="space-y-1.5 text-sm text-slate-700 dark:text-slate-200">
-                  <li
-                    v-for="item in project.stack"
-                    :key="item.label"
-                    class="flex items-center gap-2 border-b border-slate-200/70 pb-1 last:border-b-0 dark:border-white/10"
-                  >
-                    <Icon :icon="item.icon" :class="item.iconClass" />
-                    <span>{{ item.label }}</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                  Key Features
-                </p>
-                <div class="flex flex-wrap gap-2">
-                  <span
-                    v-for="feature in project.features"
-                    :key="feature"
-                    class="rounded-full border border-slate-300/80 bg-slate-100/80 px-3 py-1 text-xs font-medium text-slate-700 dark:border-white/15 dark:bg-slate-900 dark:text-slate-200"
-                  >
-                    {{ feature }}
-                  </span>
-                </div>
-              </div>
-            </div>
+              class="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-gradient-to-br from-cyan-400/25 via-sky-500/15 to-transparent blur-2xl dark:from-cyan-400/20 dark:via-violet-500/12"
+            />
+            <div
+              class="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-gradient-to-tr from-violet-500/15 to-transparent blur-2xl dark:from-violet-500/12"
+            />
           </div>
+          <div
+            class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent opacity-80 dark:via-cyan-300/35"
+            aria-hidden="true"
+          />
+
+          <div
+            class="relative aspect-[16/10] min-h-[132px] shrink-0 overflow-hidden border-b border-slate-200/70 bg-gradient-to-b from-slate-100/90 to-slate-50/80 dark:border-white/10 dark:from-slate-900/80 dark:to-slate-950/90"
+          >
+            <img
+              :src="project.image"
+              :alt="project.title"
+              class="h-full w-full object-contain object-center p-3 transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.07]"
+              loading="lazy"
+            />
+          </div>
+
+          <div class="relative flex min-h-0 flex-1 flex-col gap-2 p-3 sm:p-3.5">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+              <span
+                class="inline-flex max-w-[72%] items-center rounded-full border border-primary-500/20 bg-primary-500/[0.08] px-2 py-0.5 text-[10px] font-semibold uppercase leading-tight tracking-wide text-primary-700 dark:border-cyan-400/25 dark:bg-cyan-400/10 dark:text-cyan-200/95"
+              >
+                {{ project.label }}
+              </span>
+              <span
+                class="shrink-0 text-[10px] font-medium tabular-nums text-slate-500 dark:text-slate-400"
+              >
+                {{ project.year }} · {{ project.phase }}
+              </span>
+            </div>
+
+            <h3 class="text-[15px] font-semibold leading-snug tracking-tight text-slate-900 dark:text-white sm:text-base">
+              {{ project.title }}
+            </h3>
+            <p class="line-clamp-3 text-[13px] leading-relaxed text-slate-600 dark:text-slate-300 sm:text-xs sm:leading-relaxed">
+              {{ project.description }}
+            </p>
+
+            <div class="flex flex-wrap gap-1.5 pt-0.5">
+              <span
+                v-for="item in project.stack"
+                :key="item.label"
+                class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200/80 bg-white/90 shadow-sm transition group-hover:border-cyan-500/25 group-hover:shadow-[0_0_12px_-4px_rgba(34,211,238,0.35)] dark:border-white/10 dark:bg-slate-900/85 dark:group-hover:border-cyan-400/30"
+                :title="item.label"
+              >
+                <Icon :icon="item.icon" :class="[item.iconClass, 'h-4 w-4']" />
+              </span>
+            </div>
+
+            <div class="flex min-h-[1.75rem] flex-wrap gap-1">
+              <span
+                v-for="feature in project.features.slice(0, 4)"
+                :key="feature"
+                class="rounded-md border border-slate-200/80 bg-slate-50/95 px-1.5 py-0.5 text-[10px] font-medium text-slate-700 dark:border-slate-600/45 dark:bg-slate-800/85 dark:text-slate-200"
+              >
+                {{ feature }}
+              </span>
+              <span
+                v-if="project.features.length > 4"
+                class="self-center text-[10px] font-medium text-slate-500 dark:text-slate-400"
+              >
+                +{{ project.features.length - 4 }}
+              </span>
+            </div>
+
+            <div class="mt-auto flex border-t border-slate-200/60 pt-2.5 dark:border-white/10">
+              <span
+                class="inline-flex items-center gap-1.5 rounded-lg bg-slate-900/[0.04] px-2.5 py-1.5 text-xs font-semibold text-primary-600 ring-1 ring-slate-200/80 transition group-hover:bg-primary-600/10 group-hover:ring-cyan-500/30 dark:bg-white/[0.06] dark:text-cyan-300 dark:ring-white/10 dark:group-hover:bg-cyan-400/10 dark:group-hover:ring-cyan-400/25"
+              >
+                View details
+                <Icon
+                  icon="ph:arrow-right-bold"
+                  class="h-3.5 w-3.5 transition group-hover:translate-x-0.5"
+                />
+              </span>
+            </div>
           </div>
         </article>
-        </div>
       </div>
     </div>
 
@@ -116,115 +157,119 @@
           :aria-labelledby="selectedProject ? 'project-modal-title' : undefined"
           @click.stop
         >
-        <header class="flex shrink-0 items-start justify-between gap-3 border-b border-slate-200/80 bg-white/95 px-4 py-3 dark:border-white/10 dark:bg-slate-950/95 sm:px-5">
-          <div class="min-w-0 pr-2">
-            <p class="text-[11px] font-semibold uppercase tracking-wide text-primary-600 dark:text-cyan-300">
-              {{ selectedProject.label }}
-            </p>
-            <h3 id="project-modal-title" class="mt-0.5 text-base font-semibold leading-snug tracking-tight sm:text-xl">
-              {{ selectedProject.title }}
-            </h3>
-          </div>
-          <button
-            type="button"
-            class="shrink-0 rounded-lg border border-slate-300/80 bg-slate-100 px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 dark:border-white/15 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
-            @click="closeModal"
-          >
-            Close
-          </button>
-        </header>
-
-        <div class="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-          <div class="space-y-3 px-3 pb-6 pt-3 sm:space-y-4 sm:px-5 sm:py-5 sm:pb-5">
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-6">
-              <button
-                type="button"
-                class="image-launch image-frame w-full shrink-0 overflow-hidden rounded-xl border border-slate-300/85 bg-slate-100/80 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_6px_16px_rgba(15,23,42,0.1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-slate-700/90 dark:bg-slate-900/90 dark:shadow-[inset_0_1px_0_rgba(148,163,184,0.15),0_8px_18px_rgba(2,6,23,0.4)] dark:focus-visible:ring-cyan-300 sm:mx-0 sm:w-[46%] sm:min-w-[280px] sm:max-w-[420px]"
-                :aria-label="`Expand ${selectedProject.title} preview image`"
-                @click="openImagePreview(selectedProject.image, selectedProject.title)"
-              >
-                <img
-                  :src="selectedProject.image"
-                  :alt="selectedProject.title"
-                  class="h-auto max-h-[min(38vh,240px)] w-full rounded-lg border border-slate-300/60 object-contain dark:border-slate-700/70 sm:max-h-[360px] lg:max-h-[400px]"
-                  loading="lazy"
-                />
-              </button>
-              <div class="project-modal-mobile-card min-w-0 flex-1 space-y-3 sm:space-y-3">
-                <p class="text-[15px] leading-relaxed text-slate-700 dark:text-slate-200 sm:text-sm sm:leading-snug sm:text-slate-600 dark:sm:text-slate-300">
-                  {{ selectedProject.description }}
-                </p>
-                <div class="border-t border-slate-200/80 pt-3 dark:border-white/10 sm:border-0 sm:pt-0">
-                  <p class="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 sm:mb-1 sm:text-[11px]">
-                    Problem it solves
-                  </p>
-                  <p class="text-[15px] leading-relaxed text-slate-800 dark:text-slate-100 sm:text-sm sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200">
-                    {{ selectedProject.problem }}
-                  </p>
-                </div>
-              </div>
+          <header class="flex shrink-0 items-start justify-between gap-3 border-b border-slate-200/80 bg-white/95 px-4 py-3 dark:border-white/10 dark:bg-slate-950/95 sm:px-5">
+            <div class="min-w-0 pr-2">
+              <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                <span class="tabular-nums text-slate-700 dark:text-slate-200">{{ selectedProject.year }}</span>
+                · {{ selectedProject.phase }}
+              </p>
+              <p class="mt-0.5 text-[11px] font-semibold uppercase tracking-wide text-primary-600 dark:text-cyan-300">
+                {{ selectedProject.label }}
+              </p>
+              <h3 id="project-modal-title" class="mt-0.5 text-base font-semibold leading-snug tracking-tight sm:text-xl">
+                {{ selectedProject.title }}
+              </h3>
             </div>
+            <button
+              type="button"
+              class="shrink-0 rounded-lg border border-slate-300/80 bg-slate-100 px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 dark:border-white/15 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+              @click="closeModal"
+            >
+              Close
+            </button>
+          </header>
 
-            <div class="grid gap-3 sm:grid-cols-2 sm:gap-5 sm:border-t sm:border-slate-200/80 sm:pt-4 dark:sm:border-white/10">
-              <div class="project-modal-mobile-card">
-                <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:mb-1.5 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
-                  How it works
-                </p>
-                <ol class="list-decimal space-y-2.5 pl-4 text-[15px] leading-relaxed text-slate-800 marker:font-medium marker:text-primary-600 dark:text-slate-100 dark:marker:text-cyan-400/90 sm:space-y-1.5 sm:pl-4 sm:text-xs sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200 dark:sm:marker:text-slate-500">
-                  <li v-for="(step, i) in selectedProject.howItWorks" :key="i">{{ step }}</li>
-                </ol>
-              </div>
-              <div class="project-modal-mobile-card">
-                <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:mb-1.5 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
-                  Deep dive
-                </p>
-                <p class="text-[15px] leading-relaxed text-slate-800 dark:text-slate-100 sm:text-xs sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200">
-                  {{ selectedProject.deepDive }}
-                </p>
-                <div class="mt-4 border-t border-slate-200/80 pt-4 dark:border-white/10 sm:mt-4 sm:border-slate-200/70">
-                  <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
-                    Key features
+          <div class="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+            <div class="space-y-3 px-3 pb-6 pt-3 sm:space-y-4 sm:px-5 sm:py-5 sm:pb-5">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-6">
+                <button
+                  type="button"
+                  class="image-launch image-frame w-full shrink-0 overflow-hidden rounded-xl border border-slate-300/85 bg-slate-100/80 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_6px_16px_rgba(15,23,42,0.1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-slate-700/90 dark:bg-slate-900/90 dark:shadow-[inset_0_1px_0_rgba(148,163,184,0.15),0_8px_18px_rgba(2,6,23,0.4)] dark:focus-visible:ring-cyan-300 sm:mx-0 sm:w-[46%] sm:min-w-[280px] sm:max-w-[420px]"
+                  :aria-label="`Expand ${selectedProject.title} preview image`"
+                  @click="openImagePreview(selectedProject.image, selectedProject.title)"
+                >
+                  <img
+                    :src="selectedProject.image"
+                    :alt="selectedProject.title"
+                    class="h-auto max-h-[min(38vh,240px)] w-full rounded-lg border border-slate-300/60 object-contain dark:border-slate-700/70 sm:max-h-[360px] lg:max-h-[400px]"
+                    loading="lazy"
+                  />
+                </button>
+                <div class="project-modal-mobile-card min-w-0 flex-1 space-y-3 sm:space-y-3">
+                  <p class="text-[15px] leading-relaxed text-slate-700 dark:text-slate-200 sm:text-sm sm:leading-snug sm:text-slate-600 dark:sm:text-slate-300">
+                    {{ selectedProject.description }}
                   </p>
-                  <div class="flex flex-wrap gap-2 sm:gap-1.5">
-                    <span
-                      v-for="feature in selectedProject.features"
-                      :key="feature"
-                      class="rounded-lg border border-slate-300/80 bg-white px-2.5 py-1 text-xs font-medium text-slate-800 shadow-sm dark:border-white/15 dark:bg-slate-900/90 dark:text-slate-100 sm:rounded-md sm:border-slate-300/70 sm:bg-slate-100/70 sm:px-2 sm:py-0.5 sm:text-[11px] sm:font-medium sm:text-slate-700 dark:sm:bg-slate-900/80 dark:sm:text-slate-200"
-                    >
-                      {{ feature }}
-                    </span>
+                  <div class="border-t border-slate-200/80 pt-3 dark:border-white/10 sm:border-0 sm:pt-0">
+                    <p class="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 sm:mb-1 sm:text-[11px]">
+                      Problem it solves
+                    </p>
+                    <p class="text-[15px] leading-relaxed text-slate-800 dark:text-slate-100 sm:text-sm sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200">
+                      {{ selectedProject.problem }}
+                    </p>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div class="grid gap-3 sm:grid-cols-2 sm:gap-5 sm:border-t sm:border-slate-200/80 sm:pt-4 dark:sm:border-white/10">
-              <div class="project-modal-mobile-card">
-                <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:mb-1.5 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
-                  Tech stack
-                </p>
-                <ul class="space-y-2.5 text-[15px] leading-relaxed text-slate-800 dark:text-slate-100 sm:space-y-1 sm:text-xs sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200">
-                  <li v-for="item in selectedProject.stack" :key="item.label" class="flex items-start gap-2.5 sm:gap-2">
-                    <Icon :icon="item.icon" :class="[item.iconClass, 'mt-0.5 shrink-0 opacity-90']" />
-                    <span>{{ item.label }}</span>
-                  </li>
-                </ul>
+              <div class="grid gap-3 sm:grid-cols-2 sm:gap-5 sm:border-t sm:border-slate-200/80 sm:pt-4 dark:sm:border-white/10">
+                <div class="project-modal-mobile-card">
+                  <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:mb-1.5 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
+                    How it works
+                  </p>
+                  <ol class="list-decimal space-y-2.5 pl-4 text-[15px] leading-relaxed text-slate-800 marker:font-medium marker:text-primary-600 dark:text-slate-100 dark:marker:text-cyan-400/90 sm:space-y-1.5 sm:pl-4 sm:text-xs sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200 dark:sm:marker:text-slate-500">
+                    <li v-for="(step, i) in selectedProject.howItWorks" :key="i">{{ step }}</li>
+                  </ol>
+                </div>
+                <div class="project-modal-mobile-card">
+                  <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:mb-1.5 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
+                    Deep dive
+                  </p>
+                  <p class="text-[15px] leading-relaxed text-slate-800 dark:text-slate-100 sm:text-xs sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200">
+                    {{ selectedProject.deepDive }}
+                  </p>
+                  <div class="mt-4 border-t border-slate-200/80 pt-4 dark:border-white/10 sm:mt-4 sm:border-slate-200/70">
+                    <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
+                      Key features
+                    </p>
+                    <div class="flex flex-wrap gap-2 sm:gap-1.5">
+                      <span
+                        v-for="feature in selectedProject.features"
+                        :key="feature"
+                        class="rounded-lg border border-slate-300/80 bg-white px-2.5 py-1 text-xs font-medium text-slate-800 shadow-sm dark:border-white/15 dark:bg-slate-900/90 dark:text-slate-100 sm:rounded-md sm:border-slate-300/70 sm:bg-slate-100/70 sm:px-2 sm:py-0.5 sm:text-[11px] sm:font-medium sm:text-slate-700 dark:sm:bg-slate-900/80 dark:sm:text-slate-200"
+                      >
+                        {{ feature }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="project-modal-mobile-card">
-                <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:mb-1.5 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
-                  Architecture highlights
-                </p>
-                <ul class="space-y-2.5 text-[15px] leading-relaxed text-slate-800 dark:text-slate-100 sm:space-y-1 sm:text-xs sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200">
-                  <li v-for="point in selectedProject.highlights" :key="point" class="flex gap-2 sm:gap-1.5">
-                    <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary-500 dark:bg-cyan-400 sm:mt-1.5 sm:h-1 sm:w-1" />
-                    <span>{{ point }}</span>
-                  </li>
-                </ul>
+
+              <div class="grid gap-3 sm:grid-cols-2 sm:gap-5 sm:border-t sm:border-slate-200/80 sm:pt-4 dark:sm:border-white/10">
+                <div class="project-modal-mobile-card">
+                  <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:mb-1.5 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
+                    Tech stack
+                  </p>
+                  <ul class="space-y-2.5 text-[15px] leading-relaxed text-slate-800 dark:text-slate-100 sm:space-y-1 sm:text-xs sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200">
+                    <li v-for="item in selectedProject.stack" :key="item.label" class="flex items-start gap-2.5 sm:gap-2">
+                      <Icon :icon="item.icon" :class="[item.iconClass, 'mt-0.5 shrink-0 opacity-90']" />
+                      <span>{{ item.label }}</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="project-modal-mobile-card">
+                  <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:mb-1.5 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
+                    Architecture highlights
+                  </p>
+                  <ul class="space-y-2.5 text-[15px] leading-relaxed text-slate-800 dark:text-slate-100 sm:space-y-1 sm:text-xs sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200">
+                    <li v-for="point in selectedProject.highlights" :key="point" class="flex gap-2 sm:gap-1.5">
+                      <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary-500 dark:bg-cyan-400 sm:mt-1.5 sm:h-1 sm:w-1" />
+                      <span>{{ point }}</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </article>
+        </article>
       </div>
     </Transition>
 
@@ -258,19 +303,21 @@
 
 <script setup>
 import { Icon } from '@iconify/vue'
-import { onBeforeUnmount, onBeforeUpdate, onMounted, ref, watch } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-const observer = ref(null)
-const projectsSectionRef = ref(null)
-const cardRefs = ref([])
-const revealed = ref([])
+const sectionRoot = ref(null)
 const selectedProject = ref(null)
 const imagePreview = ref({ src: '', alt: '' })
-const stackProgress = ref(0)
-let scrollRafId = 0
 
-const setCardRef = (el) => {
-  if (el) cardRefs.value.push(el)
+/** If intersection never fired, unstick only nodes that are already on screen (avoids forcing off-screen cards visible). */
+function nudgeRevealIfStuckInView() {
+  const vh = window.innerHeight
+  sectionRoot.value?.querySelectorAll('.reveal-on-scroll').forEach((el) => {
+    if (el.classList.contains('is-visible')) return
+    const r = el.getBoundingClientRect()
+    const inView = r.top < vh * 0.92 && r.bottom > vh * 0.08
+    if (inView) el.classList.add('is-visible')
+  })
 }
 
 const openProject = (project) => {
@@ -289,42 +336,6 @@ const closeImagePreview = () => {
   imagePreview.value = { src: '', alt: '' }
 }
 
-const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value))
-
-const updateStackProgress = () => {
-  if (!projectsSectionRef.value) return
-  const rect = projectsSectionRef.value.getBoundingClientRect()
-  const viewportHeight = window.innerHeight || 1
-  const totalScrollable = Math.max(1, rect.height - viewportHeight)
-  stackProgress.value = clamp(-rect.top / totalScrollable)
-}
-
-const scheduleStackProgressUpdate = () => {
-  if (scrollRafId) return
-  scrollRafId = window.requestAnimationFrame(() => {
-    updateStackProgress()
-    scrollRafId = 0
-  })
-}
-
-const getProjectLayerStyle = (index) => {
-  const count = visibleProjects.length
-  if (count <= 1) return { zIndex: index + 1, '--slide-y': '0%' }
-
-  const revealTrack = 1
-  const holdOffset = 0.02
-  const step = revealTrack / (count - 1)
-  const start = holdOffset + step * (index - 1)
-  const localProgress = index === 0 ? 1 : clamp((stackProgress.value - start) / step)
-  const travel = index === 1 ? 150 : 128
-  const slideY = index === 0 ? 0 : (1 - localProgress) * travel
-
-  return {
-    zIndex: index + 1,
-    '--slide-y': `${slideY}%`,
-  }
-}
-
 const handleEscClose = (event) => {
   if (event.key !== 'Escape') return
   if (imagePreview.value.src) {
@@ -336,6 +347,8 @@ const handleEscClose = (event) => {
 
 const projects = [
   {
+    year: '2025',
+    phase: 'Capstone',
     label: 'Capstone Project',
     title: 'Payroll with Attendance System',
     image: '/payroll.png',
@@ -376,7 +389,7 @@ const projects = [
       'Automated payroll',
       'Attendance monitoring',
       'Payroll reports',
-      'Govenment Benefits Monitoring',
+      'Government benefits monitoring',
     ],
     deepDive:
       'This system unifies attendance capture, identity validation, and payroll computation into a single operational pipeline for HR and finance teams.',
@@ -387,6 +400,8 @@ const projects = [
     ],
   },
   {
+    year: '2026',
+    phase: 'Innovation project',
     label: 'AR Platform',
     title: 'NDDU Siena AR Campus Navigation System',
     image: '/nddu.png',
@@ -437,6 +452,8 @@ const projects = [
     ],
   },
   {
+    year: '2026',
+    phase: 'Production client system',
     label: 'Merchandising Suite',
     title: 'ReedGrey Sales and Inventory System',
     image: '/sales.png',
@@ -478,8 +495,8 @@ const projects = [
       'Point-of-sale (POS)',
       'Cross-branch sales tracking',
       'Sales reporting',
-      'Team Management',
-      'Inventory Monitoring',
+      'Team management',
+      'Inventory monitoring',
     ],
     deepDive:
       'The platform links catalog, stock, and POS flows so inventory movement and sales outcomes stay synchronized per branch without manual reconciliation cycles.',
@@ -492,37 +509,14 @@ const projects = [
 ]
 
 const visibleProjects = projects
-revealed.value = visibleProjects.map(() => false)
-
-onBeforeUpdate(() => {
-  cardRefs.value = []
-})
 
 onMounted(() => {
-  observer.value = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const idx = Number(entry.target.getAttribute('data-index'))
-        if (Number.isNaN(idx)) return
-        revealed.value[idx] = entry.isIntersecting
-      })
-    },
-    { threshold: 0.18, rootMargin: '0px 0px -8% 0px' }
-  )
-
-  cardRefs.value.forEach((card) => observer.value?.observe(card))
   window.addEventListener('keydown', handleEscClose)
-  window.addEventListener('scroll', scheduleStackProgressUpdate, { passive: true })
-  window.addEventListener('resize', scheduleStackProgressUpdate)
-  scheduleStackProgressUpdate()
+  window.setTimeout(nudgeRevealIfStuckInView, 2000)
 })
 
 onBeforeUnmount(() => {
-  observer.value?.disconnect()
   window.removeEventListener('keydown', handleEscClose)
-  window.removeEventListener('scroll', scheduleStackProgressUpdate)
-  window.removeEventListener('resize', scheduleStackProgressUpdate)
-  if (scrollRafId) window.cancelAnimationFrame(scrollRafId)
 })
 
 watch(selectedProject, (project) => {
@@ -535,87 +529,21 @@ watch(imagePreview, (preview) => {
 </script>
 
 <style scoped>
-.project-reveal {
-  position: relative;
-  opacity: 0;
-  --reveal-y: 28px;
-  width: min(100%, 72rem);
-  transform: translateY(var(--reveal-y));
-  transform-origin: top center;
-}
-
-.project-reveal.is-visible {
-  opacity: 1;
-  --reveal-y: 0px;
-}
-
-.project-reveal.is-visible:hover {
-  --reveal-y: -4px;
-}
-
-.project-stack {
-  position: relative;
-  height: calc(18vh + (var(--project-count) - 1) * 58vh);
-}
-
-.project-stage {
-  position: sticky;
-  top: clamp(0.75rem, 4vh, 2.75rem);
-  height: min(60vh, 580px);
-}
-
-.project-stack-item {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  transform: translateY(var(--slide-y, 0%));
-  transition: none;
-}
-
-@media (min-width: 640px) {
-  .project-stack {
-    height: calc(10vh + (var(--project-count) - 1) * 64vh);
-  }
-
-  .project-stage {
-    height: min(62vh, 620px);
-  }
-}
-
-@media (min-width: 1024px) {
-  .project-stack {
-    height: calc(6vh + (var(--project-count) - 1) * 70vh);
-  }
-
-  .project-stage {
-    height: min(64vh, 660px);
-  }
-}
-
-.project-media {
+/* Scroll reveal: stagger + unified transitions (opacity/transform + hover shadow) */
+.featured-projects .project-card.reveal-on-scroll {
   opacity: 0;
   transform: translateY(18px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transition:
+    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease;
 }
 
-.project-reveal.is-visible .project-media {
+.featured-projects .project-card.reveal-on-scroll.is-visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-.image-launch img {
-  display: block;
-  border-radius: inherit;
-  transition: transform 0.35s ease;
-}
-
-.image-launch {
-  display: block;
-  line-height: 0;
-  overflow: hidden;
-  border-radius: inherit;
+  transition-delay: calc(var(--reveal-stagger, 0) * 65ms);
 }
 
 .project-modal-enter-active .project-modal-backdrop,
@@ -674,5 +602,4 @@ watch(imagePreview, (preview) => {
     background-color: transparent;
   }
 }
-
 </style>
