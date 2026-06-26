@@ -123,8 +123,7 @@ const baseImages = [
   '/me3.jpg',
   '/me4.jpg',
   '/me5.jpg',
-  '/me6.jpg',
-  '/me7.jpg'
+  '/me6.jpg'
 ] as const
 
 const LOOP_SEGMENTS = 3
