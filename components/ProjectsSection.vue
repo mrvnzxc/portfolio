@@ -32,110 +32,92 @@
         </span>
       </div>
 
-      <!-- Uniform grid: equal visual weight for every project -->
-      <div
-        class="projects-uniform-grid grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3.5 lg:grid-cols-3 lg:gap-4"
-      >
-        <article
-          v-for="(project, index) in visibleProjects"
-          :key="project.title"
-          role="button"
-          tabindex="0"
-          class="project-card reveal-on-scroll group relative flex h-full min-h-0 cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-200/75 bg-white/55 shadow-[0_8px_30px_-12px_rgba(15,23,42,0.12),inset_0_1px_0_0_rgba(255,255,255,0.75)] outline-none ring-1 ring-white/60 backdrop-blur-xl hover:-translate-y-1.5 hover:border-cyan-500/35 hover:shadow-[0_22px_50px_-14px_rgba(15,23,42,0.18),0_0_40px_-8px_rgba(34,211,238,0.22),inset_0_1px_0_0_rgba(255,255,255,0.85)] focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 dark:border-cyan-500/15 dark:bg-slate-950/50 dark:shadow-[0_12px_40px_-16px_rgba(0,0,0,0.45),inset_0_1px_0_0_rgba(255,255,255,0.06)] dark:ring-white/5 dark:hover:border-cyan-400/40 dark:hover:shadow-[0_26px_56px_-12px_rgba(0,0,0,0.55),0_0_48px_-6px_rgba(34,211,238,0.18)] dark:focus-visible:ring-cyan-400 dark:focus-visible:ring-offset-slate-950"
-          :style="{ '--reveal-stagger': index }"
-          :aria-label="`View project: ${project.title}`"
-          @click="openProject(project)"
-          @keydown.enter.prevent="openProject(project)"
-          @keydown.space.prevent="openProject(project)"
-        >
+      <!-- GSAP stacking cards — desktop & mobile (same scroll logic) -->
+      <div ref="stackStage" class="projects-stack-stage">
+        <div class="projects-stack-cards">
           <div
-            class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-            aria-hidden="true"
+            v-for="project in visibleProjects"
+            :key="project.title"
+            class="projects-card-wrapper"
           >
-            <div
-              class="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-gradient-to-br from-cyan-400/25 via-sky-500/15 to-transparent blur-2xl dark:from-cyan-400/20 dark:via-violet-500/12"
-            />
-            <div
-              class="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-gradient-to-tr from-violet-500/15 to-transparent blur-2xl dark:from-violet-500/12"
-            />
-          </div>
-          <div
-            class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent opacity-80 dark:via-cyan-300/35"
-            aria-hidden="true"
-          />
-
-          <div
-            class="relative aspect-[16/10] min-h-[132px] shrink-0 overflow-hidden border-b border-slate-200/70 bg-gradient-to-b from-slate-100/90 to-slate-50/80 dark:border-white/10 dark:from-slate-900/80 dark:to-slate-950/90"
-          >
-            <img
-              :src="project.image"
-              :alt="project.title"
-              class="h-full w-full object-contain object-center p-3 transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.07]"
-              loading="lazy"
-            />
-          </div>
-
-          <div class="relative flex min-h-0 flex-1 flex-col gap-2 p-3 sm:p-3.5">
-            <div class="flex flex-wrap items-start justify-between gap-2">
-              <span
-                class="inline-flex max-w-[72%] items-center rounded-full border border-primary-500/20 bg-primary-500/[0.08] px-2 py-0.5 text-[10px] font-semibold uppercase leading-tight tracking-wide text-primary-700 dark:border-cyan-400/25 dark:bg-cyan-400/10 dark:text-cyan-200/95"
+            <article
+              role="button"
+              tabindex="0"
+              class="projects-stack-card project-card group relative flex w-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-200/75 bg-white/55 shadow-[0_8px_30px_-12px_rgba(15,23,42,0.12),inset_0_1px_0_0_rgba(255,255,255,0.75)] outline-none ring-1 ring-white/60 backdrop-blur-xl hover:border-cyan-500/35 hover:shadow-[0_22px_50px_-14px_rgba(15,23,42,0.18),0_0_40px_-8px_rgba(34,211,238,0.22),inset_0_1px_0_0_rgba(255,255,255,0.85)] focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 dark:border-cyan-500/15 dark:bg-slate-950/50 dark:shadow-[0_12px_40px_-16px_rgba(0,0,0,0.45),inset_0_1px_0_0_rgba(255,255,255,0.06)] dark:ring-white/5 dark:hover:border-cyan-400/40 dark:hover:shadow-[0_26px_56px_-12px_rgba(0,0,0,0.55),0_0_48px_-6px_rgba(34,211,238,0.18)] dark:focus-visible:ring-cyan-400 dark:focus-visible:ring-offset-slate-950 lg:min-h-[400px] lg:flex-row"
+              :aria-label="`View project: ${project.title}`"
+              @click="openProject(project)"
+              @keydown.enter.prevent="openProject(project)"
+              @keydown.space.prevent="openProject(project)"
+            >
+              <div
+                class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                aria-hidden="true"
               >
-                {{ project.label }}
-              </span>
-              <span
-                class="shrink-0 text-[10px] font-medium tabular-nums text-slate-500 dark:text-slate-400"
-              >
-                {{ project.year }} · {{ project.phase }}
-              </span>
-            </div>
+                <div class="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-gradient-to-br from-cyan-400/25 via-sky-500/15 to-transparent blur-2xl dark:from-cyan-400/20 dark:via-violet-500/12" />
+                <div class="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-gradient-to-tr from-violet-500/15 to-transparent blur-2xl dark:from-violet-500/12" />
+              </div>
+              <div
+                class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent opacity-80 dark:via-cyan-300/35"
+                aria-hidden="true"
+              />
 
-            <h3 class="text-[15px] font-semibold leading-snug tracking-tight text-slate-900 dark:text-white sm:text-base">
-              {{ project.title }}
-            </h3>
-            <p class="line-clamp-3 text-[13px] leading-relaxed text-slate-600 dark:text-slate-300 sm:text-xs sm:leading-relaxed">
-              {{ project.description }}
-            </p>
-
-            <div class="flex flex-wrap gap-1.5 pt-0.5">
-              <span
-                v-for="item in project.stack"
-                :key="item.label"
-                class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200/80 bg-white/90 shadow-sm transition group-hover:border-cyan-500/25 group-hover:shadow-[0_0_12px_-4px_rgba(34,211,238,0.35)] dark:border-white/10 dark:bg-slate-900/85 dark:group-hover:border-cyan-400/30"
-                :title="item.label"
-              >
-                <Icon :icon="item.icon" :class="[item.iconClass, 'h-4 w-4']" />
-              </span>
-            </div>
-
-            <div class="flex min-h-[1.75rem] flex-wrap gap-1">
-              <span
-                v-for="feature in project.features.slice(0, 4)"
-                :key="feature"
-                class="rounded-md border border-slate-200/80 bg-slate-50/95 px-1.5 py-0.5 text-[10px] font-medium text-slate-700 dark:border-slate-600/45 dark:bg-slate-800/85 dark:text-slate-200"
-              >
-                {{ feature }}
-              </span>
-              <span
-                v-if="project.features.length > 4"
-                class="self-center text-[10px] font-medium text-slate-500 dark:text-slate-400"
-              >
-                +{{ project.features.length - 4 }}
-              </span>
-            </div>
-
-            <div class="mt-auto flex border-t border-slate-200/60 pt-2.5 dark:border-white/10">
-              <span
-                class="inline-flex items-center gap-1.5 rounded-lg bg-slate-900/[0.04] px-2.5 py-1.5 text-xs font-semibold text-primary-600 ring-1 ring-slate-200/80 transition group-hover:bg-primary-600/10 group-hover:ring-cyan-500/30 dark:bg-white/[0.06] dark:text-cyan-300 dark:ring-white/10 dark:group-hover:bg-cyan-400/10 dark:group-hover:ring-cyan-400/25"
-              >
-                View details
-                <Icon
-                  icon="ph:arrow-right-bold"
-                  class="h-3.5 w-3.5 transition group-hover:translate-x-0.5"
+              <div class="relative aspect-[16/9] w-full shrink-0 overflow-hidden border-b border-slate-200/70 bg-gradient-to-b from-slate-100/90 to-slate-50/80 dark:border-white/10 dark:from-slate-900/80 dark:to-slate-950/90 lg:aspect-auto lg:h-[400px] lg:w-[63%] lg:border-b-0 lg:border-r">
+                <img
+                  :src="project.image"
+                  :alt="project.title"
+                  class="h-full w-full object-contain object-center p-5 transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+                  loading="lazy"
                 />
-              </span>
-            </div>
+              </div>
+
+              <div class="relative flex min-h-0 flex-1 flex-col justify-center gap-2.5 p-5 lg:py-6">
+                <div class="flex flex-wrap items-start justify-between gap-2">
+                  <span class="inline-flex max-w-[72%] items-center rounded-full border border-primary-500/20 bg-primary-500/[0.08] px-2.5 py-0.5 text-[10px] font-semibold uppercase leading-tight tracking-wide text-primary-700 dark:border-cyan-400/25 dark:bg-cyan-400/10 dark:text-cyan-200/95">
+                    {{ project.label }}
+                  </span>
+                  <span class="shrink-0 text-[10px] font-medium tabular-nums text-slate-500 dark:text-slate-400">
+                    {{ project.year }} · {{ project.phase }}
+                  </span>
+                </div>
+
+                <h3 class="text-lg font-semibold leading-snug tracking-tight text-slate-900 dark:text-white sm:text-xl">
+                  {{ project.title }}
+                </h3>
+                <p class="line-clamp-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                  {{ project.description }}
+                </p>
+
+                <div class="flex flex-wrap gap-1.5">
+                  <span
+                    v-for="item in project.stack"
+                    :key="item.label"
+                    class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200/80 bg-white/90 shadow-sm transition group-hover:border-cyan-500/25 dark:border-white/10 dark:bg-slate-900/85 dark:group-hover:border-cyan-400/30"
+                    :title="item.label"
+                  >
+                    <Icon :icon="item.icon" :class="[item.iconClass, 'h-4 w-4']" />
+                  </span>
+                </div>
+
+                <div class="flex flex-wrap gap-1">
+                  <span
+                    v-for="feature in project.features.slice(0, 3)"
+                    :key="feature"
+                    class="rounded-md border border-slate-200/80 bg-slate-50/95 px-1.5 py-0.5 text-[10px] font-medium text-slate-700 dark:border-slate-600/45 dark:bg-slate-800/85 dark:text-slate-200"
+                  >
+                    {{ feature }}
+                  </span>
+                </div>
+
+                <div class="mt-1 flex pt-1">
+                  <span class="inline-flex items-center gap-1.5 rounded-lg bg-slate-900/[0.04] px-2.5 py-1.5 text-xs font-semibold text-primary-600 ring-1 ring-slate-200/80 transition group-hover:bg-primary-600/10 group-hover:ring-cyan-500/30 dark:bg-white/[0.06] dark:text-cyan-300 dark:ring-white/10 dark:group-hover:bg-cyan-400/10 dark:group-hover:ring-cyan-400/25">
+                    View details
+                    <Icon icon="ph:arrow-right-bold" class="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
+                  </span>
+                </div>
+              </div>
+            </article>
           </div>
-        </article>
+        </div>
       </div>
     </div>
 
@@ -303,11 +285,25 @@
 
 <script setup>
 import { Icon } from '@iconify/vue'
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useProjectStackScroll } from '~/composables/useProjectStackScroll'
 
+const introContentReady = useIntroContentReady()
 const sectionRoot = ref(null)
+const stackStage = ref(null)
 const selectedProject = ref(null)
 const imagePreview = ref({ src: '', alt: '' })
+
+const { init: initProjectStackScroll, bind: bindProjectStackScroll } = useProjectStackScroll(stackStage)
+let unbindProjectStackScroll = null
+let stackInitialized = false
+
+function setupProjectStackScroll() {
+  if (stackInitialized || !introContentReady.value) return
+  stackInitialized = true
+  unbindProjectStackScroll = bindProjectStackScroll()
+  void initProjectStackScroll()
+}
 
 /** If intersection never fired, unstick only nodes that are already on screen (avoids forcing off-screen cards visible). */
 function nudgeRevealIfStuckInView() {
@@ -513,10 +509,20 @@ const visibleProjects = projects
 onMounted(() => {
   window.addEventListener('keydown', handleEscClose)
   window.setTimeout(nudgeRevealIfStuckInView, 2000)
+
+  if (introContentReady.value) {
+    nextTick(() => requestAnimationFrame(() => setupProjectStackScroll()))
+  }
+})
+
+watch(introContentReady, (ready) => {
+  if (!ready) return
+  nextTick(() => requestAnimationFrame(() => setupProjectStackScroll()))
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleEscClose)
+  unbindProjectStackScroll?.()
 })
 
 watch(selectedProject, (project) => {
@@ -529,21 +535,59 @@ watch(imagePreview, (preview) => {
 </script>
 
 <style scoped>
-/* Scroll reveal: stagger + unified transitions (opacity/transform + hover shadow) */
-.featured-projects .project-card.reveal-on-scroll {
-  opacity: 0;
-  transform: translateY(18px);
-  transition:
-    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.35s ease;
+.projects-stack-stage {
+  width: 100%;
+  padding-top: 1rem;
+  padding-bottom: 4rem;
 }
 
-.featured-projects .project-card.reveal-on-scroll.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: calc(var(--reveal-stagger, 0) * 65ms);
+.projects-stack-cards {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.projects-card-wrapper {
+  width: 100%;
+  perspective: 500px;
+  margin-bottom: 1.25rem;
+  position: relative;
+}
+
+.projects-card-wrapper:last-child {
+  margin-bottom: 0;
+}
+
+@media (min-width: 1024px) {
+  .projects-stack-stage {
+    padding-top: 1.5rem;
+    padding-bottom: 6rem;
+  }
+
+  .projects-card-wrapper {
+    margin-bottom: 3rem;
+  }
+
+  .projects-stack-card {
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+}
+
+@media (max-width: 1023px) {
+  .projects-stack-stage {
+    padding-top: 0.75rem;
+    padding-bottom: 3rem;
+  }
+
+  .projects-card-wrapper {
+    perspective: 500px;
+    margin-bottom: 2.5rem;
+  }
+
+  .projects-stack-card {
+    will-change: transform;
+    backface-visibility: hidden;
+  }
 }
 
 .project-modal-enter-active .project-modal-backdrop,

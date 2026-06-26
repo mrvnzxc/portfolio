@@ -27,6 +27,11 @@
         ref="scrollerRef"
         class="gallery-x-scroll w-full cursor-grab touch-pan-x overflow-x-auto scroll-smooth pb-6 pt-2 selection:bg-transparent active:cursor-grabbing md:select-none"
         :class="{ 'select-none': pointerDragging }"
+        @mouseenter="autoScrollPaused = true"
+        @mouseleave="autoScrollPaused = false"
+        @touchstart.passive="autoScrollPaused = true"
+        @touchend.passive="autoScrollPaused = false"
+        @touchcancel.passive="autoScrollPaused = false"
         @scroll.passive="onScrollerScroll"
         @pointerdown="onPointerDown"
         @pointermove="onPointerMove"
@@ -183,9 +188,15 @@ let activePointerId: number | null = null
 
 const lightboxOpen = ref(false)
 const lightboxIndex = ref(0)
+const autoScrollPaused = ref(false)
 
 let ro: ResizeObserver | null = null
 let rafScroll = 0
+let autoScrollRaf = 0
+let lastAutoScrollTs = 0
+
+/** Pixels per second — drift right to left */
+const AUTO_SCROLL_SPEED = 200
 
 const cardStateClass = (idx: number) => {
   const isCenter = idx === centeredSlotIndex.value
@@ -359,6 +370,43 @@ const onKeydown = (e: KeyboardEvent) => {
   }
 }
 
+function shouldAutoScroll() {
+  if (typeof window === 'undefined') return false
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false
+  if (lightboxOpen.value || pointerDragging.value || autoScrollPaused.value) return false
+  return Boolean(scrollerRef.value && segmentWidth.value > 0)
+}
+
+function tickAutoScroll(ts: number) {
+  if (!lastAutoScrollTs) lastAutoScrollTs = ts
+  const elapsed = ts - lastAutoScrollTs
+  lastAutoScrollTs = ts
+
+  const el = scrollerRef.value
+  if (shouldAutoScroll() && el) {
+    const delta = AUTO_SCROLL_SPEED * (elapsed / 1000)
+    el.scrollLeft += delta
+    normalizeInfiniteScroll()
+    updateCenteredCard()
+  } else if (!shouldAutoScroll()) {
+    lastAutoScrollTs = 0
+  }
+
+  autoScrollRaf = requestAnimationFrame(tickAutoScroll)
+}
+
+function startAutoScroll() {
+  if (autoScrollRaf) return
+  if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  autoScrollRaf = requestAnimationFrame(tickAutoScroll)
+}
+
+function stopAutoScroll() {
+  if (autoScrollRaf) cancelAnimationFrame(autoScrollRaf)
+  autoScrollRaf = 0
+  lastAutoScrollTs = 0
+}
+
 const lockBody = (lock: boolean) => {
   if (typeof document === 'undefined') return
   document.body.style.overflow = lock ? 'hidden' : ''
@@ -389,6 +437,8 @@ onMounted(() => {
       updateCenteredCard()
     })
     if (scrollerRef.value) ro.observe(scrollerRef.value)
+
+    startAutoScroll()
   })
 })
 
@@ -398,6 +448,7 @@ onBeforeUnmount(() => {
   ro = null
   lockBody(false)
   if (rafScroll) cancelAnimationFrame(rafScroll)
+  stopAutoScroll()
 })
 </script>
 

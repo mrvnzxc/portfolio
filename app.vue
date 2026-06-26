@@ -36,6 +36,16 @@ onMounted(() => {
   window.setTimeout(() => {
     minimumTimerElapsed.value = true
   }, 3000)
+
+  // Safety net: never leave the site invisible if the warp loader fails to finish
+  window.setTimeout(() => {
+    if (portfolioVisible.value) return
+    warpSequenceDone.value = true
+    minimumTimerElapsed.value = true
+    showWarpLoader.value = false
+    portfolioVisible.value = true
+    introContentReady.value = true
+  }, 6500)
 })
 
 watch([warpSequenceDone, minimumTimerElapsed], ([warp, min]) => {

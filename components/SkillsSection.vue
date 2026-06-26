@@ -90,9 +90,10 @@ const skills = ref([
   { name: 'Java', percent: 80, current: 0, icon: 'logos:java', iconClass: 'h-6 w-6 shrink-0' },
   { name: 'Python', percent: 60, current: 0, icon: 'simple-icons:python', iconClass: 'h-5 w-5 shrink-0 text-[#3776ab]' },
   { name: 'JavaScript', percent: 60, current: 0, icon: 'simple-icons:javascript', iconClass: 'h-5 w-5 shrink-0 text-[#f7df1e]' },
-  { name: 'PHP', percent: 85, current: 0, icon: 'simple-icons:php', iconClass: 'h-5 w-5 shrink-0 text-[#777bb4]' },
+  { name: 'React / Next', percent: 70, current: 0, icon: 'simple-icons:react', iconClass: 'h-5 w-5 shrink-0 text-[#61dafb]' },
+  { name: 'PHP/Laravel', percent: 85, current: 0, icon: 'simple-icons:laravel', iconClass: 'h-5 w-5 shrink-0 text-[#ff2d20]' },
   { name: 'MySQL', percent: 70, current: 0, icon: 'simple-icons:mysql', iconClass: 'h-5 w-5 shrink-0 text-[#00618a]' },
-  { name: 'Nuxt / Vue', percent: 60, current: 0, icon: 'simple-icons:nuxtdotjs', iconClass: 'h-5 w-5 shrink-0 text-[#00dc82]' },
+  { name: 'Vue / Nuxt', percent: 60, current: 0, icon: 'simple-icons:nuxtdotjs', iconClass: 'h-5 w-5 shrink-0 text-[#00dc82]' },
   { name: 'Tailwind CSS', percent: 70, current: 0, icon: 'simple-icons:tailwindcss', iconClass: 'h-5 w-5 shrink-0 text-[#38bdf8]' },
   { name: 'PostgreSQL', percent: 50, current: 0, icon: 'simple-icons:postgresql', iconClass: 'h-5 w-5 shrink-0 text-[#4169e1]' }
 ])
