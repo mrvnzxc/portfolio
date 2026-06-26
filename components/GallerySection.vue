@@ -182,7 +182,7 @@ let lastAutoScrollTs = 0
 let lastCenterUpdate = 0
 
 /** Pixels per second — drift right to left */
-const AUTO_SCROLL_SPEED = 120
+const AUTO_SCROLL_SPEED = 80
 
 const cardStateClass = (idx: number) => {
   const isCenter = idx === centeredSlotIndex.value

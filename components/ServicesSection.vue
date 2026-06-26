@@ -2,7 +2,7 @@
   <section id="services" class="section-band-b pt-5 sm:pt-6">
     <div class="mx-auto max-w-6xl px-4">
       <div class="mb-4 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 reveal-on-scroll">
-        <h2 class="mb-1 text-3xl font-semibold tracking-tight sm:text-4xl">How I Can Help</h2>
+        <h2 class="mb-1 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-50">How I Can Help</h2>
         <span class="self-end text-right text-xs sm:self-auto sm:text-left sm:text-sm font-semibold uppercase tracking-wide text-primary-600">Services</span>
       </div>
       <div class="grid gap-6 md:grid-cols-3">
