@@ -20,7 +20,6 @@
   <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-  import { useIntroContentReady } from '~/composables/useIntroContentReady'
 
   const fullName = 'John Marvin Bautista'
   /** Empty until warp handoff; avoids typing under the loader or a full-name flash. */

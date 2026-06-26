@@ -7,7 +7,6 @@ function runStackAnimation(
   stage: HTMLElement,
   startOffset: (index: number) => number,
   end: string,
-  pinSpacing: boolean | ((index: number, total: number) => boolean) = false,
 ) {
   const wrappers = gsap.utils.toArray<HTMLElement>('.projects-card-wrapper', stage)
   const cards = gsap.utils.toArray<HTMLElement>('.projects-stack-card', stage)
@@ -39,10 +38,7 @@ function runStackAnimation(
         endTrigger: stage,
         scrub: true,
         pin: wrapper,
-        pinSpacing:
-          typeof pinSpacing === 'function'
-            ? pinSpacing(index, cards.length)
-            : pinSpacing,
+        pinSpacing: false,
         anticipatePin: 1,
         invalidateOnRefresh: true,
       },
@@ -79,15 +75,9 @@ export function useProjectStackScroll(stageRef: { value: HTMLElement | null }) {
           // Desktop — unchanged from the working version
           runStackAnimation(gsap, stage, (index) => 60 + 10 * index, 'bottom 550')
         } else {
-          // Mobile — reserve document space after the last pin so Services is not covered
+          // Mobile / tablet — same scale, tilt & pin logic; viewport-sized offsets only
           const end = `bottom ${Math.round(window.innerHeight * 0.72)}`
-          runStackAnimation(
-            gsap,
-            stage,
-            (index) => 16 + 8 * index,
-            end,
-            (index, total) => index === total - 1,
-          )
+          runStackAnimation(gsap, stage, (index) => 16 + 8 * index, end)
         }
       }, stage)
 

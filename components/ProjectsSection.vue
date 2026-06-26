@@ -286,7 +286,6 @@
 <script setup>
 import { Icon } from '@iconify/vue'
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useIntroContentReady } from '~/composables/useIntroContentReady'
 import { useProjectStackScroll } from '~/composables/useProjectStackScroll'
 
 const introContentReady = useIntroContentReady()
@@ -577,7 +576,7 @@ watch(imagePreview, (preview) => {
 @media (max-width: 1023px) {
   .projects-stack-stage {
     padding-top: 0.75rem;
-    padding-bottom: 2.5rem;
+    padding-bottom: 3rem;
   }
 
   .projects-card-wrapper {

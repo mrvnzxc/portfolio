@@ -18,7 +18,6 @@
 
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
-import { useIntroContentReady } from '~/composables/useIntroContentReady'
 
 const showWarpLoader = ref(true)
 const portfolioVisible = ref(false)
