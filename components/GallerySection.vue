@@ -6,50 +6,32 @@
         <span class="self-end text-right text-xs sm:self-auto sm:text-left sm:text-sm font-semibold uppercase tracking-wide text-primary-600">Moments</span>
       </div>
 
-    <div class="reveal-on-scroll relative">
-      <button
-        type="button"
-        class="absolute left-1 top-1/2 z-20 hidden -translate-y-1/2 items-center justify-center rounded-full border border-slate-300/80 bg-white/90 p-2.5 text-slate-700 shadow-md shadow-slate-900/10 backdrop-blur-sm transition hover:border-primary-400/50 hover:bg-white hover:text-primary-700 sm:left-2 sm:flex md:p-3 dark:border-white/15 dark:bg-slate-900/90 dark:text-slate-100 dark:hover:border-cyan-400/40 dark:hover:bg-slate-800"
-        aria-label="Scroll gallery left"
-        @click="scrollGalleryStrip(-1)"
-      >
-        <Icon icon="ph:caret-left" class="h-6 w-6 md:h-7 md:w-7" />
-      </button>
-      <button
-        type="button"
-        class="absolute right-1 top-1/2 z-20 hidden -translate-y-1/2 items-center justify-center rounded-full border border-slate-300/80 bg-white/90 p-2.5 text-slate-700 shadow-md shadow-slate-900/10 backdrop-blur-sm transition hover:border-primary-400/50 hover:bg-white hover:text-primary-700 sm:right-2 sm:flex md:p-3 dark:border-white/15 dark:bg-slate-900/90 dark:text-slate-100 dark:hover:border-cyan-400/40 dark:hover:bg-slate-800"
-        aria-label="Scroll gallery right"
-        @click="scrollGalleryStrip(1)"
-      >
-        <Icon icon="ph:caret-right" class="h-6 w-6 md:h-7 md:w-7" />
-      </button>
+    <div class="reveal-on-scroll">
       <div
-        ref="scrollerRef"
-        class="gallery-x-scroll w-full cursor-grab touch-pan-x overflow-x-auto scroll-smooth pb-6 pt-2 selection:bg-transparent active:cursor-grabbing md:select-none"
+        ref="viewportRef"
+        class="gallery-viewport w-full cursor-grab overflow-hidden pb-6 pt-2 selection:bg-transparent active:cursor-grabbing md:select-none"
         :class="{ 'select-none': pointerDragging }"
         @mouseenter="autoScrollPaused = true"
         @mouseleave="autoScrollPaused = false"
         @touchstart.passive="autoScrollPaused = true"
         @touchend.passive="autoScrollPaused = false"
         @touchcancel.passive="autoScrollPaused = false"
-        @scroll.passive="onScrollerScroll"
         @pointerdown="onPointerDown"
         @pointermove="onPointerMove"
         @pointerup="onPointerUp"
         @pointercancel="onPointerUp"
         @pointerleave="onPointerLeave"
       >
-        <div class="mx-auto flex w-max gap-6 md:gap-8">
+        <div ref="trackRef" class="gallery-track flex w-max gap-6 md:gap-8">
         <div
           v-for="(item, idx) in displayItems"
           :key="item.key"
-          class="gallery-float-outer shrink-0"
-          :style="{ animationDelay: `${(idx % baseImages.length) * 0.12}s` }"
+          class="shrink-0"
         >
           <button
             type="button"
             :ref="(el) => setCardRef(el, idx)"
-            class="gallery-glass-card group relative flex min-w-[250px] flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-50/80 p-3 text-left shadow-sm shadow-slate-950/5 outline-none backdrop-blur-md transition-[transform,opacity,filter,box-shadow] duration-300 ease-out focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-white/10 dark:bg-white/5 dark:shadow-lg dark:shadow-black/25 dark:backdrop-blur-lg dark:focus-visible:ring-offset-slate-950 md:min-w-[260px] md:p-2.5 lg:min-w-[280px] dark:shadow-cyan-950/20"
+            class="gallery-glass-card group relative flex min-w-[250px] flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-50/80 p-3 text-left shadow-sm shadow-slate-950/5 outline-none backdrop-blur-md transition-[opacity,filter,box-shadow] duration-300 ease-out focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-white/10 dark:bg-white/5 dark:shadow-lg dark:shadow-black/25 dark:backdrop-blur-lg dark:focus-visible:ring-offset-slate-950 md:min-w-[260px] md:p-2.5 lg:min-w-[280px] dark:shadow-cyan-950/20"
             :class="cardStateClass(idx)"
             @click="onCardActivate(item.logicalIndex)"
           >
@@ -141,7 +123,8 @@ const baseImages = [
   '/me3.jpg',
   '/me4.jpg',
   '/me5.jpg',
-  '/me6.jpg'
+  '/me6.jpg',
+  '/me7.jpg'
 ] as const
 
 const LOOP_SEGMENTS = 3
@@ -160,7 +143,8 @@ const displayItems = computed(() => {
   return rows
 })
 
-const scrollerRef = ref<HTMLElement | null>(null)
+const viewportRef = ref<HTMLElement | null>(null)
+const trackRef = ref<HTMLElement | null>(null)
 const cardRefs = ref<(HTMLElement | null)[]>([])
 
 const setCardRef = (
@@ -177,111 +161,88 @@ const setCardRef = (
 }
 
 const segmentWidth = ref(0)
+const cardStep = ref(0)
 const centeredSlotIndex = ref(-1)
 
 const pointerDragging = ref(false)
 const dragMoved = ref(false)
 const suppressClick = ref(false)
 let dragStartX = 0
-let dragStartScroll = 0
+let dragStartOffset = 0
 let activePointerId: number | null = null
+let trackOffset = 0
 
 const lightboxOpen = ref(false)
 const lightboxIndex = ref(0)
 const autoScrollPaused = ref(false)
 
 let ro: ResizeObserver | null = null
-let rafScroll = 0
 let autoScrollRaf = 0
 let lastAutoScrollTs = 0
+let lastCenterUpdate = 0
 
 /** Pixels per second — drift right to left */
-const AUTO_SCROLL_SPEED = 200
+const AUTO_SCROLL_SPEED = 120
 
 const cardStateClass = (idx: number) => {
   const isCenter = idx === centeredSlotIndex.value
   return [
     isCenter
-      ? 'scale-105 opacity-100 z-[1]'
-      : 'scale-100 z-0 opacity-100 dark:opacity-[0.72]',
-    'group-hover:scale-[1.06] group-hover:opacity-100 group-hover:shadow-md group-hover:shadow-primary-500/15 dark:group-hover:shadow-[0_0_20px_rgba(0,255,255,0.3)]'
+      ? 'opacity-100 z-[1]'
+      : 'z-0 opacity-100 dark:opacity-[0.72]',
+    'group-hover:scale-[1.03] group-hover:opacity-100 group-hover:shadow-md group-hover:shadow-primary-500/15 dark:group-hover:shadow-[0_0_20px_rgba(0,255,255,0.3)]'
   ]
 }
 
-const measureSegment = () => {
-  const el = scrollerRef.value
-  if (!el || el.scrollWidth === 0) return
-  segmentWidth.value = el.scrollWidth / LOOP_SEGMENTS
+const applyTrackTransform = () => {
+  const track = trackRef.value
+  if (!track) return
+  track.style.transform = `translate3d(${-trackOffset}px, 0, 0)`
 }
 
-const normalizeInfiniteScroll = () => {
-  const el = scrollerRef.value
-  const w = segmentWidth.value
-  if (!el || w <= 0) return
+const measureSegment = () => {
+  const track = trackRef.value
+  if (!track || track.scrollWidth === 0) return
+  segmentWidth.value = track.scrollWidth / LOOP_SEGMENTS
 
-  const left = el.scrollLeft
-  const margin = w * 0.12
-
-  if (left < margin) {
-    el.style.scrollBehavior = 'auto'
-    el.scrollLeft = left + w
-    requestAnimationFrame(() => {
-      el.style.scrollBehavior = ''
-    })
-  } else if (left > w * 2 - margin) {
-    el.style.scrollBehavior = 'auto'
-    el.scrollLeft = left - w
-    requestAnimationFrame(() => {
-      el.style.scrollBehavior = ''
-    })
+  const firstCard = cardRefs.value.find((c) => c != null)
+  if (firstCard) {
+    const gap = window.matchMedia('(min-width: 768px)').matches ? 32 : 24
+    cardStep.value = firstCard.offsetWidth + gap
   }
 }
 
-const updateCenteredCard = () => {
-  const scroller = scrollerRef.value
-  if (!scroller) return
+const normalizeTrackOffset = () => {
+  const w = segmentWidth.value
+  if (w <= 0) return
 
-  const rect = scroller.getBoundingClientRect()
-  const mid = rect.left + rect.width / 2
-
-  let best = -1
-  let bestDist = Infinity
-
-  cardRefs.value.forEach((el, idx) => {
-    if (!el) return
-    const cr = el.getBoundingClientRect()
-    const c = cr.left + cr.width / 2
-    const d = Math.abs(c - mid)
-    if (d < bestDist) {
-      bestDist = d
-      best = idx
-    }
-  })
-
-  centeredSlotIndex.value = best
+  const margin = w * 0.12
+  if (trackOffset < margin) trackOffset += w
+  else if (trackOffset > w * 2 - margin) trackOffset -= w
 }
 
-const onScrollerScroll = () => {
-  if (rafScroll) cancelAnimationFrame(rafScroll)
-  rafScroll = requestAnimationFrame(() => {
-    normalizeInfiniteScroll()
-    updateCenteredCard()
-    rafScroll = 0
-  })
+const updateCenteredCard = (force = false) => {
+  const viewport = viewportRef.value
+  if (!viewport || cardStep.value <= 0) return
+
+  const now = performance.now()
+  if (!force && now - lastCenterUpdate < 120) return
+  lastCenterUpdate = now
+
+  const center = trackOffset + viewport.clientWidth / 2
+  const idx = Math.round((center - cardStep.value / 2) / cardStep.value)
+  const clamped = Math.max(0, Math.min(displayItems.value.length - 1, idx))
+  if (clamped !== centeredSlotIndex.value) centeredSlotIndex.value = clamped
 }
 
 const onPointerDown = (e: PointerEvent) => {
-  if (e.pointerType === 'touch') return
-  const target = e.target as HTMLElement | null
-  if (target?.closest('button')) return
-
-  const el = scrollerRef.value
+  const el = viewportRef.value
   if (!el) return
 
   pointerDragging.value = true
   dragMoved.value = false
   dragStartX = e.clientX
-  dragStartScroll = el.scrollLeft
+  dragStartOffset = trackOffset
   activePointerId = e.pointerId
   try {
     el.setPointerCapture(e.pointerId)
@@ -291,17 +252,17 @@ const onPointerDown = (e: PointerEvent) => {
 }
 
 const onPointerMove = (e: PointerEvent) => {
-  if (!pointerDragging.value || e.pointerType === 'touch') return
-  const el = scrollerRef.value
-  if (!el) return
-
+  if (!pointerDragging.value) return
   const dx = e.clientX - dragStartX
   if (Math.abs(dx) > 6) dragMoved.value = true
-  el.scrollLeft = dragStartScroll - dx
+  trackOffset = dragStartOffset - dx
+  normalizeTrackOffset()
+  applyTrackTransform()
+  updateCenteredCard(true)
 }
 
 const releasePointer = (e: PointerEvent) => {
-  const el = scrollerRef.value
+  const el = viewportRef.value
   if (activePointerId !== null && el?.hasPointerCapture(activePointerId)) {
     try {
       el.releasePointerCapture(activePointerId)
@@ -314,7 +275,6 @@ const releasePointer = (e: PointerEvent) => {
 }
 
 const onPointerUp = (e: PointerEvent) => {
-  if (e.pointerType === 'touch') return
   if (pointerDragging.value && dragMoved.value) {
     suppressClick.value = true
     queueMicrotask(() => {
@@ -328,7 +288,6 @@ const onPointerUp = (e: PointerEvent) => {
 }
 
 const onPointerLeave = (e: PointerEvent) => {
-  if (e.pointerType === 'touch') return
   if (pointerDragging.value) releasePointer(e)
 }
 
@@ -336,15 +295,6 @@ const onCardActivate = (logicalIndex: number) => {
   if (suppressClick.value) return
   lightboxIndex.value = logicalIndex
   lightboxOpen.value = true
-}
-
-const scrollGalleryStrip = (dir: number) => {
-  const el = scrollerRef.value
-  if (!el) return
-  const firstCard = cardRefs.value.find((c) => c != null)
-  const gap = 24
-  const step = firstCard ? firstCard.offsetWidth + gap : 300
-  el.scrollBy({ left: dir * step, behavior: 'smooth' })
 }
 
 const closeLightbox = () => {
@@ -374,21 +324,20 @@ function shouldAutoScroll() {
   if (typeof window === 'undefined') return false
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false
   if (lightboxOpen.value || pointerDragging.value || autoScrollPaused.value) return false
-  return Boolean(scrollerRef.value && segmentWidth.value > 0)
+  return Boolean(trackRef.value && segmentWidth.value > 0)
 }
 
 function tickAutoScroll(ts: number) {
   if (!lastAutoScrollTs) lastAutoScrollTs = ts
-  const elapsed = ts - lastAutoScrollTs
+  const elapsed = Math.min(ts - lastAutoScrollTs, 32)
   lastAutoScrollTs = ts
 
-  const el = scrollerRef.value
-  if (shouldAutoScroll() && el) {
-    const delta = AUTO_SCROLL_SPEED * (elapsed / 1000)
-    el.scrollLeft += delta
-    normalizeInfiniteScroll()
+  if (shouldAutoScroll()) {
+    trackOffset += AUTO_SCROLL_SPEED * (elapsed / 1000)
+    normalizeTrackOffset()
+    applyTrackTransform()
     updateCenteredCard()
-  } else if (!shouldAutoScroll()) {
+  } else {
     lastAutoScrollTs = 0
   }
 
@@ -421,22 +370,18 @@ onMounted(() => {
 
   nextTick(() => {
     measureSegment()
-    const el = scrollerRef.value
     const w = segmentWidth.value
-    if (el && w > 0) {
-      el.style.scrollBehavior = 'auto'
-      el.scrollLeft = w
-      requestAnimationFrame(() => {
-        el.style.scrollBehavior = ''
-        updateCenteredCard()
-      })
+    if (w > 0) {
+      trackOffset = w
+      applyTrackTransform()
+      updateCenteredCard(true)
     }
 
     ro = new ResizeObserver(() => {
       measureSegment()
-      updateCenteredCard()
+      updateCenteredCard(true)
     })
-    if (scrollerRef.value) ro.observe(scrollerRef.value)
+    if (viewportRef.value) ro.observe(viewportRef.value)
 
     startAutoScroll()
   })
@@ -447,32 +392,24 @@ onBeforeUnmount(() => {
   ro?.disconnect()
   ro = null
   lockBody(false)
-  if (rafScroll) cancelAnimationFrame(rafScroll)
   stopAutoScroll()
 })
 </script>
 
 <style scoped>
-@keyframes gallery-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+.gallery-viewport {
+  touch-action: pan-y;
 }
 
-.gallery-float-outer {
-  animation: gallery-float 6.5s ease-in-out infinite;
+.gallery-track {
   will-change: transform;
+  backface-visibility: hidden;
 }
 
 .gallery-glass-card {
   transform-origin: center center;
 }
 
-/* Stop the browser’s default image drag (ghost) on desktop so horizontal scroll-drag feels right */
 .gallery-strip-img {
   -webkit-user-drag: none;
   user-select: none;
