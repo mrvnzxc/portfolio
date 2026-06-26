@@ -118,6 +118,7 @@
             </article>
           </div>
         </div>
+        <div class="projects-mobile-tail-spacer lg:hidden" aria-hidden="true" />
       </div>
     </div>
 
@@ -574,14 +575,28 @@ watch(imagePreview, (preview) => {
 }
 
 @media (max-width: 1023px) {
+  .featured-projects {
+    padding-bottom: max(7rem, 20vh) !important;
+  }
+
   .projects-stack-stage {
     padding-top: 0.75rem;
-    padding-bottom: 3rem;
+    padding-bottom: min(40vh, 18rem);
   }
 
   .projects-card-wrapper {
     perspective: 500px;
     margin-bottom: 2.5rem;
+  }
+
+  .projects-card-wrapper:last-child {
+    margin-bottom: 1.5rem;
+  }
+
+  .projects-mobile-tail-spacer {
+    height: min(50vh, 24rem);
+    width: 100%;
+    pointer-events: none;
   }
 
   .projects-stack-card {
