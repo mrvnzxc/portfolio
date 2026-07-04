@@ -118,6 +118,7 @@ import {
 } from 'vue'
 
 const baseImages = [
+  '/awards1.jpg',
   '/me1.jpg',
   '/me2.jpg',
   '/me3.jpg',
