@@ -24,15 +24,14 @@
       >
         <div ref="trackRef" class="gallery-track flex w-max gap-6 md:gap-8">
         <div
-          v-for="(item, idx) in displayItems"
+          v-for="item in displayItems"
           :key="item.key"
           class="shrink-0"
         >
           <button
             type="button"
-            :ref="(el) => setCardRef(el, idx)"
-            class="gallery-glass-card group relative flex min-w-[250px] flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-50/80 p-3 text-left shadow-sm shadow-slate-950/5 outline-none backdrop-blur-md transition-[opacity,filter,box-shadow] duration-300 ease-out focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-white/10 dark:bg-white/5 dark:shadow-lg dark:shadow-black/25 dark:backdrop-blur-lg dark:focus-visible:ring-offset-slate-950 md:min-w-[260px] md:p-2.5 lg:min-w-[280px] dark:shadow-cyan-950/20"
-            :class="cardStateClass(idx)"
+            :data-gallery-index="item.logicalIndex"
+            class="gallery-glass-card group relative flex min-w-[250px] cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-50/80 p-3 text-left opacity-100 shadow-sm shadow-slate-950/5 outline-none backdrop-blur-md transition-[opacity,filter,box-shadow] duration-300 ease-out focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 group-hover:scale-[1.03] group-hover:opacity-100 group-hover:shadow-md group-hover:shadow-primary-500/15 dark:border-white/10 dark:bg-white/5 dark:shadow-lg dark:shadow-black/25 dark:backdrop-blur-lg dark:focus-visible:ring-offset-slate-950 dark:group-hover:shadow-[0_0_20px_rgba(0,255,255,0.3)] md:min-w-[260px] md:p-2.5 lg:min-w-[280px] dark:shadow-cyan-950/20"
             @click="onCardActivate(item.logicalIndex)"
           >
             <div
@@ -44,12 +43,7 @@
                 draggable="false"
                 loading="lazy"
                 decoding="async"
-                class="gallery-strip-img pointer-events-none max-h-full max-w-full object-contain object-center transition-[filter] duration-300 select-none"
-                :class="
-                  idx === centeredSlotIndex
-                    ? 'brightness-[1.03] contrast-[1.02] dark:brightness-110'
-                    : 'brightness-100 contrast-[1.03] dark:brightness-90 dark:contrast-100'
-                "
+                class="gallery-strip-img pointer-events-none max-h-full max-w-full object-contain object-center brightness-[1.03] contrast-[1.02] transition-[filter] duration-300 select-none dark:brightness-110"
                 @dragstart.prevent
               />
             </div>
@@ -113,8 +107,7 @@ import {
   onBeforeUnmount,
   onMounted,
   ref,
-  watch,
-  type ComponentPublicInstance
+  watch
 } from 'vue'
 
 const baseImages = [
@@ -145,24 +138,8 @@ const displayItems = computed(() => {
 
 const viewportRef = ref<HTMLElement | null>(null)
 const trackRef = ref<HTMLElement | null>(null)
-const cardRefs = ref<(HTMLElement | null)[]>([])
-
-const setCardRef = (
-  el: Element | ComponentPublicInstance | null,
-  idx: number
-) => {
-  const node =
-    el instanceof HTMLElement
-      ? el
-      : el && '$el' in el && el.$el instanceof HTMLElement
-        ? el.$el
-        : null
-  cardRefs.value[idx] = node
-}
 
 const segmentWidth = ref(0)
-const cardStep = ref(0)
-const centeredSlotIndex = ref(-1)
 
 const pointerDragging = ref(false)
 const dragMoved = ref(false)
@@ -170,6 +147,7 @@ const suppressClick = ref(false)
 let dragStartX = 0
 let dragStartOffset = 0
 let activePointerId: number | null = null
+let pressedLogicalIndex: number | null = null
 let trackOffset = 0
 
 const lightboxOpen = ref(false)
@@ -179,20 +157,9 @@ const autoScrollPaused = ref(false)
 let ro: ResizeObserver | null = null
 let autoScrollRaf = 0
 let lastAutoScrollTs = 0
-let lastCenterUpdate = 0
 
 /** Pixels per second — drift right to left */
 const AUTO_SCROLL_SPEED = 80
-
-const cardStateClass = (idx: number) => {
-  const isCenter = idx === centeredSlotIndex.value
-  return [
-    isCenter
-      ? 'opacity-100 z-[1]'
-      : 'z-0 opacity-100 dark:opacity-[0.72]',
-    'group-hover:scale-[1.03] group-hover:opacity-100 group-hover:shadow-md group-hover:shadow-primary-500/15 dark:group-hover:shadow-[0_0_20px_rgba(0,255,255,0.3)]'
-  ]
-}
 
 const applyTrackTransform = () => {
   const track = trackRef.value
@@ -204,12 +171,6 @@ const measureSegment = () => {
   const track = trackRef.value
   if (!track || track.scrollWidth === 0) return
   segmentWidth.value = track.scrollWidth / LOOP_SEGMENTS
-
-  const firstCard = cardRefs.value.find((c) => c != null)
-  if (firstCard) {
-    const gap = window.matchMedia('(min-width: 768px)').matches ? 32 : 24
-    cardStep.value = firstCard.offsetWidth + gap
-  }
 }
 
 const normalizeTrackOffset = () => {
@@ -221,24 +182,21 @@ const normalizeTrackOffset = () => {
   else if (trackOffset > w * 2 - margin) trackOffset -= w
 }
 
-const updateCenteredCard = (force = false) => {
-  const viewport = viewportRef.value
-  if (!viewport || cardStep.value <= 0) return
-
-  const now = performance.now()
-  if (!force && now - lastCenterUpdate < 120) return
-  lastCenterUpdate = now
-
-  const center = trackOffset + viewport.clientWidth / 2
-  const idx = Math.round((center - cardStep.value / 2) / cardStep.value)
-  const clamped = Math.max(0, Math.min(displayItems.value.length - 1, idx))
-  if (clamped !== centeredSlotIndex.value) centeredSlotIndex.value = clamped
+const getCardLogicalIndex = (target: EventTarget | null): number | null => {
+  if (!(target instanceof Element)) return null
+  const card = target.closest('[data-gallery-index]')
+  if (!card) return null
+  const value = card.getAttribute('data-gallery-index')
+  if (value == null || value === '') return null
+  const index = Number(value)
+  return Number.isFinite(index) ? index : null
 }
 
 const onPointerDown = (e: PointerEvent) => {
   const el = viewportRef.value
   if (!el) return
 
+  pressedLogicalIndex = getCardLogicalIndex(e.target)
   pointerDragging.value = true
   dragMoved.value = false
   dragStartX = e.clientX
@@ -258,7 +216,6 @@ const onPointerMove = (e: PointerEvent) => {
   trackOffset = dragStartOffset - dx
   normalizeTrackOffset()
   applyTrackTransform()
-  updateCenteredCard(true)
 }
 
 const releasePointer = (e: PointerEvent) => {
@@ -275,6 +232,12 @@ const releasePointer = (e: PointerEvent) => {
 }
 
 const onPointerUp = (e: PointerEvent) => {
+  const shouldOpen =
+    pointerDragging.value &&
+    !dragMoved.value &&
+    pressedLogicalIndex !== null &&
+    !suppressClick.value
+
   if (pointerDragging.value && dragMoved.value) {
     suppressClick.value = true
     queueMicrotask(() => {
@@ -282,8 +245,11 @@ const onPointerUp = (e: PointerEvent) => {
       dragMoved.value = false
     })
   } else {
+    if (shouldOpen) onCardActivate(pressedLogicalIndex!)
     dragMoved.value = false
   }
+
+  pressedLogicalIndex = null
   releasePointer(e)
 }
 
@@ -336,7 +302,6 @@ function tickAutoScroll(ts: number) {
     trackOffset += AUTO_SCROLL_SPEED * (elapsed / 1000)
     normalizeTrackOffset()
     applyTrackTransform()
-    updateCenteredCard()
   } else {
     lastAutoScrollTs = 0
   }
@@ -374,12 +339,10 @@ onMounted(() => {
     if (w > 0) {
       trackOffset = w
       applyTrackTransform()
-      updateCenteredCard(true)
     }
 
     ro = new ResizeObserver(() => {
       measureSegment()
-      updateCenteredCard(true)
     })
     if (viewportRef.value) ro.observe(viewportRef.value)
 
