@@ -76,7 +76,7 @@
                     {{ project.label }}
                   </span>
                   <span class="shrink-0 text-[10px] font-medium tabular-nums text-slate-500 dark:text-slate-400">
-                    {{ project.year }} · {{ project.phase }}
+                    {{ project.year }}
                   </span>
                 </div>
 
@@ -144,7 +144,6 @@
             <div class="min-w-0 pr-2">
               <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                 <span class="tabular-nums text-slate-700 dark:text-slate-200">{{ selectedProject.year }}</span>
-                · {{ selectedProject.phase }}
               </p>
               <p class="mt-0.5 text-[11px] font-semibold uppercase tracking-wide text-primary-600 dark:text-cyan-300">
                 {{ selectedProject.label }}
@@ -345,7 +344,6 @@ const handleEscClose = (event) => {
 const projects = [
   {
     year: '2025',
-    phase: 'Capstone',
     label: 'Capstone Project',
     title: 'Payroll with Attendance System',
     image: '/payroll.png',
@@ -398,7 +396,6 @@ const projects = [
   },
   {
     year: '2026',
-    phase: 'Innovation project',
     label: 'AR Platform',
     title: 'NDDU Siena AR Campus Navigation System',
     image: '/nddu.png',
@@ -450,7 +447,6 @@ const projects = [
   },
   {
     year: '2026',
-    phase: 'Production client system',
     label: 'Merchandising Suite',
     title: 'ReedGrey Sales and Inventory System',
     image: '/sales.png',
