@@ -2,53 +2,177 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Alternating stripes: A = white / slate-900 tint, B = sky / slate-950 tint. Both use alpha so fixed #dust-canvas shows through—no extra star layers. */
+/*
+ * Space theme tokens.
+ * Dark = deep space (default). Light = "lunar" — pale silver with ink stars.
+ * --c-* are RGB triplets so Tailwind can apply alpha (text-ion/60, bg-nebula/10 …).
+ */
+:root {
+  --c-ink: 16 20 46;
+  --c-muted: 75 83 120;
+  --c-ion: 14 116 144;
+  --c-nebula: 91 69 214;
+  --c-solar: 154 69 8;
+
+  --panel-bg: rgb(255 255 255 / 0.62);
+  --panel-border: rgb(91 69 214 / 0.14);
+  --panel-border-hover: rgb(91 69 214 / 0.38);
+  --panel-glow: rgb(91 69 214 / 0.16);
+  --panel-highlight: rgb(255 255 255 / 0.8);
+
+  --band-a: rgb(255 255 255 / 0.3);
+  --band-b: rgb(241 242 251 / 0.18);
+  --horizon: rgb(91 69 214 / 0.22);
+
+  --gradient-text: linear-gradient(90deg, #0e7490 0%, #5b45d6 55%, #a21caf 100%);
+
+  --light-bg:
+    radial-gradient(ellipse 60% 45% at 88% 4%, rgb(122 102 240 / 0.16), transparent 70%),
+    radial-gradient(ellipse 45% 40% at 4% 46%, rgb(14 165 233 / 0.1), transparent 70%),
+    linear-gradient(180deg, #f1f2fb 0%, #e3e6f5 100%);
+  --dark-bg:
+    radial-gradient(ellipse 60% 45% at 88% 4%, rgb(122 102 240 / 0.2), transparent 70%),
+    radial-gradient(ellipse 45% 40% at 4% 46%, rgb(56 189 248 / 0.1), transparent 70%),
+    radial-gradient(ellipse 50% 35% at 72% 98%, rgb(217 70 239 / 0.08), transparent 70%),
+    linear-gradient(180deg, #060a1c 0%, #04060f 55%, #03040b 100%);
+}
+
+html.dark {
+  --c-ink: 231 234 255;
+  --c-muted: 152 161 200;
+  --c-ion: 110 231 249;
+  --c-nebula: 165 148 255;
+  --c-solar: 252 199 102;
+
+  --panel-bg: linear-gradient(180deg, rgb(16 22 52 / 0.66), rgb(8 12 30 / 0.6));
+  --panel-border: rgb(165 148 255 / 0.14);
+  --panel-border-hover: rgb(110 231 249 / 0.38);
+  --panel-glow: rgb(110 231 249 / 0.14);
+  --panel-highlight: rgb(255 255 255 / 0.06);
+
+  --band-a: rgb(10 15 36 / 0.34);
+  --band-b: rgb(4 6 15 / 0.16);
+  --horizon: rgb(165 148 255 / 0.2);
+
+  --gradient-text: linear-gradient(90deg, #6ee7f9 0%, #a594ff 50%, #f0abfc 100%);
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: theme('fontFamily.display');
+  }
+}
+
+/* Section bands: nearly transparent so the fixed starfield reads as one continuous sky. A gradient "horizon" hairline separates them. */
 @layer components {
-  .section-band-a {
-    @apply border-t border-slate-200/70 py-16 sm:py-20 dark:border-slate-800;
-    background-color: rgb(255 255 255 / 0.62);
+  .section-band-a,
+  .section-band-b,
+  .footer-band-b {
+    border-top: 1px solid transparent;
+    border-image: linear-gradient(90deg, transparent, var(--horizon) 30%, var(--horizon) 70%, transparent) 1;
   }
 
-  .dark .section-band-a {
-    background-color: rgb(15 23 42 / 0.52);
+  .section-band-a {
+    @apply py-16 sm:py-20;
+    background-color: var(--band-a);
   }
 
   .section-band-b {
-    @apply border-t border-slate-200/70 py-16 sm:py-20 dark:border-slate-800;
-    background-color: rgb(240 249 255 / 0.6);
-  }
-
-  .dark .section-band-b {
-    background-color: rgb(2 6 23 / 0.55);
+    @apply py-16 sm:py-20;
+    background-color: var(--band-b);
   }
 
   .section-band-b-first {
     @apply py-16 sm:py-20;
-    background-color: rgb(240 249 255 / 0.6);
-  }
-
-  .dark .section-band-b-first {
-    background-color: rgb(2 6 23 / 0.55);
+    background-color: transparent;
   }
 
   .footer-band-b {
-    @apply border-t border-slate-200/80 py-6 text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400;
-    background-color: rgb(240 249 255 / 0.6);
+    @apply py-6 text-sm text-muted;
+    background-color: var(--band-a);
   }
 
-  .dark .footer-band-b {
-    background-color: rgb(2 6 23 / 0.55);
+  /* Glass panel used by every card on the page */
+  .space-panel {
+    border-radius: 1rem;
+    border: 1px solid var(--panel-border);
+    background: var(--panel-bg);
+    box-shadow:
+      inset 0 1px 0 0 var(--panel-highlight),
+      0 12px 32px -22px rgb(4 6 15 / 0.55);
   }
-}
 
-/* Base styling */
-:root {
-  --gradient-text: linear-gradient(90deg, #0d6efd, #6610f2);
-  --light-bg:
-    radial-gradient(circle at 18% 12%, #deeeff 0%, #cfe2ff 35%, rgba(188, 213, 255, 0.86) 62%, rgba(170, 203, 255, 0.5) 100%),
-    linear-gradient(180deg, #e7f1ff 0%, #cfe2ff 100%);
-  --dark-bg: radial-gradient(circle at 20% 20%, #0b1d3a, #030712 60%);
-  --dark-surface: rgba(255, 255, 255, 0.06);
+  /* Small mono label that sits opposite a section title */
+  .section-tag {
+    @apply inline-flex items-center gap-2 font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-ion sm:text-xs;
+  }
+
+  .section-tag::before {
+    content: '';
+    width: 1.25rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, currentColor);
+  }
+
+  .btn-thrust {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-white;
+    background: linear-gradient(135deg, #7a66f0 0%, #4f7cf0 55%, #1fb3d4 100%);
+    box-shadow: 0 10px 26px -12px rgb(122 102 240 / 0.9);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  }
+
+  .btn-thrust:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+    box-shadow:
+      0 16px 36px -12px rgb(122 102 240 / 0.95),
+      0 0 28px -6px rgb(34 211 238 / 0.45);
+  }
+
+  .btn-hull {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border px-5 py-2.5 text-sm font-semibold text-ink;
+    border-color: rgb(var(--c-nebula) / 0.45);
+    background: rgb(var(--c-nebula) / 0.06);
+    transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .btn-hull:hover {
+    transform: translateY(-2px);
+    border-color: rgb(var(--c-ion) / 0.6);
+    background: rgb(var(--c-ion) / 0.08);
+  }
+
+  .btn-thrust:focus-visible,
+  .btn-hull:focus-visible {
+    outline: 2px solid rgb(var(--c-ion));
+    outline-offset: 3px;
+  }
+
+  /* Status chip (hero) */
+  .pill {
+    @apply inline-flex items-center gap-2 rounded-full px-3 py-1.5 font-mono text-xs text-ink/85;
+    border: 1px solid rgb(var(--c-nebula) / 0.22);
+    background: rgb(var(--c-nebula) / 0.07);
+  }
+
+  .pill::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgb(var(--c-ion));
+    box-shadow: 0 0 8px rgb(var(--c-ion) / 0.8);
+  }
+
+  /* Round icon badge in card headings */
+  .icon-badge {
+    @apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-ion;
+    background: radial-gradient(circle at 35% 30%, rgb(var(--c-ion) / 0.22), rgb(var(--c-nebula) / 0.12) 70%);
+    box-shadow: inset 0 0 0 1px rgb(var(--c-ion) / 0.25);
+  }
 }
 
 * {
@@ -88,14 +212,24 @@ body {
 }
 
 body {
-  background: var(--light-bg);
-  color: #0f172a;
+  background: #e3e6f5;
+  color: rgb(var(--c-ink));
   position: relative;
   min-height: 100vh;
+  font-family: theme('fontFamily.sans');
+  -webkit-font-smoothing: antialiased;
+}
+
+body.dark-mode {
+  background: #04060f;
+}
+
+::selection {
+  background: rgb(var(--c-nebula) / 0.35);
 }
 
 .light-bg {
-  background-color: #d8e8ff;
+  background-color: #e3e6f5;
   background: var(--light-bg);
   background-attachment: fixed;
 }
@@ -103,11 +237,13 @@ body {
 html.dark .light-bg,
 body.dark-mode .light-bg {
   background: var(--dark-bg);
+  background-attachment: fixed;
 }
 
 .text-gradient {
   background: var(--gradient-text);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -124,205 +260,28 @@ body.dark-mode .light-bg {
   height: auto;
 }
 
-.pill {
-  padding: 0.45rem 0.85rem;
-  border-radius: 999px;
-  background: rgba(13, 110, 253, 0.08);
-  color: #0d6efd;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.profile-wrapper {
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(13, 110, 253, 0.15), rgba(102, 16, 242, 0.15));
-  display: grid;
-  place-items: center;
-  padding: 10px;
-}
-
-.profile-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 6px solid #fff;
-}
-
-.btn {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-}
-
-.btn:hover,
-.btn:focus-visible {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
-}
-
-.nav-link {
-  transition: color 0.2s ease, transform 0.2s ease;
-  color: inherit;
-}
-
-/* Legacy navbar styles removed – Tailwind handles layout & colors */
-
-.hover-card {
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.hover-card:hover,
-.hover-card:focus-within {
-  transform: translateY(-6px);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.16);
-}
-
-
-#projects .project-visual {
-  background: linear-gradient(135deg, rgba(13, 110, 253, 0.2), rgba(3, 7, 18, 0.75));
-}
-
-.glass-card {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 1.2rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.biometric-ui {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem;
-}
-
-.fingerprint {
-  height: 120px;
-  border-radius: 12px;
-  border: 1px dashed rgba(255, 255, 255, 0.35);
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent 60%), rgba(255, 255, 255, 0.05);
-}
-
-.face-scan {
-  position: relative;
-  height: 120px;
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.25);
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.scan-line {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: rgba(13, 110, 253, 0.8);
-  animation: scan 3s linear infinite;
-}
-
-@keyframes scan {
-  0% { transform: translateY(-100%); }
-  50% { transform: translateY(100%); }
-  100% { transform: translateY(-100%); }
-}
-
-#contact .form-text {
-  font-size: 0.9rem;
-}
-
 footer a {
   text-decoration: none;
 }
 
-/* Dark mode */
-body.dark-mode {
-  background: var(--dark-bg);
-  color: #e2e8f0;
-}
-
-body.dark-mode .navbar,
-body.dark-mode .card,
-body.dark-mode .btn-outline-primary,
-body.dark-mode .form-control,
-body.dark-mode .form-select {
-  background-color: rgba(255, 255, 255, 0.04) !important;
-  color: #e2e8f0;
-}
-
-body.dark-mode .card,
-body.dark-mode .btn-outline-primary,
-body.dark-mode .form-control,
-body.dark-mode .form-select {
-  border-color: rgba(255, 255, 255, 0.12);
-}
-
-body.dark-mode .text-secondary,
-body.dark-mode .form-text,
-body.dark-mode footer a,
-body.dark-mode .navbar .nav-link {
-  color: #cbd5e1 !important;
-}
-
-body.dark-mode .pill {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
-}
-
-body.dark-mode .glass-card {
-  background: rgba(255, 255, 255, 0.06);
-}
-
-body.dark-mode .bg-body,
-body.dark-mode .bg-body-tertiary {
-  background-color: rgba(255, 255, 255, 0.03) !important;
-}
-
-/* Nav menu responsiveness is handled by Tailwind's utility classes */
-
-body.dark-mode .badge.text-bg-light {
-  background: rgba(255, 255, 255, 0.14) !important;
-  color: #fff !important;
-}
-
-/* Floating dust canvas — sits under main (z-index) so translucent stripes can show particles */
+/* Floating starfield — sits under main (z-index) so translucent bands show it */
 #dust-canvas {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.92;
+  opacity: 0.9;
   transition: opacity 0.5s ease;
 }
 
 body.dark-mode #dust-canvas {
-  opacity: 0.97;
+  opacity: 1;
 }
 
-@media (min-width: 1400px) {
-  #dust-canvas {
-    opacity: 0.95;
-  }
-
-  body.dark-mode #dust-canvas {
-    opacity: 1;
-  }
-}
-
-/* Stack page content above the dust layer; transparent areas reveal the canvas */
+/* Stack page content above the starfield; transparent areas reveal the canvas */
 main {
   position: relative;
   z-index: 1;
-}
-
-/* Spacing tweaks */
-section + section {
-  border-top: 1px solid rgba(0, 0, 0, 0.04);
-}
-
-body.dark-mode section + section {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .nav-toggle-bar {
@@ -379,11 +338,6 @@ body.dark-mode section + section {
 }
 
 @media (max-width: 767px) {
-  .profile-wrapper {
-    width: 240px;
-    height: 240px;
-  }
-
   /* Allow name to wrap on small screens to avoid horizontal scroll */
   #typewriter-name {
     white-space: normal;
@@ -405,11 +359,10 @@ body.dark-mode section + section {
   transform: translateY(0);
 }
 
-/* Shared card hover animations */
+/* Shared card hover: lift + ion rim light */
 .card-animated,
 .achievement-card {
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-  border-color: rgba(148, 163, 184, 0.35); /* subtle slate border that blends on both themes */
 }
 
 .card-animated:hover,
@@ -417,23 +370,23 @@ body.dark-mode section + section {
 .achievement-card:hover,
 .achievement-card:focus-within {
   transform: translateY(-4px);
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.35);
-  border-color: rgba(148, 163, 184, 0.8); /* slightly brighter slate, still soft */
+  border-color: var(--panel-border-hover);
+  box-shadow:
+    inset 0 1px 0 0 var(--panel-highlight),
+    0 22px 48px -24px rgb(4 6 15 / 0.7),
+    0 0 44px -14px var(--panel-glow);
 }
 
-.item-animated,
 .achievement-item {
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-  border-color: rgba(148, 163, 184, 0.3);
+  border: 1px solid var(--panel-border);
 }
 
-.item-animated:hover,
-.item-animated:focus-visible,
 .achievement-item:hover,
 .achievement-item:focus-visible {
   transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.3);
-  border-color: rgba(148, 163, 184, 0.8);
+  box-shadow: 0 14px 30px -16px rgb(4 6 15 / 0.6);
+  border-color: var(--panel-border-hover);
 }
 
 .achievement-thumb {
@@ -444,25 +397,19 @@ body.dark-mode section + section {
   transform: scale(1.05);
 }
 
-/* Toast animation */
-#toast-content {
-  transform: translateY(12px);
-  opacity: 0;
-  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
-}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-on-scroll {
+    transform: none;
+    transition: opacity 0.4s ease-out;
+  }
 
-#toast-content.toast-show {
-  opacity: 1;
-  transform: translateY(0);
+  .card-animated:hover,
+  .card-animated:focus-within,
+  .achievement-card:hover,
+  .achievement-card:focus-within,
+  .achievement-item:hover,
+  .btn-thrust:hover,
+  .btn-hull:hover {
+    transform: none;
+  }
 }
-
-/* Horizontal gallery: hide scrollbar, keep scroll */
-.gallery-x-scroll {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.gallery-x-scroll::-webkit-scrollbar {
-  display: none;
-}
-

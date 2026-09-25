@@ -22,12 +22,10 @@
       <div
         class="mb-4 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 reveal-on-scroll sm:mb-5"
       >
-        <h2 class="mb-1 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-50">
+        <h2 class="mb-1 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
           Mission Control Projects
         </h2>
-        <span
-          class="self-end text-right text-xs font-semibold uppercase tracking-wide text-primary-600 sm:self-auto sm:text-left sm:text-sm"
-        >
+        <span class="section-tag self-end sm:self-auto">
           Featured projects
         </span>
       </div>

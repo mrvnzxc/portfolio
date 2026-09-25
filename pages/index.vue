@@ -1,15 +1,15 @@
 <template>
-  <div class="light-bg relative min-h-screen text-slate-900 dark:bg-slate-950 dark:text-slate-50">
+  <div class="light-bg relative min-h-screen text-ink">
     <DustCanvas />
     <AppHeader />
     <main>
       <HeroSection />
-      <AboutSection />
-      <GallerySection />
       <ProjectsSection />
-      <ServicesSection />
-      <AchievementsSection @open-image="openImage" />
       <SkillsSection />
+      <AboutSection />
+      <AchievementsSection @open-image="openImage" />
+      <GallerySection />
+      <ServicesSection />
       <ContactSection />
     </main>
     <AppFooter />

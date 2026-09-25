@@ -40,7 +40,7 @@
     />
 
     <p
-      class="pointer-events-none absolute bottom-[min(28%,200px)] left-1/2 z-10 -translate-x-1/2 whitespace-nowrap text-center font-medium tracking-[0.2em] text-sky-200/90 drop-shadow-[0_0_12px_rgba(56,189,248,0.45)] sm:tracking-[0.28em]"
+      class="pointer-events-none absolute bottom-[min(28%,200px)] left-1/2 z-10 -translate-x-1/2 whitespace-nowrap text-center font-mono text-sm font-medium uppercase tracking-[0.3em] text-sky-200/90 drop-shadow-[0_0_12px_rgba(56,189,248,0.45)] sm:tracking-[0.28em]"
     >
       Entering Hyperspace...
     </p>

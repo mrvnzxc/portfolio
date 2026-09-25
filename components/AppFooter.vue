@@ -3,22 +3,22 @@
     <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 sm:flex-row">
       <div class="flex flex-col items-center gap-1 sm:items-start">
         <div>© {{ year }} John Marvin Bautista. All rights reserved.</div>
-        <div class="text-xs text-slate-500 dark:text-slate-400">
+        <div class="font-mono text-xs text-muted">
           Total page views:
-          <span class="font-semibold text-slate-700 dark:text-slate-200">{{ totalPageViewsLabel }}</span>
+          <span class="font-semibold text-ion">{{ totalPageViewsLabel }}</span>
         </div>
       </div>
       <div class="flex flex-wrap items-center justify-center gap-4 sm:justify-end">
-        <a class="transition hover:text-primary-600 dark:hover:text-primary-400" href="#hero">Back to top</a>
-        <a class="transition hover:text-primary-600 dark:hover:text-primary-400" href="#projects">Projects</a>
-        <a class="transition hover:text-primary-600 dark:hover:text-primary-400" href="#contact">Contact</a>
-        <span class="hidden h-4 w-px bg-slate-300 sm:inline-block dark:bg-slate-600" aria-hidden="true" />
+        <a class="transition hover:text-ion" href="#hero">Back to top</a>
+        <a class="transition hover:text-ion" href="#projects">Projects</a>
+        <a class="transition hover:text-ion" href="#contact">Contact</a>
+        <span class="hidden h-4 w-px bg-nebula/25 sm:inline-block" aria-hidden="true" />
         <div class="flex items-center gap-3">
           <a
             href="https://www.facebook.com/jhnmrvnzxc"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-slate-500 transition hover:text-[#1877F2] dark:text-slate-400 dark:hover:text-[#1877F2]"
+            class="text-muted transition hover:text-[#1877F2]"
             aria-label="Facebook (opens in a new tab)"
           >
             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -31,7 +31,7 @@
             href="https://www.instagram.com/jhnmrvnzxc/"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-slate-500 transition hover:text-[#E4405F] dark:text-slate-400 dark:hover:text-[#E4405F]"
+            class="text-muted transition hover:text-[#E4405F]"
             aria-label="Instagram (opens in a new tab)"
           >
             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

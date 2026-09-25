@@ -1,9 +1,9 @@
 <template>
-  <section id="gallery" class="relative section-band-b-first border-t border-slate-200/70 dark:border-slate-800">
+  <section id="gallery" class="relative section-band-a">
     <div class="mx-auto max-w-6xl px-4">
       <div class="mb-4 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 reveal-on-scroll">
         <h2 class="mb-1 text-3xl font-semibold tracking-tight sm:text-4xl">Floating gallery</h2>
-        <span class="self-end text-right text-xs sm:self-auto sm:text-left sm:text-sm font-semibold uppercase tracking-wide text-primary-600">Moments</span>
+        <span class="section-tag self-end sm:self-auto">Moments</span>
       </div>
 
     <div class="reveal-on-scroll">
@@ -31,7 +31,7 @@
           <button
             type="button"
             :data-gallery-index="item.logicalIndex"
-            class="gallery-glass-card group relative flex min-w-[250px] cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-50/80 p-3 text-left opacity-100 shadow-sm shadow-slate-950/5 outline-none backdrop-blur-md transition-[opacity,filter,box-shadow] duration-300 ease-out focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 group-hover:scale-[1.03] group-hover:opacity-100 group-hover:shadow-md group-hover:shadow-primary-500/15 dark:border-white/10 dark:bg-white/5 dark:shadow-lg dark:shadow-black/25 dark:backdrop-blur-lg dark:focus-visible:ring-offset-slate-950 dark:group-hover:shadow-[0_0_20px_rgba(0,255,255,0.3)] md:min-w-[260px] md:p-2.5 lg:min-w-[280px] dark:shadow-cyan-950/20"
+            class="gallery-glass-card group relative flex min-w-[250px] cursor-pointer flex-col overflow-hidden rounded-2xl border border-nebula/15 bg-white/60 p-3 text-left opacity-100 shadow-sm shadow-slate-950/5 outline-none backdrop-blur-md transition-[opacity,filter,box-shadow] duration-300 ease-out focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 group-hover:scale-[1.03] group-hover:opacity-100 group-hover:shadow-md group-hover:shadow-primary-500/15 dark:border-white/10 dark:bg-white/5 dark:shadow-lg dark:shadow-black/25 dark:backdrop-blur-lg dark:focus-visible:ring-offset-slate-950 dark:group-hover:shadow-[0_0_20px_rgba(0,255,255,0.3)] md:min-w-[260px] md:p-2.5 lg:min-w-[280px] dark:shadow-cyan-950/20"
             @click="onCardActivate(item.logicalIndex)"
           >
             <div

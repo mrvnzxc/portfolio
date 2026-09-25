@@ -1,19 +1,23 @@
 <template>
-    <section id="hero" class="section-band-b-first">
+    <section id="hero" class="section-band-b-first overflow-x-clip">
       <div class="mx-auto flex max-w-6xl flex-col items-center gap-12 px-4 md:flex-row md:items-center md:justify-between">
         <div class="max-w-xl space-y-4 sm:space-y-5 reveal-on-scroll">
-          <p class="text-base sm:text-lg font-semibold uppercase tracking-wide text-primary-600">Full-Stack Developer</p>
+          <p class="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs font-medium uppercase tracking-[0.2em] text-ion sm:text-sm">
+            <span>Full-Stack Developer</span>
+            <span class="text-muted/60" aria-hidden="true">/</span>
+            <span class="text-muted">6.1164° N · 125.1716° E</span>
+          </p>
           <h1 class="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">Hello World, I'm <br><span class="text-gradient" id="typewriter-name">{{ name }}</span></h1>
-          <div class="mt-6 flex justify-center md:hidden"><div class="profile-wrapper mx-auto shadow-lg shadow-primary-500/20"><img src="/profile.webp" alt="Profile photo" class="profile-img"></div></div>
-          <p class="text-lg leading-relaxed text-slate-700 dark:text-slate-200">I build reliable, user-focused software that blends clean architecture with thoughtful design. Currently exploring AI-assisted automation and modern web stacks.</p>
-          <div class="flex flex-wrap gap-3 pt-2">
-            <a class="inline-flex items-center justify-center rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white" href="/cv.pdf" download>Download CV</a>
-            <a class="inline-flex items-center justify-center rounded-lg border border-primary-600 px-5 py-2.5 text-sm font-semibold text-primary-700" href="#contact">Contact Me</a>
-            <a class="inline-flex items-center gap-1 text-sm font-medium text-primary-700 underline-offset-4 hover:underline dark:text-primary-300" href="#projects"><Icon icon="ph:arrow-down"/>See Projects</a>
+          <div class="flex justify-center py-8 md:hidden"><ProfilePlanet /></div>
+          <p class="text-lg leading-relaxed text-ink/80">I build reliable, user-focused software that blends clean architecture with thoughtful design. Currently exploring AI-assisted automation and modern web stacks.</p>
+          <div class="flex flex-wrap items-center gap-3 pt-2">
+            <a class="btn-thrust" href="/cv.pdf" download><Icon icon="ph:download-simple-bold" />Download CV</a>
+            <a class="btn-hull" href="#contact">Contact Me</a>
+            <a class="inline-flex items-center gap-1 text-sm font-medium text-ion underline-offset-4 hover:underline" href="#projects"><Icon icon="ph:arrow-down" />See Projects</a>
           </div>
-          <div class="mt-5 flex flex-wrap gap-3"><div class="pill">Open to remote</div><div class="pill">Available for freelance</div><div class="pill">Based in General Santos</div></div>
+          <div class="mt-5 flex flex-wrap gap-2.5"><div class="pill">Open to remote</div><div class="pill">Available for freelance</div><div class="pill">Based in General Santos</div></div>
         </div>
-        <div class="hidden md:flex justify-center md:justify-end reveal-on-scroll"><div class="profile-wrapper mx-auto shadow-lg shadow-primary-500/20"><img src="/profile.webp" alt="Profile photo" class="profile-img"></div></div>
+        <div class="hidden md:flex justify-center md:justify-end md:pr-10 reveal-on-scroll"><ProfilePlanet /></div>
       </div>
     </section>
   </template>
