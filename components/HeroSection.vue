@@ -3,7 +3,7 @@
       <div class="mx-auto flex max-w-6xl flex-col items-center gap-12 px-4 md:flex-row md:items-center md:justify-between">
         <div class="max-w-xl space-y-4 sm:space-y-5 reveal-on-scroll">
           <p class="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs font-medium uppercase tracking-[0.2em] text-ion sm:text-sm">
-            <span>Full-Stack Developer</span>
+            <span>Software Engineer</span>
             <span class="text-muted/60" aria-hidden="true">/</span>
             <span class="text-muted">6.1164° N · 125.1716° E</span>
           </p>
