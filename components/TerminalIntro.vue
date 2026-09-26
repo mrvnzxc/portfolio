@@ -128,7 +128,7 @@ async function typeCommand(prompt: string, command: string) {
   await sleep(160)
 }
 
-/** " [ OK ] Fueling rocket ........ 3 projects" */
+/** " [ OK ] Fueling rocket ........ 100%" */
 function check(label: string, value: string) {
   print({
     segs: [
@@ -167,15 +167,15 @@ async function run() {
   blank()
   await sleep(130)
 
-  /* Counts match the page: 3 projects, 25 tools in the Skills orbit, 4 awards in About */
-  check('Fueling rocket', '3 projects')
+  /* Pre-flight checks: all about the launch itself */
+  check('Fueling rocket', '100%')
   await sleep(90)
-  check('Charting the orbit', '25 tools')
+  check('Guidance system', 'locked')
   await sleep(90)
-  check('Polishing trophies', '4 awards')
+  check('Checking oxygen', 'nominal')
   await sleep(90)
   ignited.value = true
-  check('Checking oxygen', 'nominal')
+  check('Main engines', 'ignited')
   await sleep(90)
   check('Buckling your seatbelt', 'click')
   blank()
