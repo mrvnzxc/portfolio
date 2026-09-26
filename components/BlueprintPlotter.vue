@@ -313,7 +313,9 @@ const CONTENT_SELECTOR = [
   'header', 'footer',
   'main h1', 'main h2', 'main h3', 'main p', 'main ul', 'main dl', 'main form', 'main img',
   '.space-panel', '.projects-stack-card', '.orbit-stage', '.gallery-viewport', '.profile-planet',
-  '.section-tag', '.btn-thrust', '.btn-hull', '.pill'
+  '.section-tag', '.btn-thrust', '.btn-hull', '.pill',
+  /* The drafting rulers along the sheet's edges */
+  '.drafting-ruler'
 ].join(',')
 
 type Stroke = {
