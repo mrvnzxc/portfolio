@@ -1,13 +1,21 @@
 <template>
   <footer class="footer-band-b">
     <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 sm:flex-row">
-      <div class="flex flex-col items-center gap-1 sm:items-start">
+      <div class="hidden flex-col items-center gap-1 sm:items-start dark:flex">
         <div>© {{ year }} John Marvin Bautista. All rights reserved.</div>
         <div class="font-mono text-xs text-muted">
           Total page views:
           <span class="font-semibold text-ion">{{ totalPageViewsLabel }}</span>
         </div>
       </div>
+      <!-- Ground Control: the page signs off like a drawing's title block -->
+      <dl class="gc-titleblock gc-titleblock--footer w-full max-w-xl dark:hidden">
+        <div class="gc-titleblock__wide"><dt>Drawn by</dt><dd>John Marvin Bautista</dd></div>
+        <div><dt>Sheet</dt><dd>1 of 1</dd></div>
+        <div><dt>Rev.</dt><dd>{{ year }}</dd></div>
+        <div><dt>Page views</dt><dd>{{ totalPageViewsLabel }}</dd></div>
+        <div class="gc-titleblock__wide"><dt>Rights</dt><dd>© {{ year }} All rights reserved</dd></div>
+      </dl>
       <div class="flex flex-wrap items-center justify-center gap-4 sm:justify-end">
         <a class="transition hover:text-ion" href="#hero">Back to top</a>
         <a class="transition hover:text-ion" href="#projects">Projects</a>

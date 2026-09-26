@@ -7,8 +7,8 @@
             <span class="text-muted/60" aria-hidden="true">/</span>
             <span class="text-muted">6.1164° N · 125.1716° E</span>
           </p>
-          <h1 class="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">Hello World, I'm <br><span class="text-gradient" id="typewriter-name">{{ name }}</span></h1>
-          <div class="flex justify-center py-8 md:hidden"><ProfilePlanet /></div>
+          <h1 class="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">Hello World, I'm <br><span class="text-gradient" id="typewriter-name" :data-full-text="fullName"><span class="typewriter-text">{{ name }}</span></span></h1>
+          <div class="flex justify-center pb-20 pt-8 md:hidden"><ProfilePlanet /></div>
           <p class="text-lg leading-relaxed text-ink/80">I build reliable, user-focused software that blends clean architecture with thoughtful design. Currently exploring AI-assisted automation and modern web stacks.</p>
           <div class="flex flex-wrap items-center gap-3 pt-2">
             <a class="btn-thrust" href="/cv.pdf" download><Icon icon="ph:download-simple-bold" />Download CV</a>
@@ -26,7 +26,7 @@
   import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   const fullName = 'John Marvin Bautista'
-  /** Empty until warp handoff; avoids typing under the loader or a full-name flash. */
+  /** Empty until the intro hands off; avoids typing under the intro or a full-name flash. */
   const name = ref('')
   const introContentReady = useIntroContentReady()
 

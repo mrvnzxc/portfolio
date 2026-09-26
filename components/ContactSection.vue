@@ -8,7 +8,7 @@
           <form class="space-panel card-animated mt-6 flex flex-1 flex-col space-y-4 p-6" novalidate @submit.prevent="submitForm">
             <div class="space-y-1">
               <label for="name" class="block text-sm font-medium text-ink">Name</label>
-              <NeonBorderReveal color="#6ee7f9" light-color="#0e7490" :duration="1.3" class="rounded-lg">
+              <NeonBorderReveal color="#6ee7f9" light-color="#1d4ed8" :duration="1.3" class="rounded-lg">
                 <input
                   id="name"
                   v-model="form.name"
@@ -20,7 +20,7 @@
             </div>
             <div class="space-y-1">
               <label for="email" class="block text-sm font-medium text-ink">Email</label>
-              <NeonBorderReveal color="#6ee7f9" light-color="#0e7490" :duration="1.3" class="rounded-lg">
+              <NeonBorderReveal color="#6ee7f9" light-color="#1d4ed8" :duration="1.3" class="rounded-lg">
                 <input
                   id="email"
                   v-model="form.email"
@@ -33,7 +33,7 @@
             </div>
             <div class="space-y-1">
               <label for="message" class="block text-sm font-medium text-ink">Message</label>
-              <NeonBorderReveal color="#6ee7f9" light-color="#0e7490" :duration="1.3" class="rounded-lg">
+              <NeonBorderReveal color="#6ee7f9" light-color="#1d4ed8" :duration="1.3" class="rounded-lg">
                 <textarea
                   id="message"
                   v-model="form.message"

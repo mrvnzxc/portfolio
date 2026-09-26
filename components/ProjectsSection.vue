@@ -6,7 +6,7 @@
   >
     <!-- overflow only on decorative layer — overflow-hidden on section breaks lg:sticky preview -->
     <div
-      class="pointer-events-none absolute inset-0 overflow-hidden opacity-40 dark:opacity-30"
+      class="pointer-events-none absolute inset-0 hidden overflow-hidden opacity-40 dark:block dark:opacity-30"
       aria-hidden="true"
     >
       <div
@@ -34,7 +34,7 @@
       <div ref="stackStage" class="projects-stack-stage">
         <div class="projects-stack-cards">
           <div
-            v-for="project in visibleProjects"
+            v-for="(project, index) in visibleProjects"
             :key="project.title"
             class="projects-card-wrapper"
           >
@@ -48,18 +48,18 @@
               @keydown.space.prevent="openProject(project)"
             >
               <div
-                class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                class="pointer-events-none absolute inset-0 hidden opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:block"
                 aria-hidden="true"
               >
                 <div class="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-gradient-to-br from-cyan-400/25 via-sky-500/15 to-transparent blur-2xl dark:from-cyan-400/20 dark:via-violet-500/12" />
                 <div class="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-gradient-to-tr from-violet-500/15 to-transparent blur-2xl dark:from-violet-500/12" />
               </div>
               <div
-                class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent opacity-80 dark:via-cyan-300/35"
+                class="pointer-events-none absolute inset-x-0 top-0 hidden h-px bg-gradient-to-r dark:block from-transparent via-cyan-400/40 to-transparent opacity-80 dark:via-cyan-300/35"
                 aria-hidden="true"
               />
 
-              <div class="relative aspect-[16/9] w-full shrink-0 overflow-hidden border-b border-slate-200/70 bg-gradient-to-b from-slate-100/90 to-slate-50/80 dark:border-white/10 dark:from-slate-900/80 dark:to-slate-950/90 lg:aspect-auto lg:h-[400px] lg:w-[63%] lg:border-b-0 lg:border-r">
+              <div class="project-shot relative aspect-[16/9] w-full shrink-0 overflow-hidden border-b border-slate-200/70 bg-gradient-to-b from-slate-100/90 to-slate-50/80 dark:border-white/10 dark:from-slate-900/80 dark:to-slate-950/90 lg:aspect-auto lg:h-[400px] lg:w-[63%] lg:border-b-0 lg:border-r">
                 <img
                   :src="project.image"
                   :alt="project.title"
@@ -69,7 +69,7 @@
               </div>
 
               <div class="relative flex min-h-0 flex-1 flex-col justify-center gap-2.5 p-5 lg:py-6">
-                <div class="flex flex-wrap items-start justify-between gap-2">
+                <div class="hidden flex-wrap items-start justify-between gap-2 dark:flex">
                   <span class="inline-flex max-w-[72%] items-center rounded-full border border-primary-500/20 bg-primary-500/[0.08] px-2.5 py-0.5 text-[10px] font-semibold uppercase leading-tight tracking-wide text-primary-700 dark:border-cyan-400/25 dark:bg-cyan-400/10 dark:text-cyan-200/95">
                     {{ project.label }}
                   </span>
@@ -107,16 +107,22 @@
                 </div>
 
                 <div class="mt-1 flex pt-1">
-                  <span class="inline-flex items-center gap-1.5 rounded-lg bg-slate-900/[0.04] px-2.5 py-1.5 text-xs font-semibold text-primary-600 ring-1 ring-slate-200/80 transition group-hover:bg-primary-600/10 group-hover:ring-cyan-500/30 dark:bg-white/[0.06] dark:text-cyan-300 dark:ring-white/10 dark:group-hover:bg-cyan-400/10 dark:group-hover:ring-cyan-400/25">
+                  <span class="project-cta inline-flex items-center gap-1.5 rounded-lg bg-slate-900/[0.04] px-2.5 py-1.5 text-xs font-semibold text-primary-600 ring-1 ring-slate-200/80 transition group-hover:bg-primary-600/10 group-hover:ring-cyan-500/30 dark:bg-white/[0.06] dark:text-cyan-300 dark:ring-white/10 dark:group-hover:bg-cyan-400/10 dark:group-hover:ring-cyan-400/25">
                     View details
                     <Icon icon="ph:arrow-right-bold" class="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
                   </span>
                 </div>
+
+                <!-- Ground Control: every project is a numbered drawing sheet -->
+                <dl class="gc-titleblock gc-titleblock--project mt-2 dark:hidden">
+                  <div><dt>Sheet</dt><dd>{{ String(index + 1).padStart(2, '0') }} / {{ String(visibleProjects.length).padStart(2, '0') }}</dd></div>
+                  <div><dt>Year</dt><dd>{{ project.year }}</dd></div>
+                  <div><dt>Type</dt><dd>{{ project.label }}</dd></div>
+                </dl>
               </div>
             </article>
           </div>
         </div>
-        <div class="projects-mobile-tail-spacer lg:hidden" aria-hidden="true" />
       </div>
     </div>
 
@@ -569,13 +575,9 @@ watch(imagePreview, (preview) => {
 }
 
 @media (max-width: 1023px) {
-  .featured-projects {
-    padding-bottom: max(7rem, 20vh) !important;
-  }
-
   .projects-stack-stage {
     padding-top: 0.75rem;
-    padding-bottom: min(40vh, 18rem);
+    padding-bottom: 1rem;
   }
 
   .projects-card-wrapper {
@@ -584,13 +586,7 @@ watch(imagePreview, (preview) => {
   }
 
   .projects-card-wrapper:last-child {
-    margin-bottom: 1.5rem;
-  }
-
-  .projects-mobile-tail-spacer {
-    height: min(50vh, 24rem);
-    width: 100%;
-    pointer-events: none;
+    margin-bottom: 0;
   }
 
   .projects-stack-card {

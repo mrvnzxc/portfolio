@@ -1,6 +1,7 @@
 <template>
   <div class="light-bg relative min-h-screen text-ink">
     <DustCanvas />
+    <BlueprintPlotter />
     <AppHeader />
     <main>
       <HeroSection />

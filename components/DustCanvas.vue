@@ -194,33 +194,50 @@ onMounted(() => {
     })
   }
 
+  const isSpace = () => document.body.classList.contains('dark-mode')
+  let running = false
+
+  /* Ground Control (light) hides the canvas, so only animate while in space */
+  const syncToTheme = () => {
+    if (reducedMotion) {
+      if (isSpace()) drawStill()
+      return
+    }
+    if (isSpace() && !running) {
+      running = true
+      animationId = requestAnimationFrame(draw)
+    } else if (!isSpace() && running) {
+      running = false
+      cancelAnimationFrame(animationId)
+    }
+  }
+
+  const onScrollStill = () => {
+    if (isSpace()) drawStill()
+  }
+
   resizeCanvas()
   createStars()
+  syncToTheme()
 
-  let themeObserver: MutationObserver | null = null
-  if (reducedMotion) {
-    drawStill()
-    window.addEventListener('scroll', drawStill, { passive: true })
-    themeObserver = new MutationObserver(drawStill)
-    themeObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] })
-  } else {
-    animationId = requestAnimationFrame(draw)
-  }
+  const themeObserver = new MutationObserver(syncToTheme)
+  themeObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] })
+  if (reducedMotion) window.addEventListener('scroll', onScrollStill, { passive: true })
 
   const handleResize = () => {
     const prevW = viewportWidth
     const prevH = viewportHeight
     resizeCanvas()
     remapToViewport(prevW, prevH)
-    if (reducedMotion) drawStill()
+    if (reducedMotion) onScrollStill()
   }
 
   window.addEventListener('resize', handleResize)
   onBeforeUnmount(() => {
     cancelAnimationFrame(animationId)
     window.removeEventListener('resize', handleResize)
-    window.removeEventListener('scroll', drawStill)
-    themeObserver?.disconnect()
+    window.removeEventListener('scroll', onScrollStill)
+    themeObserver.disconnect()
   })
 })
 </script>

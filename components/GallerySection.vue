@@ -26,7 +26,7 @@
         <div
           v-for="item in displayItems"
           :key="item.key"
-          class="shrink-0"
+          class="gallery-print shrink-0"
         >
           <button
             type="button"

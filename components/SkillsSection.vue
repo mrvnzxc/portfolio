@@ -40,6 +40,10 @@
 
         <div class="order-1 reveal-on-scroll lg:order-2">
           <div class="orbit-stage">
+            <!-- Ground Control only: centre lines and a degree dial on the outer ring -->
+            <div class="orbit-axes" aria-hidden="true" />
+            <div class="orbit-dial" aria-hidden="true" />
+
             <div class="orbit-core" aria-hidden="true">
               <span class="orbit-core__band orbit-core__band--back" />
               <span class="orbit-core__planet" />
@@ -107,7 +111,9 @@ const rings: Ring[] = [
       { name: 'Java', icon: 'logos:java' },
       { name: 'Python', icon: 'logos:python' },
       { name: 'JavaScript', icon: 'logos:javascript' },
-      { name: 'PHP', icon: 'logos:php' }
+      { name: 'PHP', icon: 'logos:php' },
+      { name: 'TypeScript', icon: 'logos:typescript-icon' },
+      { name: 'C++', icon: 'logos:c-plusplus' }
     ]
   },
   {
@@ -124,7 +130,9 @@ const rings: Ring[] = [
       { name: 'Tailwind CSS', icon: 'logos:tailwindcss-icon' },
       { name: 'Spring Boot', icon: 'logos:spring-icon' },
       { name: 'Node.js', icon: 'logos:nodejs-icon' },
-      { name: 'Flask', icon: 'simple-icons:flask', iconClass: 'text-ink' }
+      { name: 'Flask', icon: 'simple-icons:flask', iconClass: 'text-ink' },
+      { name: 'Express.js', icon: 'simple-icons:express', iconClass: 'text-ink' },
+      { name: 'Angular', icon: 'logos:angular-icon' }
     ]
   },
   {
@@ -142,7 +150,9 @@ const rings: Ring[] = [
       { name: 'PostGraphile', icon: 'logos:postgraphile' },
       { name: 'Docker', icon: 'logos:docker-icon' },
       { name: 'GitHub Actions', icon: 'logos:github-actions' },
-      { name: 'OpenCV', icon: 'logos:opencv' }
+      { name: 'OpenCV', icon: 'logos:opencv' },
+      { name: 'Firebase', icon: 'logos:firebase-icon' },
+      { name: 'RESTful APIs', icon: 'tabler:api', iconClass: 'text-ion' }
     ]
   }
 ]
@@ -192,6 +202,9 @@ function slotPosition(index: number, count: number, startAngle: number) {
   flex-shrink: 0;
   border-radius: 999px;
   border: 2px solid rgb(var(--ring));
+}
+
+html.dark .orbit-legend__swatch {
   box-shadow: 0 0 10px rgb(var(--ring) / 0.55);
 }
 
@@ -204,6 +217,49 @@ function slotPosition(index: number, count: number, startAngle: number) {
   aspect-ratio: 1;
   /* Leave room for outer-ring chips, which overhang the stage by half a chip */
   width: min(calc(100% - 2.25rem), 560px);
+}
+
+/* ---------- Ground Control drafting marks (hidden in space) ---------- */
+.orbit-axes {
+  --cl: rgb(var(--c-ink) / 0.22);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Dash-dot centre lines, as on an engineering drawing */
+  background:
+    repeating-linear-gradient(90deg, var(--cl) 0 14px, transparent 14px 18px, var(--cl) 18px 20px, transparent 20px 24px) center / 100% 1px no-repeat,
+    repeating-linear-gradient(180deg, var(--cl) 0 14px, transparent 14px 18px, var(--cl) 18px 20px, transparent 20px 24px) center / 1px 100% no-repeat;
+}
+
+/* Protractor ticks along the inside of the outer ring: every 5°, longer every 30° */
+.orbit-dial {
+  position: absolute;
+  inset: 2%;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.orbit-dial::before,
+.orbit-dial::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.orbit-dial::before {
+  background: repeating-conic-gradient(from -0.2deg, rgb(var(--c-ink) / 0.35) 0 0.4deg, transparent 0.4deg 5deg);
+  mask: radial-gradient(closest-side, transparent calc(100% - 6px), #000 calc(100% - 6px));
+}
+
+.orbit-dial::after {
+  background: repeating-conic-gradient(from -0.3deg, rgb(var(--c-ink) / 0.7) 0 0.6deg, transparent 0.6deg 30deg);
+  mask: radial-gradient(closest-side, transparent calc(100% - 13px), #000 calc(100% - 13px));
+}
+
+html.dark .orbit-axes,
+html.dark .orbit-dial {
+  display: none;
 }
 
 /* ---------- Central planet with a tilted band ---------- */
@@ -222,6 +278,14 @@ function slotPosition(index: number, count: number, startAngle: number) {
   inset: 0;
   z-index: 1;
   border-radius: 50%;
+  /* Ground Control: a section-hatched circle */
+  background:
+    repeating-linear-gradient(-45deg, rgb(var(--c-ink) / 0.4) 0 1px, transparent 1px 6px),
+    #fff;
+  box-shadow: 0 0 0 1.5px rgb(var(--c-ink));
+}
+
+html.dark .orbit-core__planet {
   background:
     radial-gradient(circle at 32% 28%, rgb(255 255 255 / 0.5), transparent 24%),
     radial-gradient(circle at 36% 36%, #9584fb 0%, #5239b8 42%, #1d1745 76%, #0b0a26 100%);
@@ -238,8 +302,12 @@ function slotPosition(index: number, count: number, startAngle: number) {
   width: 150%;
   height: 28%;
   border-radius: 50%;
-  border: 2px solid rgb(var(--c-ion) / 0.55);
+  border: 1.5px solid rgb(var(--c-ink) / 0.8);
   rotate: -18deg;
+}
+
+html.dark .orbit-core__band {
+  border: 2px solid rgb(var(--c-ion) / 0.55);
 }
 
 .orbit-core__band--back {
@@ -250,6 +318,9 @@ function slotPosition(index: number, count: number, startAngle: number) {
 .orbit-core__band--front {
   z-index: 2;
   clip-path: inset(50% 0 0 0);
+}
+
+html.dark .orbit-core__band--front {
   box-shadow: 0 6px 12px -6px rgb(var(--c-ion) / 0.5);
 }
 
@@ -261,13 +332,23 @@ function slotPosition(index: number, count: number, startAngle: number) {
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
-  border: 1px solid rgb(var(--ring) / 0.2);
+  border: 1px solid rgb(var(--ring) / 0.45);
   pointer-events: none;
   animation: orbit-spin var(--duration) linear infinite;
   transition: opacity 0.35s ease, border-color 0.35s ease;
 }
 
+html.dark .orbit-ring {
+  border-color: rgb(var(--ring) / 0.2);
+}
+
 .orbit-ring.is-active {
+  border-color: rgb(var(--ring));
+  border-width: 1.5px;
+}
+
+html.dark .orbit-ring.is-active {
+  border-width: 1px;
   border-color: rgb(var(--ring) / 0.55);
   box-shadow: 0 0 30px -10px rgb(var(--ring) / 0.5), inset 0 0 30px -14px rgb(var(--ring) / 0.5);
 }
@@ -303,9 +384,9 @@ function slotPosition(index: number, count: number, startAngle: number) {
   width: 100%;
   place-items: center;
   border-radius: 50%;
-  border: 1px solid rgb(var(--ring) / 0.4);
-  --chip-bg: radial-gradient(circle at 35% 30%, rgb(255 255 255 / 0.9), rgb(236 239 250 / 0.85));
-  --chip-shadow: 0 6px 18px -8px rgb(var(--ring) / 0.6);
+  border: 1px solid rgb(var(--ring) / 0.75);
+  --chip-bg: #fff;
+  --chip-shadow: none;
   background: var(--chip-bg);
   box-shadow: var(--chip-shadow);
   pointer-events: auto;
@@ -317,6 +398,7 @@ function slotPosition(index: number, count: number, startAngle: number) {
 
 /* Only swaps variables, so :hover below still wins in dark mode */
 html.dark .orbit-body {
+  border-color: rgb(var(--ring) / 0.4);
   --chip-bg: radial-gradient(circle at 35% 30%, rgb(30 38 80 / 0.95), rgb(10 14 34 / 0.95));
   --chip-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.08),
@@ -328,8 +410,16 @@ html.dark .orbit-body {
   height: 52%;
 }
 
+/* Ground Control: hovering "selects" the chip like a CAD object */
 .orbit-body:hover {
+  scale: 1.12;
+  border-style: dashed;
+  border-color: rgb(var(--c-ion));
+}
+
+html.dark .orbit-body:hover {
   scale: 1.14;
+  border-style: solid;
   border-color: rgb(var(--ring) / 0.9);
   box-shadow: 0 0 26px -4px rgb(var(--ring) / 0.8);
 }
@@ -340,22 +430,23 @@ html.dark .orbit-body {
   left: 50%;
   translate: -50% 4px;
   white-space: nowrap;
-  border-radius: 999px;
-  border: 1px solid rgb(var(--ring) / 0.45);
-  background: rgb(var(--c-ink) / 0.92);
+  border-radius: 2px;
+  border: 1px solid rgb(var(--c-ink));
+  background: #fff;
   padding: 0.2rem 0.6rem;
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
   font-size: 11px;
   letter-spacing: 0.04em;
-  color: rgb(236 239 250);
+  color: rgb(var(--c-ink));
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease, translate 0.2s ease;
 }
 
 html.dark .orbit-label {
+  border-radius: 999px;
+  border-color: rgb(var(--ring) / 0.45);
   background: rgb(4 6 15 / 0.92);
-  color: rgb(var(--c-ink));
 }
 
 .orbit-body:hover .orbit-label {

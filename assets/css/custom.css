@@ -3,33 +3,42 @@
 @tailwind utilities;
 
 /*
- * Space theme tokens.
- * Dark = deep space (default). Light = "lunar" — pale silver with ink stars.
+ * Two themes share one markup:
+ *   Dark  = "Space"          — deep space, planets, glowing orbits (default).
+ *   Light = "Ground Control" — the same mission on the drafting table: graph paper, navy ink, signal orange.
  * --c-* are RGB triplets so Tailwind can apply alpha (text-ion/60, bg-nebula/10 …).
+ * Light-only UI lives in the "Ground Control" block at the end of this file.
  */
 :root {
-  --c-ink: 16 20 46;
-  --c-muted: 75 83 120;
-  --c-ion: 14 116 144;
-  --c-nebula: 91 69 214;
-  --c-solar: 154 69 8;
+  --font-display: 'IBM Plex Sans Condensed', ui-sans-serif, system-ui, sans-serif;
 
-  --panel-bg: rgb(255 255 255 / 0.62);
-  --panel-border: rgb(91 69 214 / 0.14);
-  --panel-border-hover: rgb(91 69 214 / 0.38);
-  --panel-glow: rgb(91 69 214 / 0.16);
-  --panel-highlight: rgb(255 255 255 / 0.8);
+  --c-ink: 15 27 45; /* navy ink */
+  --c-muted: 86 101 122; /* pencil */
+  --c-ion: 29 78 216; /* drafting blue */
+  --c-nebula: 51 65 85; /* slate linework */
+  --c-solar: 194 65 12; /* signal orange, text-safe */
+  --signal: #ff5a1f; /* International Orange, fills only */
+  --paper: #f4f7fa;
 
-  --band-a: rgb(255 255 255 / 0.3);
-  --band-b: rgb(241 242 251 / 0.18);
-  --horizon: rgb(91 69 214 / 0.22);
+  --panel-bg: #fff;
+  --panel-border: rgb(15 27 45 / 0.55);
+  --panel-border-hover: rgb(29 78 216);
+  --panel-glow: transparent;
+  --panel-highlight: transparent;
 
-  --gradient-text: linear-gradient(90deg, #0e7490 0%, #5b45d6 55%, #a21caf 100%);
+  --band-a: transparent;
+  --band-b: transparent;
+  --horizon: rgb(15 27 45 / 0.22);
 
+  --gradient-text: linear-gradient(90deg, #1d4ed8, #1d4ed8);
+
+  /* Engineering graph paper: 96px major / 24px minor grid */
   --light-bg:
-    radial-gradient(ellipse 60% 45% at 88% 4%, rgb(122 102 240 / 0.16), transparent 70%),
-    radial-gradient(ellipse 45% 40% at 4% 46%, rgb(14 165 233 / 0.1), transparent 70%),
-    linear-gradient(180deg, #f1f2fb 0%, #e3e6f5 100%);
+    linear-gradient(rgb(29 78 216 / 0.11) 1px, transparent 1px) 0 0 / 100% 96px,
+    linear-gradient(90deg, rgb(29 78 216 / 0.11) 1px, transparent 1px) 0 0 / 96px 100%,
+    linear-gradient(rgb(29 78 216 / 0.05) 1px, transparent 1px) 0 0 / 100% 24px,
+    linear-gradient(90deg, rgb(29 78 216 / 0.05) 1px, transparent 1px) 0 0 / 24px 100%,
+    #f4f7fa;
   --dark-bg:
     radial-gradient(ellipse 60% 45% at 88% 4%, rgb(122 102 240 / 0.2), transparent 70%),
     radial-gradient(ellipse 45% 40% at 4% 46%, rgb(56 189 248 / 0.1), transparent 70%),
@@ -38,6 +47,8 @@
 }
 
 html.dark {
+  --font-display: 'Chakra Petch', ui-sans-serif, system-ui, sans-serif;
+
   --c-ink: 231 234 255;
   --c-muted: 152 161 200;
   --c-ion: 110 231 249;
@@ -205,14 +216,22 @@ html.dark {
   background: linear-gradient(180deg, rgba(207, 250, 254, 1), rgba(103, 232, 249, 1));
 }
 
+/* `clip` (not `hidden`) stops sideways scroll without turning body into a scroll container,
+   which would break the sticky header */
 html,
 body {
   max-width: 100%;
   overflow-x: hidden;
+  overflow-x: clip;
+}
+
+/* Anchor jumps land below the pinned header */
+html {
+  scroll-padding-top: 4.5rem;
 }
 
 body {
-  background: #e3e6f5;
+  background: #f4f7fa;
   color: rgb(var(--c-ink));
   position: relative;
   min-height: 100vh;
@@ -228,10 +247,9 @@ body.dark-mode {
   background: rgb(var(--c-nebula) / 0.35);
 }
 
+/* Graph paper scrolls with the page, like a real sheet; the space backdrop stays fixed */
 .light-bg {
-  background-color: #e3e6f5;
   background: var(--light-bg);
-  background-attachment: fixed;
 }
 
 html.dark .light-bg,
@@ -247,17 +265,34 @@ body.dark-mode .light-bg {
   -webkit-text-fill-color: transparent;
 }
 
+/* The hero heading keeps the Space typeface in both themes, so it holds still on a theme switch */
+#hero h1 {
+  font-family: 'Chakra Petch', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Ground Control name gradient: drafting blue → violet → signal orange */
+html:not(.dark) #hero .text-gradient {
+  background-image: linear-gradient(90deg, #1d4ed8 0%, #7c3aed 52%, #ea580c 100%);
+}
+
+/* Typed text and a hidden copy of the full name share one grid cell, so the heading keeps the
+   full name's size while typing — nothing below the hero shifts (scroll-pinned sections rely on that) */
 #typewriter-name {
-  display: inline-block;
+  display: inline-grid;
+  /* An empty typed span would otherwise shift the grid's baseline and the line height with it */
+  vertical-align: top;
   white-space: nowrap;
   position: relative;
+}
+
+#typewriter-name > .typewriter-text,
+#typewriter-name::after {
+  grid-area: 1 / 1;
 }
 
 #typewriter-name::after {
   content: attr(data-full-text);
   visibility: hidden;
-  display: block;
-  height: auto;
 }
 
 footer a {
@@ -411,5 +446,445 @@ main {
   .btn-thrust:hover,
   .btn-hull:hover {
     transform: none;
+  }
+}
+
+/* ==========================================================================
+ * GROUND CONTROL (light theme)
+ * The mission before launch: every surface is a drawing on graph paper.
+ * Cards carry crop marks; hovering one "selects" it like an object in CAD.
+ * ========================================================================== */
+
+html:not(.dark) body {
+  background: var(--paper);
+}
+
+html:not(.dark) ::selection {
+  background: rgb(255 90 31 / 0.28);
+}
+
+html:not(.dark) * {
+  scrollbar-color: rgb(29 78 216 / 0.85) #e6ebf2;
+}
+
+html:not(.dark) *::-webkit-scrollbar-track {
+  background: #e6ebf2;
+  border-left: 1px solid rgb(15 27 45 / 0.12);
+}
+
+html:not(.dark) *::-webkit-scrollbar-thumb {
+  background: #1d4ed8;
+  border: 2px solid #e6ebf2;
+}
+
+/* No stars on the ground */
+html:not(.dark) #dust-canvas {
+  display: none;
+}
+
+/* Section titles read like drawing titles */
+html:not(.dark) h2 {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Section tag becomes a boxed label with an orange registration square */
+html:not(.dark) .section-tag {
+  border: 1px solid rgb(var(--c-ink) / 0.75);
+  background: #fff;
+  padding: 0.3rem 0.6rem;
+  color: rgb(var(--c-ink));
+  letter-spacing: 0.16em;
+}
+
+html:not(.dark) .section-tag::before {
+  width: 7px;
+  height: 7px;
+  background: var(--signal);
+}
+
+/* ---------- Sheets (every .space-panel) ---------- */
+html:not(.dark) .space-panel {
+  position: relative;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 rgb(15 27 45 / 0.05);
+}
+
+/* Crop marks just outside each corner */
+html:not(.dark) .space-panel::before {
+  --mark: rgb(var(--c-ink) / 0.5);
+  content: '';
+  position: absolute;
+  inset: -8px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--mark), var(--mark)) left top / 12px 1px no-repeat,
+    linear-gradient(var(--mark), var(--mark)) left top / 1px 12px no-repeat,
+    linear-gradient(var(--mark), var(--mark)) right top / 12px 1px no-repeat,
+    linear-gradient(var(--mark), var(--mark)) right top / 1px 12px no-repeat,
+    linear-gradient(var(--mark), var(--mark)) left bottom / 12px 1px no-repeat,
+    linear-gradient(var(--mark), var(--mark)) left bottom / 1px 12px no-repeat,
+    linear-gradient(var(--mark), var(--mark)) right bottom / 12px 1px no-repeat,
+    linear-gradient(var(--mark), var(--mark)) right bottom / 1px 12px no-repeat;
+  transition: opacity 0.15s ease;
+}
+
+/* CAD selection handles: 4 corners + 4 edge midpoints */
+html:not(.dark) :is(.card-animated, .achievement-card)::after {
+  --handle: rgb(var(--c-ion));
+  content: '';
+  position: absolute;
+  inset: -4px;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    linear-gradient(var(--handle), var(--handle)) left top / 7px 7px no-repeat,
+    linear-gradient(var(--handle), var(--handle)) right top / 7px 7px no-repeat,
+    linear-gradient(var(--handle), var(--handle)) left bottom / 7px 7px no-repeat,
+    linear-gradient(var(--handle), var(--handle)) right bottom / 7px 7px no-repeat,
+    linear-gradient(var(--handle), var(--handle)) center top / 7px 7px no-repeat,
+    linear-gradient(var(--handle), var(--handle)) center bottom / 7px 7px no-repeat,
+    linear-gradient(var(--handle), var(--handle)) left center / 7px 7px no-repeat,
+    linear-gradient(var(--handle), var(--handle)) right center / 7px 7px no-repeat;
+  transition: opacity 0.15s ease;
+}
+
+html:not(.dark) :is(.card-animated, .achievement-card):is(:hover, :focus-within) {
+  transform: none;
+  border-style: dashed;
+  border-color: var(--panel-border-hover);
+  box-shadow: 0 1px 0 rgb(15 27 45 / 0.05);
+}
+
+html:not(.dark) :is(.card-animated, .achievement-card):is(:hover, :focus-within)::after {
+  opacity: 1;
+}
+
+html:not(.dark) :is(.card-animated, .achievement-card):is(:hover, :focus-within)::before {
+  opacity: 0;
+}
+
+/* ---------- Controls ---------- */
+/* Outlines are drawn with shadows so the buttons keep exactly the Space size (no shift on theme switch) */
+html:not(.dark) .btn-thrust {
+  border-radius: 3px;
+  background: var(--signal);
+  color: rgb(var(--c-ink));
+  box-shadow: inset 0 0 0 1.5px rgb(var(--c-ink));
+  filter: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+html:not(.dark) .btn-thrust:hover {
+  transform: none;
+  filter: none;
+  background: rgb(var(--c-ink));
+  color: var(--signal);
+  box-shadow: inset 0 0 0 1.5px rgb(var(--c-ink));
+}
+
+html:not(.dark) .btn-hull {
+  border-color: rgb(var(--c-ink));
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: 0 0 0 0.5px rgb(var(--c-ink));
+}
+
+html:not(.dark) .btn-hull:hover {
+  transform: none;
+  border-color: rgb(var(--c-ion));
+  background: rgb(var(--c-ion) / 0.06);
+  color: rgb(var(--c-ion));
+  box-shadow: 0 0 0 0.5px rgb(var(--c-ion));
+}
+
+html:not(.dark) .pill {
+  border-radius: 2px;
+  border-color: rgb(var(--c-ink) / 0.35);
+  background: #fff;
+  color: rgb(var(--c-ink));
+}
+
+html:not(.dark) .pill::before {
+  border-radius: 0;
+  background: var(--signal);
+  box-shadow: none;
+}
+
+html:not(.dark) .icon-badge {
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgb(var(--c-ink) / 0.55);
+}
+
+/* ---------- Title block (projects + footer) ---------- */
+.gc-titleblock {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  gap: 1px;
+  border: 1px solid rgb(var(--c-ink) / 0.8);
+  background: rgb(var(--c-ink) / 0.4);
+  font-family: theme('fontFamily.mono');
+}
+
+.gc-titleblock > div {
+  background: #fff;
+  padding: 0.35rem 0.6rem;
+}
+
+.gc-titleblock dt {
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(var(--c-muted));
+}
+
+.gc-titleblock dd {
+  margin-top: 0.1rem;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgb(var(--c-ink));
+}
+
+.gc-titleblock--project {
+  grid-template-columns: auto auto 1fr;
+}
+
+.gc-titleblock--footer {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gc-titleblock__wide {
+  grid-column: span 3;
+}
+
+@media (min-width: 640px) {
+  .gc-titleblock--footer {
+    grid-template-columns: 2fr repeat(3, minmax(0, 1fr));
+  }
+
+  .gc-titleblock--footer .gc-titleblock__wide:first-child {
+    grid-column: auto;
+  }
+
+  .gc-titleblock--footer .gc-titleblock__wide:last-child {
+    grid-column: span 4;
+  }
+}
+
+/* ---------- Projects: drawing sheets ---------- */
+html:not(.dark) .projects-stack-card {
+  border-radius: 3px;
+  border-color: rgb(var(--c-ink) / 0.6);
+  background: #fff;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+html:not(.dark) .projects-stack-card:hover {
+  border-style: dashed;
+  border-color: rgb(var(--c-ion));
+  box-shadow: none;
+}
+
+html:not(.dark) .projects-stack-card:focus-visible {
+  outline: 2px solid rgb(var(--c-ion));
+  outline-offset: 3px;
+}
+
+/* Screenshot pinned on its own patch of graph paper */
+html:not(.dark) .project-shot {
+  border-color: rgb(var(--c-ink) / 0.25);
+  background: var(--light-bg);
+}
+
+html:not(.dark) .project-cta {
+  border-radius: 2px;
+  background: #fff;
+  color: rgb(var(--c-ion));
+  box-shadow: inset 0 0 0 1px rgb(var(--c-ink) / 0.6);
+}
+
+html:not(.dark) .group:hover .project-cta {
+  background: rgb(var(--c-ion));
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgb(var(--c-ion));
+}
+
+/* ---------- Gallery: prints taped to the table ---------- */
+html:not(.dark) .gallery-print {
+  position: relative;
+  rotate: -1.2deg;
+}
+
+html:not(.dark) .gallery-print:nth-child(3n + 2) {
+  rotate: 0.8deg;
+}
+
+html:not(.dark) .gallery-print:nth-child(3n) {
+  rotate: -0.4deg;
+}
+
+/* Room for the tape above each print (the strip clips overflow) */
+html:not(.dark) .gallery-viewport {
+  padding-top: 1.1rem;
+}
+
+html:not(.dark) .gallery-glass-card {
+  border-color: rgb(var(--c-ink) / 0.18);
+  background: #fff;
+  box-shadow: 0 10px 22px -14px rgb(15 27 45 / 0.45);
+  backdrop-filter: none;
+}
+
+/* ---------- Taped prints (achievements + gallery) ---------- */
+html:not(.dark) .achievement-item,
+html:not(.dark) .gallery-glass-card {
+  border-radius: 2px;
+}
+
+html:not(.dark) :is(.achievement-item, .gallery-print)::before {
+  content: '';
+  position: absolute;
+  z-index: 3;
+  top: -10px;
+  left: 50%;
+  width: 78px;
+  height: 20px;
+  translate: -50% 0;
+  rotate: -2.5deg;
+  background: rgb(243 228 186 / 0.88);
+  box-shadow: 0 1px 2px rgb(15 27 45 / 0.14);
+  pointer-events: none;
+}
+
+html:not(.dark) :is(.achievement-item, .gallery-print):nth-child(even)::before {
+  left: 60%;
+  rotate: 3deg;
+}
+
+/* The plotter pen traces borders flat on paper — no neon glow */
+html:not(.dark) .nb-svg-layer,
+html:not(.dark) .nb-border-path {
+  filter: none !important;
+  animation: none !important;
+}
+
+/* ---------- Contact: a paper request form ---------- */
+html:not(.dark) #contact .nb-svg-layer {
+  display: none;
+}
+
+html:not(.dark) #contact label {
+  font-family: theme('fontFamily.mono');
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(var(--c-muted));
+}
+
+html:not(.dark) #contact :is(input, textarea) {
+  border: 0;
+  border-bottom: 1.5px solid rgb(var(--c-ink) / 0.6);
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+/* Ruled lines under the message, one per text line */
+html:not(.dark) #contact textarea {
+  border-bottom: 0;
+  padding-top: 0;
+  line-height: 1.75rem;
+  background-image: repeating-linear-gradient(transparent 0 calc(1.75rem - 1px), rgb(var(--c-ink) / 0.35) calc(1.75rem - 1px) 1.75rem);
+  background-attachment: local;
+}
+
+html:not(.dark) #contact :is(input, textarea):focus-visible {
+  --tw-ring-shadow: 0 0 #0000;
+  box-shadow: none;
+  border-bottom-color: rgb(var(--c-ion));
+  background-color: rgb(var(--c-ion) / 0.05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:not(.dark) .space-panel::before,
+  html:not(.dark) :is(.card-animated, .achievement-card)::after {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+ * THEME SWITCH — View Transitions (see useTheme.ts)
+ * The page itself switches instantly; text blocks named "vt-text" glide to
+ * their new position and typeface.
+ * ========================================================================== */
+
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition: none !important;
+}
+
+/* No page-wide fade or wipe — only the text moves */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-group(*.vt-text) {
+  animation-duration: 0.8s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Morph: old and new text both fill the moving box, so one word reshapes into the other while
+   they blend (the browser's plus-lighter cross-fade); a light blur at the midpoint smooths the seam */
+::view-transition-old(*.vt-text),
+::view-transition-new(*.vt-text) {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: fill;
+  animation-duration: 0.8s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: both;
+}
+
+::view-transition-old(*.vt-text) {
+  animation-name: vt-morph-out;
+}
+
+::view-transition-new(*.vt-text) {
+  animation-name: vt-morph-in;
+}
+
+@keyframes vt-morph-out {
+  0% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  50% {
+    filter: blur(1.5px);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(0);
+  }
+}
+
+@keyframes vt-morph-in {
+  0% {
+    opacity: 0;
+    filter: blur(0);
+  }
+  50% {
+    filter: blur(1.5px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
   }
 }

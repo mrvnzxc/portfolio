@@ -1,5 +1,5 @@
 <template>
-  <header id="top-nav" class="sticky top-0 z-30 border-b border-nebula/15 bg-[#f1f2fb]/75 backdrop-blur-md dark:bg-[#04060f]/70">
+  <header id="top-nav" class="sticky top-0 z-30 border-b border-nebula/15 bg-[#f4f7fa]/90 backdrop-blur-md dark:bg-[#04060f]/70">
     <nav ref="navRoot" class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
       <a href="#hero" class="inline-flex items-center gap-2 rounded-full border border-nebula/25 bg-nebula/5 px-3 py-1 font-mono text-sm text-ink">
         <span class="inline-flex h-2 w-2 rounded-full bg-ion shadow-[0_0_8px_rgb(var(--c-ion)/0.85)]"></span>
@@ -11,8 +11,8 @@
       </a>
 
       <div class="flex items-center gap-2 md:hidden">
-        <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-nebula/30 bg-nebula/5 text-ink transition hover:border-ion/60 hover:text-ion" aria-label="Toggle light or dark mode" @click="toggleTheme">
-          <Icon :icon="isDark ? 'ph:sun-fill' : 'ph:moon-fill'" />
+        <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-nebula/30 bg-nebula/5 text-ink transition hover:border-ion/60 hover:text-ion" :aria-label="themeToggleLabel" :title="themeToggleLabel" @click="toggleTheme">
+          <Icon :icon="isDark ? 'ph:compass-tool-fill' : 'ph:rocket-launch-fill'" />
         </button>
         <button type="button" class="nav-toggle inline-flex h-10 w-10 items-center justify-center rounded-md border border-nebula/30 bg-nebula/5 text-ink transition-transform duration-200 hover:scale-[1.04] hover:border-ion/60 hover:text-ion" :class="{ 'is-open': isMenuActive }" aria-controls="navMenu" :aria-expanded="isMenuActive" @click="toggleMenu">
           <span class="sr-only">Toggle navigation</span>
@@ -24,7 +24,7 @@
         </button>
       </div>
 
-      <div id="navMenu" class="nav-menu absolute left-0 right-0 top-full z-20 w-full flex-col gap-4 border-b border-nebula/15 bg-[#f1f2fb]/[0.98] px-4 pb-4 pt-3 shadow-lg shadow-[#04060f]/10 dark:bg-[#070b1c]/[0.97] dark:shadow-black/40 md:static md:z-auto md:flex md:w-auto md:flex-row md:items-center md:gap-6 md:border-none md:bg-transparent md:p-0 md:shadow-none dark:md:bg-transparent dark:md:shadow-none" :class="menuClass" @animationend="onMenuAnimationEnd">
+      <div id="navMenu" class="nav-menu absolute left-0 right-0 top-full z-20 w-full flex-col gap-4 border-b border-nebula/15 bg-[#f4f7fa]/[0.98] px-4 pb-4 pt-3 shadow-lg shadow-[#04060f]/10 dark:bg-[#070b1c]/[0.97] dark:shadow-black/40 md:static md:z-auto md:flex md:w-auto md:flex-row md:items-center md:gap-6 md:border-none md:bg-transparent md:p-0 md:shadow-none dark:md:bg-transparent dark:md:shadow-none" :class="menuClass" @animationend="onMenuAnimationEnd">
         <ul class="nav-links flex flex-col gap-3 text-base font-medium text-ink/75 md:flex-row md:items-center md:gap-6 md:text-[15px]">
           <li><a href="#projects" @click="closeMenu">Projects</a></li>
           <li><a href="#skills" @click="closeMenu">Skills</a></li>
@@ -33,8 +33,8 @@
           <li><a href="#gallery" @click="closeMenu">Gallery</a></li>
           <li><a href="#contact" @click="closeMenu">Contact</a></li>
         </ul>
-        <button type="button" class="hidden md:inline-flex h-9 w-9 items-center justify-center rounded-full border border-nebula/30 bg-nebula/5 text-ink transition hover:border-ion/60 hover:text-ion" aria-label="Toggle light or dark mode" @click="toggleTheme">
-          <Icon :icon="isDark ? 'ph:sun-fill' : 'ph:moon-fill'" />
+        <button type="button" class="hidden md:inline-flex h-9 w-9 items-center justify-center rounded-full border border-nebula/30 bg-nebula/5 text-ink transition hover:border-ion/60 hover:text-ion" :aria-label="themeToggleLabel" :title="themeToggleLabel" @click="toggleTheme">
+          <Icon :icon="isDark ? 'ph:compass-tool-fill' : 'ph:rocket-launch-fill'" />
         </button>
       </div>
     </nav>
@@ -51,6 +51,8 @@ const navRoot = ref<HTMLElement | null>(null)
 const menuState = ref<'closed' | 'open' | 'closing'>('closed')
 
 const isMenuActive = computed(() => menuState.value !== 'closed')
+/* Dark = Space, light = Ground Control; the icon shows where the toggle takes you */
+const themeToggleLabel = computed(() => (isDark.value ? 'Switch to Ground Control (light) theme' : 'Switch to Space (dark) theme'))
 const menuClass = computed(() => {
   if (menuState.value === 'open') return 'flex nav-menu--open md:flex'
   if (menuState.value === 'closing') return 'flex nav-menu--closing md:flex'

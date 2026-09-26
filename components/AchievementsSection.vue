@@ -10,7 +10,7 @@
           <h3 class="mb-4 text-lg font-semibold text-ink">Certificates</h3>
           <div class="space-y-4">
             <NeonBorderReveal
-              color="#a594ff" light-color="#5b45d6"
+              color="#a594ff" light-color="#1d4ed8"
               class="achievement-item cursor-pointer rounded-xl bg-white/70 shadow-sm dark:bg-[#0a0f24]/70"
               @click="$emit('open-image', '/cert1.png')"
             >
@@ -24,7 +24,7 @@
             </NeonBorderReveal>
 
             <NeonBorderReveal
-              color="#a594ff" light-color="#5b45d6"
+              color="#a594ff" light-color="#1d4ed8"
               class="achievement-item cursor-pointer rounded-xl bg-white/70 shadow-sm dark:bg-[#0a0f24]/70"
               @click="$emit('open-image', '/cert2.png')"
             >
@@ -38,7 +38,7 @@
             </NeonBorderReveal>
 
             <NeonBorderReveal
-              color="#a594ff" light-color="#5b45d6"
+              color="#a594ff" light-color="#1d4ed8"
               class="achievement-item cursor-pointer rounded-xl bg-white/70 shadow-sm dark:bg-[#0a0f24]/70"
               @click="$emit('open-image', '/cert3.png')"
             >
@@ -58,7 +58,7 @@
             <NeonBorderReveal
               v-for="n in 5"
               :key="n"
-              color="#6ee7f9" light-color="#0e7490"
+              color="#6ee7f9" light-color="#1d4ed8"
               class="achievement-item cursor-pointer rounded-xl bg-white/70 shadow-sm dark:bg-[#0a0f24]/70"
               :class="n === 5 ? 'sm:col-span-2' : ''"
               @click="$emit('open-image', '/res' + n + '.jpg')"

@@ -1,7 +1,7 @@
 <template>
   <div class="relative min-h-screen">
     <ClientOnly>
-      <WarpLoader v-if="showWarpLoader" @complete="onWarpComplete" />
+      <TerminalIntro v-if="showIntro" @complete="onIntroComplete" />
     </ClientOnly>
     <!--
       Intro uses opacity only (no transform). Transform on this wrapper would break
@@ -19,9 +19,9 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
-const showWarpLoader = ref(true)
+const showIntro = ref(true)
 const portfolioVisible = ref(false)
-const warpSequenceDone = ref(false)
+const introSequenceDone = ref(false)
 const minimumTimerElapsed = ref(false)
 const introContentReady = useIntroContentReady()
 
@@ -33,26 +33,27 @@ const portfolioRevealClass = computed(() => {
 })
 
 onMounted(() => {
+  /* The terminal intro paces itself; this only guards against a flash on a skip at first paint */
   window.setTimeout(() => {
     minimumTimerElapsed.value = true
-  }, 3000)
+  }, 400)
 
-  // Safety net: never leave the site invisible if the warp loader fails to finish
+  // Safety net: never leave the site invisible if the intro fails to finish
   window.setTimeout(() => {
     if (portfolioVisible.value) return
-    warpSequenceDone.value = true
+    introSequenceDone.value = true
     minimumTimerElapsed.value = true
-    showWarpLoader.value = false
+    showIntro.value = false
     portfolioVisible.value = true
     introContentReady.value = true
-  }, 6500)
+  }, 9000)
 })
 
-watch([warpSequenceDone, minimumTimerElapsed], ([warp, min]) => {
-  if (!warp || !min) return
-  showWarpLoader.value = false
+watch([introSequenceDone, minimumTimerElapsed], ([done, min]) => {
+  if (!done || !min) return
+  showIntro.value = false
   nextTick(() => {
-    /* Let the loader paint its last frame off-DOM before starting the page ease-in. */
+    /* Let the intro paint its last frame off-DOM before starting the page ease-in. */
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         window.setTimeout(() => {
@@ -64,8 +65,8 @@ watch([warpSequenceDone, minimumTimerElapsed], ([warp, min]) => {
   })
 })
 
-function onWarpComplete() {
-  warpSequenceDone.value = true
+function onIntroComplete() {
+  introSequenceDone.value = true
 }
 </script>
 

@@ -30,7 +30,8 @@ export default <Partial<Config>>{
         solar: token('solar')
       },
       fontFamily: {
-        display: ['"Chakra Petch"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        /* Chakra Petch in space (dark), IBM Plex Sans Condensed in Ground Control (light) — set in custom.css */
+        display: ['var(--font-display)'],
         sans: ['"IBM Plex Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         mono: ['"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace']
       }
