@@ -17,7 +17,7 @@
       />
     </div>
 
-    <div class="relative mx-auto max-w-6xl px-4">
+    <div class="relative mx-auto max-w-6xl 2xl:max-w-7xl px-4">
       <!-- Same row layout as GallerySection: title left, label right (text-primary-600) -->
       <div
         class="mb-4 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 reveal-on-scroll sm:mb-5"

@@ -1,6 +1,6 @@
 <template>
   <section id="contact" class="section-band-a">
-    <div class="mx-auto max-w-6xl px-4">
+    <div class="mx-auto max-w-6xl 2xl:max-w-7xl px-4">
       <div class="grid gap-12 items-stretch lg:grid-cols-2">
         <div class="reveal-on-scroll flex h-full flex-col">
           <h2 class="text-3xl font-semibold tracking-tight sm:text-4xl">Contact Me</h2>

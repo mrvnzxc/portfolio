@@ -1,6 +1,6 @@
 <template>
   <footer class="footer-band-b">
-    <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 sm:flex-row">
+    <div class="mx-auto flex max-w-6xl 2xl:max-w-7xl flex-col items-center justify-between gap-3 px-4 sm:flex-row">
       <div class="hidden flex-col items-center gap-1 sm:items-start dark:flex">
         <div>© {{ year }} John Marvin Bautista. All rights reserved.</div>
         <div class="font-mono text-xs text-muted">

@@ -227,7 +227,14 @@ body {
 
 /* Anchor jumps land below the pinned header */
 html {
+  --header-h: 61px; /* measured and updated by AppHeader */
   scroll-padding-top: 4.5rem;
+}
+
+/* The hero fills the screen below the header, so the next section starts below the fold */
+.hero-screen {
+  min-height: calc(100vh - var(--header-h));
+  min-height: calc(100svh - var(--header-h));
 }
 
 body {

@@ -201,7 +201,11 @@ function finish() {
   pendingTimer = setTimeout(() => emit('complete'), skipped ? 220 : 450)
 }
 
-function skip() {
+/* Keys that would otherwise scroll the (still hidden) page underneath the intro */
+const SCROLL_KEYS = new Set([' ', 'Spacebar', 'ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End'])
+
+function skip(event?: Event) {
+  if (event instanceof KeyboardEvent && SCROLL_KEYS.has(event.key)) event.preventDefault()
   if (skipped) return
   skipped = true
   if (pendingTimer) clearTimeout(pendingTimer)

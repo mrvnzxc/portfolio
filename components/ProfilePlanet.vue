@@ -13,7 +13,7 @@
     <!-- Ground Control only: the photo drawn as a dimensioned figure -->
     <span class="profile-fig__ext" aria-hidden="true" />
     <div class="profile-fig__dim" aria-hidden="true">
-      <span class="profile-fig__dim-label">Ø <span class="md:hidden">240</span><span class="hidden md:inline">300</span></span>
+      <span class="profile-fig__dim-label">Ø <span class="md:hidden">240</span><span class="hidden md:inline 2xl:hidden">300</span><span class="hidden 2xl:inline">360</span></span>
     </div>
     <p class="profile-fig__caption" aria-hidden="true">Fig. 1 — J. M. Bautista</p>
   </div>
@@ -27,6 +27,14 @@
   width: 300px;
   height: 300px;
   flex-shrink: 0;
+}
+
+/* Large monitors: a bigger planet to fill the full-screen hero */
+@media (min-width: 1536px) {
+  .profile-planet {
+    width: 360px;
+    height: 360px;
+  }
 }
 
 @media (max-width: 767px) {

@@ -1,15 +1,15 @@
 <template>
-    <section id="hero" class="section-band-b-first overflow-x-clip">
-      <div class="mx-auto flex max-w-6xl flex-col items-center gap-12 px-4 md:flex-row md:items-center md:justify-between">
-        <div class="max-w-xl space-y-4 sm:space-y-5 reveal-on-scroll">
+    <section id="hero" class="hero-screen section-band-b-first flex items-center overflow-x-clip">
+      <div class="mx-auto flex w-full max-w-6xl 2xl:max-w-7xl flex-col items-center gap-12 px-4 md:flex-row md:items-center md:justify-between">
+        <div class="max-w-xl space-y-4 sm:space-y-5 2xl:max-w-2xl reveal-on-scroll">
           <p class="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs font-medium uppercase tracking-[0.2em] text-ion sm:text-sm">
             <span>Software Engineer</span>
             <span class="text-muted/60" aria-hidden="true">/</span>
             <span class="text-muted">6.1164° N · 125.1716° E</span>
           </p>
-          <h1 class="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">Hello World, I'm <br><span class="text-gradient" id="typewriter-name" :data-full-text="fullName"><span class="typewriter-text">{{ name }}</span></span></h1>
+          <h1 class="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl 2xl:text-7xl">Hello World, I'm <br><span class="text-gradient" id="typewriter-name" :data-full-text="fullName"><span class="typewriter-text">{{ name }}</span></span></h1>
           <div class="flex justify-center pb-20 pt-8 md:hidden"><ProfilePlanet /></div>
-          <p class="text-lg leading-relaxed text-ink/80">I build reliable, user-focused software that blends clean architecture with thoughtful design. Currently exploring AI-assisted automation and modern web stacks.</p>
+          <p class="text-lg leading-relaxed text-ink/80 2xl:text-xl">I build reliable, user-focused software that blends clean architecture with thoughtful design. Currently exploring AI-assisted automation and modern web stacks.</p>
           <div class="flex flex-wrap items-center gap-3 pt-2">
             <a class="btn-thrust" href="/cv.pdf" download><Icon icon="ph:download-simple-bold" />Download CV</a>
             <a class="btn-hull" href="#contact">Contact Me</a>

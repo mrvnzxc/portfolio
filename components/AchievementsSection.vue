@@ -1,6 +1,6 @@
 <template>
   <section id="achievements" class="section-band-b">
-    <div class="mx-auto max-w-6xl px-4">
+    <div class="mx-auto max-w-6xl 2xl:max-w-7xl px-4">
       <div class="mb-4 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 reveal-on-scroll">
         <h2 class="mb-1 text-3xl font-semibold tracking-tight sm:text-4xl">Achievements</h2>
         <span class="section-tag self-end sm:self-auto">Certificates &amp; contests</span>

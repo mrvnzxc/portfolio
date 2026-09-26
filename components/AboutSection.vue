@@ -1,6 +1,6 @@
 <template>
   <section id="about" class="section-band-a">
-    <div class="mx-auto max-w-6xl px-4">
+    <div class="mx-auto max-w-6xl 2xl:max-w-7xl px-4">
       <div class="grid gap-8 md:grid-cols-[minmax(0,1.7fr)_minmax(0,1.1fr)] md:items-start">
         <div class="reveal-on-scroll">
           <h2 class="text-4xl font-semibold tracking-tight sm:text-5xl">About Me</h2>
