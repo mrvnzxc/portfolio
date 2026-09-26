@@ -16,6 +16,7 @@
     <AppFooter />
     <Lightbox />
     <ToastRoot />
+    <CursorDust />
   </div>
 </template>
 
