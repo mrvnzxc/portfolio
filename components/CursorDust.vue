@@ -32,6 +32,8 @@ const MAX_MOTES = 180
 const SPACING = 5
 /** A bigger jump than this is the pointer re-entering the window, not a stroke */
 const MAX_STROKE = 240
+/** Dust under a fingertip is drawn larger, or it vanishes on a small screen */
+const TOUCH_SCALE = 1.6
 
 /** A soft cyan dot with a halo, drawn once and stamped per mote. */
 const makeGlow = () => {
@@ -56,8 +58,6 @@ onMounted(() => {
   const el = canvas.value
   const ctx = el?.getContext('2d')
   if (!el || !ctx) return
-  /* Mouse and trackpad only: no trail under a finger, and none when motion is reduced */
-  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
   const glow = makeGlow()
@@ -83,17 +83,18 @@ onMounted(() => {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
   }
 
-  const spawn = (x: number, y: number, dx: number, dy: number) => {
+  const spawn = (x: number, y: number, dx: number, dy: number, burst = false, scale = 1) => {
     if (motes.length >= MAX_MOTES) motes.shift()
     const angle = Math.random() * Math.PI * 2
-    const kick = 0.008 + Math.random() * 0.03
+    /* A tap's burst flies out further than dust shed along a stroke */
+    const kick = burst ? 0.03 + Math.random() * 0.05 : 0.008 + Math.random() * 0.03
     motes.push({
       x: x + (Math.random() - 0.5) * 6,
       y: y + (Math.random() - 0.5) * 6,
       /* Scatter a little, and carry a little of the stroke's direction */
       vx: Math.cos(angle) * kick + dx * 0.0012,
       vy: Math.sin(angle) * kick + dy * 0.0012,
-      size: 0.8 + Math.random() ** 2 * 1.8,
+      size: (0.8 + Math.random() ** 2 * 1.8) * scale,
       life: 1,
       decay: 1 / (650 + Math.random() * 850),
       mark: Math.random() < 0.12
@@ -155,10 +156,8 @@ onMounted(() => {
     frame = requestAnimationFrame(tick)
   }
 
-  const onPointerMove = (event: PointerEvent) => {
-    if (event.pointerType === 'touch') return
-    const x = event.clientX
-    const y = event.clientY
+  /** Sheds dust along the stroke from the last point to this one */
+  const trail = (x: number, y: number, scale = 1) => {
     const dx = x - lastX
     const dy = y - lastY
     const distance = Math.hypot(dx, dy)
@@ -172,18 +171,54 @@ onMounted(() => {
     /* Spread along the stroke so a fast flick leaves a trail, not a clump */
     for (let i = 0; i < count; i += 1) {
       const along = (i + Math.random()) / count
-      spawn(x - dx * (1 - along), y - dy * (1 - along), dx, dy)
+      spawn(x - dx * (1 - along), y - dy * (1 - along), dx, dy, false, scale)
     }
     if (count > 0) start()
+  }
+
+  /* Mouse and pen. A finger is handled by the touch events below instead. */
+  const onPointerMove = (event: PointerEvent) => {
+    if (event.pointerType !== 'touch') trail(event.clientX, event.clientY)
+  }
+
+  /*
+   * Touch: once a drag turns into a scroll, the browser stops sending pointer events, but
+   * touch events keep coming, so the trail follows the finger for the whole swipe.
+   */
+  const onTouchStart = (event: TouchEvent) => {
+    const touch = event.touches[0]
+    if (!touch) return
+    lastX = touch.clientX
+    lastY = touch.clientY
+    carry = 0
+    /* A tap puffs a little dust where the finger lands */
+    for (let i = 0; i < 8; i += 1) spawn(touch.clientX, touch.clientY, 0, 0, true, TOUCH_SCALE)
+    start()
+  }
+  const onTouchMove = (event: TouchEvent) => {
+    const touch = event.touches[0]
+    if (touch) trail(touch.clientX, touch.clientY, TOUCH_SCALE)
+  }
+  const onTouchEnd = () => {
+    lastX = Number.NaN
+    lastY = Number.NaN
   }
 
   resize()
   window.addEventListener('resize', resize)
   window.addEventListener('pointermove', onPointerMove, { passive: true })
+  window.addEventListener('touchstart', onTouchStart, { passive: true })
+  window.addEventListener('touchmove', onTouchMove, { passive: true })
+  window.addEventListener('touchend', onTouchEnd, { passive: true })
+  window.addEventListener('touchcancel', onTouchEnd, { passive: true })
   onBeforeUnmount(() => {
     cancelAnimationFrame(frame)
     window.removeEventListener('resize', resize)
     window.removeEventListener('pointermove', onPointerMove)
+    window.removeEventListener('touchstart', onTouchStart)
+    window.removeEventListener('touchmove', onTouchMove)
+    window.removeEventListener('touchend', onTouchEnd)
+    window.removeEventListener('touchcancel', onTouchEnd)
   })
 })
 </script>
