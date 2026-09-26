@@ -126,164 +126,167 @@
       </div>
     </div>
 
-    <Transition name="project-modal">
-      <div
-        v-if="selectedProject"
-        class="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-4"
-        role="presentation"
-      >
+    <!-- Rendered at the top of the page: inside <main> (its own layer) the rulers and header would sit above it -->
+    <Teleport to="body">
+      <Transition name="project-modal">
         <div
-          class="project-modal-backdrop absolute inset-0 bg-slate-950/80 backdrop-blur-[2px]"
-          aria-hidden="true"
-          @click="closeModal"
-        />
-        <article
-          class="launch-modal project-modal-panel relative z-10 flex w-full max-w-none max-h-[min(93dvh,920px)] flex-col overflow-hidden rounded-t-2xl border border-slate-200/80 border-b-0 bg-white shadow-[0_24px_60px_rgba(15,23,42,0.2)] ring-1 ring-white/50 dark:border-cyan-300/30 dark:bg-slate-950 dark:shadow-[0_0_28px_rgba(34,211,238,0.14)] dark:ring-cyan-200/20 sm:max-h-[min(85vh,680px)] sm:max-w-3xl sm:rounded-xl sm:border-b"
-          role="dialog"
-          aria-modal="true"
-          :aria-labelledby="selectedProject ? 'project-modal-title' : undefined"
-          @click.stop
+          v-if="selectedProject"
+          class="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-4"
+          role="presentation"
         >
-          <header class="flex shrink-0 items-start justify-between gap-3 border-b border-slate-200/80 bg-white/95 px-4 py-3 dark:border-white/10 dark:bg-slate-950/95 sm:px-5">
-            <div class="min-w-0 pr-2">
-              <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                <span class="tabular-nums text-slate-700 dark:text-slate-200">{{ selectedProject.year }}</span>
-              </p>
-              <p class="mt-0.5 text-[11px] font-semibold uppercase tracking-wide text-primary-600 dark:text-cyan-300">
-                {{ selectedProject.label }}
-              </p>
-              <h3 id="project-modal-title" class="mt-0.5 text-base font-semibold leading-snug tracking-tight sm:text-xl">
-                {{ selectedProject.title }}
-              </h3>
-            </div>
-            <button
-              type="button"
-              class="shrink-0 rounded-lg border border-slate-300/80 bg-slate-100 px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 dark:border-white/15 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
-              @click="closeModal"
-            >
-              Close
-            </button>
-          </header>
-
-          <div class="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-            <div class="space-y-3 px-3 pb-6 pt-3 sm:space-y-4 sm:px-5 sm:py-5 sm:pb-5">
-              <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-6">
-                <button
-                  type="button"
-                  class="image-launch image-frame w-full shrink-0 overflow-hidden rounded-xl border border-slate-300/85 bg-slate-100/80 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_6px_16px_rgba(15,23,42,0.1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-slate-700/90 dark:bg-slate-900/90 dark:shadow-[inset_0_1px_0_rgba(148,163,184,0.15),0_8px_18px_rgba(2,6,23,0.4)] dark:focus-visible:ring-cyan-300 sm:mx-0 sm:w-[46%] sm:min-w-[280px] sm:max-w-[420px]"
-                  :aria-label="`Expand ${selectedProject.title} preview image`"
-                  @click="openImagePreview(selectedProject.image, selectedProject.title)"
-                >
-                  <img
-                    :src="selectedProject.image"
-                    :alt="selectedProject.title"
-                    class="h-auto max-h-[min(38vh,240px)] w-full rounded-lg border border-slate-300/60 object-contain dark:border-slate-700/70 sm:max-h-[360px] lg:max-h-[400px]"
-                    loading="lazy"
-                  />
-                </button>
-                <div class="project-modal-mobile-card min-w-0 flex-1 space-y-3 sm:space-y-3">
-                  <p class="text-[15px] leading-relaxed text-slate-700 dark:text-slate-200 sm:text-sm sm:leading-snug sm:text-slate-600 dark:sm:text-slate-300">
-                    {{ selectedProject.description }}
-                  </p>
-                  <div class="border-t border-slate-200/80 pt-3 dark:border-white/10 sm:border-0 sm:pt-0">
-                    <p class="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 sm:mb-1 sm:text-[11px]">
-                      Problem it solves
-                    </p>
-                    <p class="text-[15px] leading-relaxed text-slate-800 dark:text-slate-100 sm:text-sm sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200">
-                      {{ selectedProject.problem }}
-                    </p>
-                  </div>
-                </div>
+          <div
+            class="project-modal-backdrop absolute inset-0 bg-slate-950/80 backdrop-blur-[2px]"
+            aria-hidden="true"
+            @click="closeModal"
+          />
+          <article
+            class="launch-modal project-modal-panel relative z-10 flex w-full max-w-none max-h-[min(93dvh,920px)] flex-col overflow-hidden rounded-t-2xl border border-slate-200/80 border-b-0 bg-white shadow-[0_24px_60px_rgba(15,23,42,0.2)] ring-1 ring-white/50 dark:border-cyan-300/30 dark:bg-slate-950 dark:shadow-[0_0_28px_rgba(34,211,238,0.14)] dark:ring-cyan-200/20 sm:max-h-[min(85vh,680px)] sm:max-w-3xl sm:rounded-xl sm:border-b"
+            role="dialog"
+            aria-modal="true"
+            :aria-labelledby="selectedProject ? 'project-modal-title' : undefined"
+            @click.stop
+          >
+            <header class="flex shrink-0 items-start justify-between gap-3 border-b border-slate-200/80 bg-white/95 px-4 py-3 dark:border-white/10 dark:bg-slate-950/95 sm:px-5">
+              <div class="min-w-0 pr-2">
+                <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  <span class="tabular-nums text-slate-700 dark:text-slate-200">{{ selectedProject.year }}</span>
+                </p>
+                <p class="mt-0.5 text-[11px] font-semibold uppercase tracking-wide text-primary-600 dark:text-cyan-300">
+                  {{ selectedProject.label }}
+                </p>
+                <h3 id="project-modal-title" class="mt-0.5 text-base font-semibold leading-snug tracking-tight sm:text-xl">
+                  {{ selectedProject.title }}
+                </h3>
               </div>
+              <button
+                type="button"
+                class="shrink-0 rounded-lg border border-slate-300/80 bg-slate-100 px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 dark:border-white/15 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+                @click="closeModal"
+              >
+                Close
+              </button>
+            </header>
 
-              <div class="grid gap-3 sm:grid-cols-2 sm:gap-5 sm:border-t sm:border-slate-200/80 sm:pt-4 dark:sm:border-white/10">
-                <div class="project-modal-mobile-card">
-                  <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:mb-1.5 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
-                    How it works
-                  </p>
-                  <ol class="list-decimal space-y-2.5 pl-4 text-[15px] leading-relaxed text-slate-800 marker:font-medium marker:text-primary-600 dark:text-slate-100 dark:marker:text-cyan-400/90 sm:space-y-1.5 sm:pl-4 sm:text-xs sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200 dark:sm:marker:text-slate-500">
-                    <li v-for="(step, i) in selectedProject.howItWorks" :key="i">{{ step }}</li>
-                  </ol>
-                </div>
-                <div class="project-modal-mobile-card">
-                  <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:mb-1.5 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
-                    Deep dive
-                  </p>
-                  <p class="text-[15px] leading-relaxed text-slate-800 dark:text-slate-100 sm:text-xs sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200">
-                    {{ selectedProject.deepDive }}
-                  </p>
-                  <div class="mt-4 border-t border-slate-200/80 pt-4 dark:border-white/10 sm:mt-4 sm:border-slate-200/70">
-                    <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
-                      Key features
+            <div class="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+              <div class="space-y-3 px-3 pb-6 pt-3 sm:space-y-4 sm:px-5 sm:py-5 sm:pb-5">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-6">
+                  <button
+                    type="button"
+                    class="image-launch image-frame w-full shrink-0 overflow-hidden rounded-xl border border-slate-300/85 bg-slate-100/80 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_6px_16px_rgba(15,23,42,0.1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-slate-700/90 dark:bg-slate-900/90 dark:shadow-[inset_0_1px_0_rgba(148,163,184,0.15),0_8px_18px_rgba(2,6,23,0.4)] dark:focus-visible:ring-cyan-300 sm:mx-0 sm:w-[46%] sm:min-w-[280px] sm:max-w-[420px]"
+                    :aria-label="`Expand ${selectedProject.title} preview image`"
+                    @click="openImagePreview(selectedProject.image, selectedProject.title)"
+                  >
+                    <img
+                      :src="selectedProject.image"
+                      :alt="selectedProject.title"
+                      class="h-auto max-h-[min(38vh,240px)] w-full rounded-lg border border-slate-300/60 object-contain dark:border-slate-700/70 sm:max-h-[360px] lg:max-h-[400px]"
+                      loading="lazy"
+                    />
+                  </button>
+                  <div class="project-modal-mobile-card min-w-0 flex-1 space-y-3 sm:space-y-3">
+                    <p class="text-[15px] leading-relaxed text-slate-700 dark:text-slate-200 sm:text-sm sm:leading-snug sm:text-slate-600 dark:sm:text-slate-300">
+                      {{ selectedProject.description }}
                     </p>
-                    <div class="flex flex-wrap gap-2 sm:gap-1.5">
-                      <span
-                        v-for="feature in selectedProject.features"
-                        :key="feature"
-                        class="rounded-lg border border-slate-300/80 bg-white px-2.5 py-1 text-xs font-medium text-slate-800 shadow-sm dark:border-white/15 dark:bg-slate-900/90 dark:text-slate-100 sm:rounded-md sm:border-slate-300/70 sm:bg-slate-100/70 sm:px-2 sm:py-0.5 sm:text-[11px] sm:font-medium sm:text-slate-700 dark:sm:bg-slate-900/80 dark:sm:text-slate-200"
-                      >
-                        {{ feature }}
-                      </span>
+                    <div class="border-t border-slate-200/80 pt-3 dark:border-white/10 sm:border-0 sm:pt-0">
+                      <p class="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 sm:mb-1 sm:text-[11px]">
+                        Problem it solves
+                      </p>
+                      <p class="text-[15px] leading-relaxed text-slate-800 dark:text-slate-100 sm:text-sm sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200">
+                        {{ selectedProject.problem }}
+                      </p>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="grid gap-3 sm:grid-cols-2 sm:gap-5 sm:border-t sm:border-slate-200/80 sm:pt-4 dark:sm:border-white/10">
-                <div class="project-modal-mobile-card">
-                  <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:mb-1.5 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
-                    Tech stack
-                  </p>
-                  <ul class="space-y-2.5 text-[15px] leading-relaxed text-slate-800 dark:text-slate-100 sm:space-y-1 sm:text-xs sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200">
-                    <li v-for="item in selectedProject.stack" :key="item.label" class="flex items-start gap-2.5 sm:gap-2">
-                      <Icon :icon="item.icon" :class="[item.iconClass, 'mt-0.5 shrink-0 opacity-90']" />
-                      <span>{{ item.label }}</span>
-                    </li>
-                  </ul>
+                <div class="grid gap-3 sm:grid-cols-2 sm:gap-5 sm:border-t sm:border-slate-200/80 sm:pt-4 dark:sm:border-white/10">
+                  <div class="project-modal-mobile-card">
+                    <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:mb-1.5 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
+                      How it works
+                    </p>
+                    <ol class="list-decimal space-y-2.5 pl-4 text-[15px] leading-relaxed text-slate-800 marker:font-medium marker:text-primary-600 dark:text-slate-100 dark:marker:text-cyan-400/90 sm:space-y-1.5 sm:pl-4 sm:text-xs sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200 dark:sm:marker:text-slate-500">
+                      <li v-for="(step, i) in selectedProject.howItWorks" :key="i">{{ step }}</li>
+                    </ol>
+                  </div>
+                  <div class="project-modal-mobile-card">
+                    <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:mb-1.5 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
+                      Deep dive
+                    </p>
+                    <p class="text-[15px] leading-relaxed text-slate-800 dark:text-slate-100 sm:text-xs sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200">
+                      {{ selectedProject.deepDive }}
+                    </p>
+                    <div class="mt-4 border-t border-slate-200/80 pt-4 dark:border-white/10 sm:mt-4 sm:border-slate-200/70">
+                      <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
+                        Key features
+                      </p>
+                      <div class="flex flex-wrap gap-2 sm:gap-1.5">
+                        <span
+                          v-for="feature in selectedProject.features"
+                          :key="feature"
+                          class="rounded-lg border border-slate-300/80 bg-white px-2.5 py-1 text-xs font-medium text-slate-800 shadow-sm dark:border-white/15 dark:bg-slate-900/90 dark:text-slate-100 sm:rounded-md sm:border-slate-300/70 sm:bg-slate-100/70 sm:px-2 sm:py-0.5 sm:text-[11px] sm:font-medium sm:text-slate-700 dark:sm:bg-slate-900/80 dark:sm:text-slate-200"
+                        >
+                          {{ feature }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="project-modal-mobile-card">
-                  <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:mb-1.5 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
-                    Architecture highlights
-                  </p>
-                  <ul class="space-y-2.5 text-[15px] leading-relaxed text-slate-800 dark:text-slate-100 sm:space-y-1 sm:text-xs sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200">
-                    <li v-for="point in selectedProject.highlights" :key="point" class="flex gap-2 sm:gap-1.5">
-                      <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary-500 dark:bg-cyan-400 sm:mt-1.5 sm:h-1 sm:w-1" />
-                      <span>{{ point }}</span>
-                    </li>
-                  </ul>
+
+                <div class="grid gap-3 sm:grid-cols-2 sm:gap-5 sm:border-t sm:border-slate-200/80 sm:pt-4 dark:sm:border-white/10">
+                  <div class="project-modal-mobile-card">
+                    <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:mb-1.5 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
+                      Tech stack
+                    </p>
+                    <ul class="space-y-2.5 text-[15px] leading-relaxed text-slate-800 dark:text-slate-100 sm:space-y-1 sm:text-xs sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200">
+                      <li v-for="item in selectedProject.stack" :key="item.label" class="flex items-start gap-2.5 sm:gap-2">
+                        <Icon :icon="item.icon" :class="[item.iconClass, 'mt-0.5 shrink-0 opacity-90']" />
+                        <span>{{ item.label }}</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="project-modal-mobile-card">
+                    <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300 sm:mb-1.5 sm:text-[11px] sm:font-semibold sm:text-slate-500 dark:sm:text-slate-400">
+                      Architecture highlights
+                    </p>
+                    <ul class="space-y-2.5 text-[15px] leading-relaxed text-slate-800 dark:text-slate-100 sm:space-y-1 sm:text-xs sm:leading-snug sm:font-normal sm:text-slate-700 dark:sm:text-slate-200">
+                      <li v-for="point in selectedProject.highlights" :key="point" class="flex gap-2 sm:gap-1.5">
+                        <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary-500 dark:bg-cyan-400 sm:mt-1.5 sm:h-1 sm:w-1" />
+                        <span>{{ point }}</span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
+          </article>
+        </div>
+      </Transition>
+
+      <div
+        v-if="imagePreview.src"
+        class="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/90 p-4"
+        @click="closeImagePreview"
+      >
+        <article
+          class="relative w-full max-w-6xl rounded-2xl border border-cyan-300/25 bg-slate-950/95 p-4 shadow-[0_0_35px_rgba(34,211,238,0.2)]"
+          @click.stop
+        >
+          <button
+            type="button"
+            class="absolute right-3 top-3 rounded-lg border border-white/20 bg-slate-900/90 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-slate-800"
+            @click="closeImagePreview"
+          >
+            Close
+          </button>
+          <div class="flex min-h-[60vh] items-center justify-center pt-8">
+            <img
+              :src="imagePreview.src"
+              :alt="imagePreview.alt"
+              class="h-auto max-h-[80vh] w-full object-contain"
+            />
           </div>
         </article>
       </div>
-    </Transition>
-
-    <div
-      v-if="imagePreview.src"
-      class="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/90 p-4"
-      @click="closeImagePreview"
-    >
-      <article
-        class="relative w-full max-w-6xl rounded-2xl border border-cyan-300/25 bg-slate-950/95 p-4 shadow-[0_0_35px_rgba(34,211,238,0.2)]"
-        @click.stop
-      >
-        <button
-          type="button"
-          class="absolute right-3 top-3 rounded-lg border border-white/20 bg-slate-900/90 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-slate-800"
-          @click="closeImagePreview"
-        >
-          Close
-        </button>
-        <div class="flex min-h-[60vh] items-center justify-center pt-8">
-          <img
-            :src="imagePreview.src"
-            :alt="imagePreview.alt"
-            class="h-auto max-h-[80vh] w-full object-contain"
-          />
-        </div>
-      </article>
-    </div>
+    </Teleport>
   </section>
 </template>
 
@@ -291,6 +294,7 @@
 import { Icon } from '@iconify/vue'
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useProjectStackScroll } from '~/composables/useProjectStackScroll'
+import { setPageScrollLock } from '~/utils/pageScrollLock'
 
 const introContentReady = useIntroContentReady()
 const sectionRoot = ref(null)
@@ -527,11 +531,11 @@ onBeforeUnmount(() => {
 })
 
 watch(selectedProject, (project) => {
-  document.body.style.overflow = project || imagePreview.value.src ? 'hidden' : ''
+  setPageScrollLock(Boolean(project || imagePreview.value.src))
 })
 
 watch(imagePreview, (preview) => {
-  document.body.style.overflow = selectedProject.value || preview.src ? 'hidden' : ''
+  setPageScrollLock(Boolean(selectedProject.value || preview.src))
 })
 </script>
 

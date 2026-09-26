@@ -109,6 +109,7 @@ import {
   ref,
   watch
 } from 'vue'
+import { setPageScrollLock } from '~/utils/pageScrollLock'
 
 const baseImages = [
   '/awards1.jpg',
@@ -321,13 +322,8 @@ function stopAutoScroll() {
   lastAutoScrollTs = 0
 }
 
-const lockBody = (lock: boolean) => {
-  if (typeof document === 'undefined') return
-  document.body.style.overflow = lock ? 'hidden' : ''
-}
-
 watch(lightboxOpen, (open) => {
-  lockBody(open)
+  setPageScrollLock(open)
 })
 
 onMounted(() => {
@@ -354,7 +350,7 @@ onBeforeUnmount(() => {
   window.removeEventListener('keydown', onKeydown)
   ro?.disconnect()
   ro = null
-  lockBody(false)
+  setPageScrollLock(false)
   stopAutoScroll()
 })
 </script>
