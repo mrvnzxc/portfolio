@@ -123,9 +123,9 @@ async function typeCommand(prompt: string, command: string) {
   const seg = current().segs[0]
   for (const char of command) {
     seg.text += char
-    await sleep(16 + Math.random() * 12)
+    await sleep(10 + Math.random() * 6)
   }
-  await sleep(160)
+  await sleep(90)
 }
 
 /** " [ OK ] Fueling rocket ........ 100%" */
@@ -153,43 +153,43 @@ async function run() {
   print({ segs: [{ text: `JMB Portfolio [Version ${year}.${now.getMonth() + 1}]` }] })
   print({ segs: [{ text: `(c) ${year} John Marvin Bautista. All rights reserved.`, tone: 'dim' }] })
   blank()
-  await sleep(140)
+  await sleep(80)
 
   await typeCommand('C:\\Users\\marvin>', 'cd portfolio')
   await typeCommand('C:\\Users\\marvin\\portfolio>', `launch --mission=${space ? 'space-adventure' : 'ground-control'}`)
   blank()
 
   manifest('Mission', space ? 'SPACE ADVENTURE' : 'GROUND CONTROL BRIEFING', 'hero')
-  await sleep(70)
+  await sleep(40)
   manifest('Pilot', 'John Marvin Bautista')
-  await sleep(70)
+  await sleep(40)
   manifest('Crew', 'you')
   blank()
-  await sleep(130)
+  await sleep(70)
 
   /* Pre-flight checks: all about the launch itself */
   check('Fueling rocket', '100%')
-  await sleep(90)
+  await sleep(55)
   check('Guidance system', 'locked')
-  await sleep(90)
+  await sleep(55)
   check('Checking oxygen', 'nominal')
-  await sleep(90)
+  await sleep(55)
   ignited.value = true
   check('Main engines', 'ignited')
-  await sleep(90)
+  await sleep(55)
   check('Buckling your seatbelt', 'click')
   blank()
-  await sleep(150)
+  await sleep(80)
 
   print({ segs: [{ text: space ? ' Get ready for a space adventure!' : ' Get ready, Ground Control is on the line!', tone: 'hero' }] })
   print({ segs: [{ text: ' T-minus ', tone: 'dim' }] })
   for (const tick of ['3', '2', '1']) {
     current().segs.push({ text: `${tick}.. `, tone: 'accent' })
-    await sleep(220)
+    await sleep(150)
   }
   current().segs.push({ text: 'LIFTOFF', tone: 'hero' })
   liftoff.value = true
-  await sleep(550)
+  await sleep(400)
 
   finish()
 }
@@ -198,7 +198,7 @@ function finish() {
   if (finished) return
   finished = true
   leaving.value = true
-  pendingTimer = setTimeout(() => emit('complete'), skipped ? 220 : 450)
+  pendingTimer = setTimeout(() => emit('complete'), skipped ? 220 : 300)
 }
 
 /* Keys that would otherwise scroll the (still hidden) page underneath the intro */

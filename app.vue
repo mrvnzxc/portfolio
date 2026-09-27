@@ -73,7 +73,7 @@ function onIntroComplete() {
 <style scoped>
 .portfolio-reveal {
   transition-property: opacity;
-  transition-duration: 1.85s;
+  transition-duration: 0.9s;
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 

@@ -176,7 +176,8 @@ onMounted(() => {
     if (!canvas.value) return
     viewportWidth = window.innerWidth
     viewportHeight = window.innerHeight
-    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    /* Full-resolution animated canvas is expensive on phones; the soft galaxy hides this scale change. */
+    const dpr = Math.min(window.devicePixelRatio || 1, viewportWidth < 768 ? 1.25 : 2)
     canvas.value.width = Math.floor(viewportWidth * dpr)
     canvas.value.height = Math.floor(viewportHeight * dpr)
     canvas.value.style.width = `${viewportWidth}px`
@@ -612,7 +613,14 @@ onMounted(() => {
     }
   }
 
+  let lastFrameTime = 0
+  const mobileFrameInterval = 1000 / 30
   const draw = (now: number) => {
+    if (viewportWidth < 768 && now - lastFrameTime < mobileFrameInterval) {
+      animationId = requestAnimationFrame(draw)
+      return
+    }
+    lastFrameTime = now
     ctx.clearRect(0, 0, viewportWidth, viewportHeight)
     advanceFlow(now)
     drawGalaxy(now, true)
