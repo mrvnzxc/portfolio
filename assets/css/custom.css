@@ -884,7 +884,8 @@ html.theme-switching *::after {
 }
 
 /* Morph: old and new text both fill the moving box, so one word reshapes into the other while
-   they blend (the browser's plus-lighter cross-fade); a light blur at the midpoint smooths the seam */
+   they blend (the browser's plus-lighter cross-fade). No blur: blurring every text snapshot each
+   frame made the first switch of a visit freeze for about a second while the GPU caught up. */
 ::view-transition-old(*.vt-text),
 ::view-transition-new(*.vt-text) {
   inline-size: 100%;
@@ -904,29 +905,19 @@ html.theme-switching *::after {
 }
 
 @keyframes vt-morph-out {
-  0% {
+  from {
     opacity: 1;
-    filter: blur(0);
   }
-  50% {
-    filter: blur(1.5px);
-  }
-  100% {
+  to {
     opacity: 0;
-    filter: blur(0);
   }
 }
 
 @keyframes vt-morph-in {
-  0% {
+  from {
     opacity: 0;
-    filter: blur(0);
   }
-  50% {
-    filter: blur(1.5px);
-  }
-  100% {
+  to {
     opacity: 1;
-    filter: blur(0);
   }
 }

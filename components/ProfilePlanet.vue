@@ -3,6 +3,7 @@
     <div class="profile-planet__atmo" aria-hidden="true" />
     <span class="profile-fig__axes" aria-hidden="true" />
     <img src="/profile.webp" alt="Profile photo" class="profile-planet__img">
+    <ProfileShades />
     <span class="profile-planet__shade" aria-hidden="true" />
     <div class="profile-planet__orbit" aria-hidden="true">
       <div class="profile-planet__track">
