@@ -95,6 +95,8 @@ let activePointerId: number | null = null
 let trackOffset = 0
 
 let ro: ResizeObserver | null = null
+/* The strip only drifts while on screen; off screen its loop would still cost a frame every refresh */
+let io: IntersectionObserver | null = null
 let autoScrollRaf = 0
 let lastAutoScrollTs = 0
 
@@ -215,13 +217,19 @@ onMounted(() => {
     })
     if (viewportRef.value) ro.observe(viewportRef.value)
 
-    startAutoScroll()
+    io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) startAutoScroll()
+      else stopAutoScroll()
+    })
+    if (viewportRef.value) io.observe(viewportRef.value)
   })
 })
 
 onBeforeUnmount(() => {
   ro?.disconnect()
   ro = null
+  io?.disconnect()
+  io = null
   stopAutoScroll()
 })
 </script>

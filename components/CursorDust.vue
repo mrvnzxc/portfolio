@@ -75,7 +75,8 @@ onMounted(() => {
   const resize = () => {
     width = window.innerWidth
     height = window.innerHeight
-    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    /* Phones redraw this full-screen layer on every swipe; the soft motes don't need full resolution (same cap as the sky) */
+    const dpr = Math.min(window.devicePixelRatio || 1, width < 768 ? 1.25 : 2)
     el.width = Math.floor(width * dpr)
     el.height = Math.floor(height * dpr)
     el.style.width = `${width}px`

@@ -324,6 +324,27 @@ body.dark-mode #dust-canvas {
   opacity: 1;
 }
 
+/*
+ * Lite sky (html.sky-lite, set by DustCanvas on phones and devices that can't keep up): frosted
+ * glass over the moving starfield is re-blurred on every sky frame, so it becomes tinted glass.
+ */
+html.dark.sky-lite :is(#top-nav, .projects-stack-card, .gallery-glass-card, .project-modal-backdrop) {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html.dark.sky-lite #top-nav {
+  background-color: rgb(4 6 15 / 0.9);
+}
+
+html.dark.sky-lite .projects-stack-card {
+  background-color: rgb(2 6 23 / 0.82);
+}
+
+html.dark.sky-lite .gallery-glass-card {
+  background-color: rgb(16 20 42 / 0.7);
+}
+
 /* Stack page content above the starfield; transparent areas reveal the canvas */
 main {
   position: relative;

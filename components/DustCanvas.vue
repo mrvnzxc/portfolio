@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import {
   bandGeometry,
   CORE_T,
@@ -17,6 +17,7 @@ import {
 } from '~/utils/milkyWay'
 
 const canvas = ref<HTMLCanvasElement | null>(null)
+const introContentReady = useIntroContentReady()
 
 type Star = {
   x: number
@@ -45,7 +46,10 @@ type Galaxy = {
   /** Length of the spine in px, to turn px-per-second speeds into steps along it. */
   length: number
   glow: HTMLCanvasElement
-  stars: { path: Path2D; fill: string }[]
+  /** Band stars, painted once at screen resolution: a frame costs one drawImage instead of thousands of fills. */
+  stars: HTMLCanvasElement
+  /** Device pixels per px of `stars`, so it is drawn back at exactly its own size. */
+  pixelRatio: number
   sparkles: Sparkle[]
 }
 
@@ -75,6 +79,20 @@ const BAND_DUST_ALPHAS = [0.1, 0.18, 0.28]
 const DRIFT_SPEED = { min: 8, spread: 20 }
 /** Light patches move slower than the stars in front of them. */
 const CLOUD_SPEED = { min: 3, spread: 6 }
+
+/*
+ * Quality tiers. Every sky frame repaints the whole screen, so the page's glass blurs are
+ * recomputed along with it. Lite halves the frame rate, lowers the resolution and drops those
+ * blurs (html.sky-lite, see custom.css). Phones start in lite; anything else falls back to it
+ * for the rest of the visit when it can't hold MIN_FULL_FPS.
+ */
+const FULL_DPR = 2
+const LITE_DPR = 1.25
+const LITE_FRAME_MS = 1000 / 30
+const MIN_FULL_FPS = 45
+const FPS_SAMPLE_MS = 2000
+/** Star and shooting-star speeds are px per frame at 60 fps; longer or shorter frames scale them. */
+const FRAME_MS = 1000 / 60
 
 /** Fades streaming things in and out at the ends of the band, where they wrap around. */
 const endFade = (t: number) => Math.max(0, Math.min(1, t / 0.08, (1 - t) / 0.08))
@@ -162,6 +180,10 @@ onMounted(() => {
   const clouds: GasCloud[] = []
   let lastFlowTime = 0
   let rebuildTimer = 0
+  let pixelRatio = 1
+  /** Set once the frame-rate check gives up on the full sky; lasts until reload. */
+  let slowDevice = false
+  let lite = false
 
   const glowSprite = (rgb: string) => {
     let sprite = glowSprites.get(rgb)
@@ -176,13 +198,15 @@ onMounted(() => {
     if (!canvas.value) return
     viewportWidth = window.innerWidth
     viewportHeight = window.innerHeight
-    /* Full-resolution animated canvas is expensive on phones; the soft galaxy hides this scale change. */
-    const dpr = Math.min(window.devicePixelRatio || 1, viewportWidth < 768 ? 1.25 : 2)
-    canvas.value.width = Math.floor(viewportWidth * dpr)
-    canvas.value.height = Math.floor(viewportHeight * dpr)
+    lite = slowDevice || viewportWidth < 768
+    document.documentElement.classList.toggle('sky-lite', lite)
+    /* Lite's lower resolution hardly shows: the band is soft and the stars are small */
+    pixelRatio = Math.min(window.devicePixelRatio || 1, lite ? LITE_DPR : FULL_DPR)
+    canvas.value.width = Math.floor(viewportWidth * pixelRatio)
+    canvas.value.height = Math.floor(viewportHeight * pixelRatio)
     canvas.value.style.width = `${viewportWidth}px`
     canvas.value.style.height = `${viewportHeight}px`
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0)
   }
 
   /** Keep distribution when the viewport resizes (mobile URL bar, rotation) — do not re-randomize. */
@@ -221,6 +245,8 @@ onMounted(() => {
         tint: tintRoll > 0.9 ? 2 : tintRoll > 0.7 ? 1 : 0
       })
     }
+    /* Grouped by tint so a frame sets each colour once */
+    stars.sort((a, b) => a.tint - b.tint)
   }
 
   const buildGalaxy = (): Galaxy | null => {
@@ -316,10 +342,7 @@ onMounted(() => {
       blob(p, gauss() * p.width * 0.5, p.width * (0.04 + rand() * 0.1), 2.5 + rand(), '0,0,0', 0.08 + rand() * 0.14, (rand() - 0.5) * 0.5)
     }
 
-    /*
-     * Band stars at full resolution, batched into one path per colour so a frame costs a
-     * dozen fills. Fewer land inside the rift, since the dust hides them.
-     */
+    /* Band stars at full resolution, one path per colour. Fewer land inside the rift, since the dust hides them. */
     const paths = new Map<string, Path2D>()
     const addStar = (fill: string, x: number, y: number, r: number, square: boolean) => {
       const path = paths.get(fill) ?? new Path2D()
@@ -359,7 +382,21 @@ onMounted(() => {
       addStar(`rgba(${DARK_TINTS[rand() < 0.3 ? 2 : 0]},${BAND_DUST_ALPHAS[level]})`, p.x + p.nx * offset, p.y + p.ny * offset, 0.7 + rand() * 0.4, true)
     }
 
-    const bandStars = [...paths].map(([fill, path]) => ({ path, fill }))
+    /*
+     * The band stars never move against each other, so they are painted once into a
+     * screen-resolution layer. Filling thousands of them every frame was the sky's biggest
+     * cost on weak GPUs.
+     */
+    const bandStars = document.createElement('canvas')
+    bandStars.width = Math.ceil(w * pixelRatio)
+    bandStars.height = Math.ceil(h * (1 + GALAXY_OVERSCAN) * pixelRatio)
+    const s = bandStars.getContext('2d')
+    if (!s) return null
+    s.scale(pixelRatio, pixelRatio)
+    paths.forEach((path, fill) => {
+      s.fillStyle = fill
+      s.fill(path)
+    })
 
     /* Sparkles: spaced out along the band, never inside a lane, all visible before scrolling */
     const sparkles: Sparkle[] = []
@@ -392,7 +429,7 @@ onMounted(() => {
       prev = next
     }
 
-    return { width: w, height: h, band, length, glow, stars: bandStars, sparkles }
+    return { width: w, height: h, band, length, glow, stars: bandStars, pixelRatio, sparkles }
   }
 
   /** Seeds the stream once; after that it only moves, even across rebuilds. */
@@ -489,7 +526,8 @@ onMounted(() => {
 
   /** Enter the band's coordinates: scrolled by its own tiny parallax, stretched if the viewport changed since it was built. */
   const enterGalaxySpace = (built: Galaxy) => {
-    const shift = galaxyShift(window.scrollY, viewportHeight)
+    /* Whole device pixels, so the band stars are copied 1:1 and stay sharp */
+    const shift = Math.round(galaxyShift(window.scrollY, viewportHeight) * pixelRatio) / pixelRatio
     ctx.save()
     ctx.translate(0, shift)
     ctx.scale(viewportWidth / built.width, viewportHeight / built.height)
@@ -504,10 +542,8 @@ onMounted(() => {
     ctx.drawImage(galaxy.glow, 0, 0, galaxy.width, galaxy.height * (1 + GALAXY_OVERSCAN))
     ctx.globalAlpha = 1
     drawFlow(galaxy, now, animate)
-    galaxy.stars.forEach(({ path, fill }) => {
-      ctx.fillStyle = fill
-      ctx.fill(path)
-    })
+    const { stars: bandStars, pixelRatio: ratio } = galaxy
+    ctx.drawImage(bandStars, 0, 0, bandStars.width / ratio, bandStars.height / ratio)
     ctx.restore()
   }
 
@@ -544,37 +580,44 @@ onMounted(() => {
 
   const wrap = (value: number, size: number) => ((value % size) + size) % size
 
-  const drawStars = (now: number, animate: boolean) => {
+  /** `step` is how many 60 fps frames of motion to apply; 0 draws a still sky. */
+  const drawStars = (now: number, step: number) => {
     const isDark = document.body.classList.contains('dark-mode')
     const tints = isDark ? DARK_TINTS : LIGHT_TINTS
     const scrollY = window.scrollY
+    let tint = -1
 
     stars.forEach((star) => {
-      const twinkle = animate ? 0.7 + 0.3 * Math.sin(now * star.twinkleSpeed + star.twinklePhase) : 1
+      if (star.tint !== tint) {
+        tint = star.tint
+        ctx.fillStyle = `rgb(${tints[tint]})`
+      }
+      const twinkle = step ? 0.7 + 0.3 * Math.sin(now * star.twinkleSpeed + star.twinklePhase) : 1
       const alpha = Math.min(1, star.alpha * twinkle * (isDark ? 1.05 : 0.8))
       const y = wrap(star.y - scrollY * star.z * PARALLAX, viewportHeight)
 
-      ctx.fillStyle = `rgba(${tints[star.tint]},${alpha})`
+      ctx.globalAlpha = alpha
       ctx.beginPath()
       ctx.arc(star.x, y, star.r, 0, Math.PI * 2)
       ctx.fill()
 
       /* Soft halo on the nearest, brightest stars only */
       if (isDark && star.z > 0.82) {
-        ctx.fillStyle = `rgba(${tints[star.tint]},${alpha * 0.12})`
+        ctx.globalAlpha = alpha * 0.12
         ctx.beginPath()
         ctx.arc(star.x, y, star.r * 3.2, 0, Math.PI * 2)
         ctx.fill()
       }
 
-      if (animate) {
-        star.x = wrap(star.x + star.vx, viewportWidth)
-        star.y = wrap(star.y + star.vy, viewportHeight)
+      if (step) {
+        star.x = wrap(star.x + star.vx * step, viewportWidth)
+        star.y = wrap(star.y + star.vy * step, viewportHeight)
       }
     })
+    ctx.globalAlpha = 1
   }
 
-  const drawShootingStars = (now: number) => {
+  const drawShootingStars = (now: number, step: number) => {
     const isDark = document.body.classList.contains('dark-mode')
 
     if (shootingStars.length === 0 && now - lastShootingStarTime > 2600 && Math.random() > 0.45) {
@@ -603,9 +646,9 @@ onMounted(() => {
       ctx.lineTo(tailX, tailY)
       ctx.stroke()
 
-      star.x += star.vx
-      star.y += star.vy
-      star.life -= star.decay
+      star.x += star.vx * step
+      star.y += star.vy * step
+      star.life -= star.decay * step
 
       if (star.life <= 0 || star.x < -200 || star.x > viewportWidth + 200 || star.y > viewportHeight + 200) {
         shootingStars.splice(index, 1)
@@ -613,30 +656,59 @@ onMounted(() => {
     }
   }
 
-  let lastFrameTime = 0
-  const mobileFrameInterval = 1000 / 30
-  const draw = (now: number) => {
-    if (viewportWidth < 768 && now - lastFrameTime < mobileFrameInterval) {
-      animationId = requestAnimationFrame(draw)
+  const goLite = () => {
+    slowDevice = true
+    resizeCanvas()
+    /* Same seed, same sky, at the lower resolution */
+    if (galaxy) galaxy = buildGalaxy()
+  }
+
+  /* Frame-rate check while in full quality: frames counted over FPS_SAMPLE_MS, two slow samples in a row mean lite */
+  let lastTick = 0
+  let sampleStart = 0
+  let sampleFrames = 0
+  let slowSamples = 0
+  const checkFrameRate = (now: number) => {
+    const gap = now - lastTick
+    lastTick = now
+    /* A long gap is a hidden tab or a one-off stall, not the sky's steady cost */
+    if (!sampleStart || gap > 250) {
+      sampleStart = now
+      sampleFrames = 0
       return
     }
-    lastFrameTime = now
+    sampleFrames += 1
+    if (now - sampleStart < FPS_SAMPLE_MS) return
+    const fps = (sampleFrames * 1000) / (now - sampleStart)
+    slowSamples = fps < MIN_FULL_FPS ? slowSamples + 1 : 0
+    sampleStart = now
+    sampleFrames = 0
+    if (slowSamples >= 2) goLite()
+  }
+
+  let lastDraw = 0
+  const draw = (now: number) => {
+    animationId = requestAnimationFrame(draw)
+    if (!lite) checkFrameRate(now)
+    /* A little slack so lite locks onto every other refresh instead of wobbling between one and three */
+    else if (now - lastDraw < LITE_FRAME_MS - 4) return
+    const step = lastDraw ? Math.min(50, now - lastDraw) / FRAME_MS : 1
+    lastDraw = now
     ctx.clearRect(0, 0, viewportWidth, viewportHeight)
     advanceFlow(now)
     drawGalaxy(now, true)
-    drawStars(now, true)
+    drawStars(now, step)
     drawSparkles(now, true)
-    drawShootingStars(now)
-    animationId = requestAnimationFrame(draw)
+    drawShootingStars(now, step)
   }
 
-  /* Reduced motion: a still sky, redrawn only when something actually changes */
+  /* One still frame: the whole sky under reduced motion, or the first frame before the intro ends */
   const drawStill = () => {
     cancelAnimationFrame(animationId)
     animationId = requestAnimationFrame(() => {
       ctx.clearRect(0, 0, viewportWidth, viewportHeight)
       drawGalaxy(0, false)
-      drawStars(0, false)
+      drawStars(0, 0)
       drawSparkles(0, false)
     })
   }
@@ -644,19 +716,21 @@ onMounted(() => {
   const isSpace = () => document.body.classList.contains('dark-mode')
   let running = false
 
-  /* Ground Control (light) hides the canvas, so only animate while in space */
+  /*
+   * Ground Control (light) hides the canvas, so only animate while in space. Behind the terminal
+   * intro a still frame is enough, and builds the band early; the sky starts moving as the page fades in.
+   */
   const syncToTheme = () => {
-    if (reducedMotion) {
-      if (isSpace()) drawStill()
-      return
-    }
-    if (isSpace() && !running) {
+    const space = isSpace()
+    const animate = space && introContentReady.value && !reducedMotion
+    if (animate && !running) {
       running = true
       animationId = requestAnimationFrame(draw)
-    } else if (!isSpace() && running) {
+    } else if (!animate && running) {
       running = false
       cancelAnimationFrame(animationId)
     }
+    if (space && !animate && (reducedMotion || !galaxy)) drawStill()
   }
 
   const onScrollStill = () => {
@@ -669,6 +743,7 @@ onMounted(() => {
 
   const themeObserver = new MutationObserver(syncToTheme)
   themeObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] })
+  const stopIntroWatch = watch(introContentReady, syncToTheme)
   if (reducedMotion) window.addEventListener('scroll', onScrollStill, { passive: true })
 
   const handleResize = () => {
@@ -693,6 +768,8 @@ onMounted(() => {
     window.removeEventListener('resize', handleResize)
     window.removeEventListener('scroll', onScrollStill)
     themeObserver.disconnect()
+    stopIntroWatch()
+    document.documentElement.classList.remove('sky-lite')
   })
 })
 </script>
