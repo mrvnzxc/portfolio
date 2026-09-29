@@ -65,7 +65,8 @@ const baseImages = [
   '/me3.webp',
   '/me4.webp',
   '/me5.webp',
-  '/me6.webp'
+  '/me6.webp',
+  '/me7.webp'
 ] as const
 
 const LOOP_SEGMENTS = 3
