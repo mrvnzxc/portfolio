@@ -354,7 +354,7 @@ const projects = [
     year: '2025',
     label: 'Capstone Project',
     title: 'Payroll with Attendance System',
-    image: '/payroll.png',
+    image: '/payroll.webp',
     description: 'An enterprise payroll and attendance platform with biometric validation and facial-recognition fallback checks.',
     problem:
       'Manual attendance tracking and payroll runs were slow to reconcile, easy to dispute, and weak on identity assurance—especially when teams work across shifts or sites.',
@@ -406,7 +406,7 @@ const projects = [
     year: '2026',
     label: 'AR Platform',
     title: 'NDDU Siena AR Campus Navigation System',
-    image: '/nddu.png',
+    image: '/nddu.webp',
     description: 'A real-time AR campus navigation experience designed to guide students, visitors, and staff across key facilities.',
     problem:
       'Large campuses are hard to navigate with static maps alone; people need live, in-context guidance that matches where they are standing and where they are trying to go.',
@@ -457,7 +457,7 @@ const projects = [
     year: '2026',
     label: 'Merchandising Suite',
     title: 'ReedGrey Sales and Inventory System',
-    image: '/sales.png',
+    image: '/sales.webp',
     description:
       'A multi-branch sales and inventory platform that centralizes product movement, checkout, and reporting in one operational dashboard.',
     problem:

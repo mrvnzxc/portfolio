@@ -59,13 +59,13 @@ import {
 } from 'vue'
 
 const baseImages = [
-  '/awards1.jpg',
-  '/me1.jpg',
-  '/me2.jpg',
-  '/me3.jpg',
-  '/me4.jpg',
-  '/me5.jpg',
-  '/me6.jpg'
+  '/awards1.webp',
+  '/me1.webp',
+  '/me2.webp',
+  '/me3.webp',
+  '/me4.webp',
+  '/me5.webp',
+  '/me6.webp'
 ] as const
 
 const LOOP_SEGMENTS = 3

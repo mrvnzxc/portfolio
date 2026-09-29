@@ -12,10 +12,10 @@
             <NeonBorderReveal
               color="#a594ff" light-color="#1d4ed8"
               class="achievement-item cursor-pointer rounded-xl bg-white/70 shadow-sm dark:bg-[#0a0f24]/70"
-              @click="$emit('open-image', '/cert1.png')"
+              @click="$emit('open-image', '/cert1.webp')"
             >
               <figure class="overflow-hidden rounded-[inherit]">
-                <img src="/cert1.png" alt="Certificate 1" class="achievement-thumb h-40 w-full object-cover sm:h-52">
+                <img src="/cert1.webp" alt="Certificate 1" class="achievement-thumb h-40 w-full object-cover sm:h-52">
                 <figcaption class="flex items-center justify-between px-3 py-2 text-[11px]">
                   <span class="font-medium">Certificate 1</span>
                   <a href="/1.pdf" download class="text-ion hover:underline" @click.stop>Download PDF</a>
@@ -26,10 +26,10 @@
             <NeonBorderReveal
               color="#a594ff" light-color="#1d4ed8"
               class="achievement-item cursor-pointer rounded-xl bg-white/70 shadow-sm dark:bg-[#0a0f24]/70"
-              @click="$emit('open-image', '/cert2.png')"
+              @click="$emit('open-image', '/cert2.webp')"
             >
               <figure class="overflow-hidden rounded-[inherit]">
-                <img src="/cert2.png" alt="Certificate 2" class="achievement-thumb h-40 w-full object-cover sm:h-52">
+                <img src="/cert2.webp" alt="Certificate 2" class="achievement-thumb h-40 w-full object-cover sm:h-52">
                 <figcaption class="flex items-center justify-between px-3 py-2 text-[11px]">
                   <span class="font-medium">Certificate 2</span>
                   <a href="/2.pdf" download class="text-ion hover:underline" @click.stop>Download PDF</a>
@@ -40,10 +40,10 @@
             <NeonBorderReveal
               color="#a594ff" light-color="#1d4ed8"
               class="achievement-item cursor-pointer rounded-xl bg-white/70 shadow-sm dark:bg-[#0a0f24]/70"
-              @click="$emit('open-image', '/cert3.png')"
+              @click="$emit('open-image', '/cert3.webp')"
             >
               <figure class="overflow-hidden rounded-[inherit]">
-                <img src="/cert3.png" alt="Certificate 3" class="achievement-thumb h-40 w-full object-cover sm:h-52">
+                <img src="/cert3.webp" alt="Certificate 3" class="achievement-thumb h-40 w-full object-cover sm:h-52">
                 <figcaption class="flex items-center justify-between px-3 py-2 text-[11px]">
                   <span class="font-medium">Certificate 3</span>
                   <a href="/3.pdf" download class="text-ion hover:underline" @click.stop>Download PDF</a>
@@ -61,11 +61,11 @@
               color="#6ee7f9" light-color="#1d4ed8"
               class="achievement-item cursor-pointer rounded-xl bg-white/70 shadow-sm dark:bg-[#0a0f24]/70"
               :class="n === 5 ? 'sm:col-span-2' : ''"
-              @click="$emit('open-image', '/res' + n + '.jpg')"
+              @click="$emit('open-image', '/res' + n + '.webp')"
             >
               <figure class="overflow-hidden rounded-[inherit]">
                 <img
-                  :src="'/res' + n + '.jpg'"
+                  :src="'/res' + n + '.webp'"
                   :alt="'Programming competition photo ' + n"
                   class="achievement-thumb h-32 w-full object-cover"
                   :class="n === 5 ? 'sm:h-48' : 'sm:h-40'"
