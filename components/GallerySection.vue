@@ -29,11 +29,16 @@
             <div
               class="relative flex h-[260px] w-full items-center justify-center sm:h-[300px] md:h-[280px] lg:h-[300px]"
             >
+              <!--
+                Not lazy: the strip moves by transform, not scrolling, so a lazy image only starts
+                downloading as it slides into view and shows an empty card. Low priority keeps these
+                behind the hero's images while the page loads.
+              -->
               <img
                 :src="item.src"
                 alt=""
                 draggable="false"
-                loading="lazy"
+                fetchpriority="low"
                 decoding="async"
                 class="gallery-strip-img pointer-events-none max-h-full max-w-full object-contain object-center brightness-[1.03] contrast-[1.02] transition-[filter] duration-300 select-none dark:brightness-110"
                 @dragstart.prevent
