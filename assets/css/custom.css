@@ -495,18 +495,28 @@ html:not(.dark) ::selection {
   background: rgb(255 90 31 / 0.28);
 }
 
+/* Scrollbars in the buttons' International Orange, navy on hover like the buttons.
+   html itself is listed because it owns the page scrollbar and isn't matched by "html *". */
+html:not(.dark),
 html:not(.dark) * {
-  scrollbar-color: rgb(29 78 216 / 0.85) #e6ebf2;
+  scrollbar-color: var(--signal) #e6ebf2;
 }
 
+html:not(.dark)::-webkit-scrollbar-track,
 html:not(.dark) *::-webkit-scrollbar-track {
   background: #e6ebf2;
   border-left: 1px solid rgb(15 27 45 / 0.12);
 }
 
+html:not(.dark)::-webkit-scrollbar-thumb,
 html:not(.dark) *::-webkit-scrollbar-thumb {
-  background: #1d4ed8;
+  background: var(--signal);
   border: 2px solid #e6ebf2;
+}
+
+html:not(.dark)::-webkit-scrollbar-thumb:hover,
+html:not(.dark) *::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--c-ink));
 }
 
 /* No stars on the ground */

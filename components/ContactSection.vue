@@ -54,7 +54,7 @@
               <div class="space-y-2">
                 <div class="flex items-center gap-2">
                   <Icon class="h-5 w-5 text-ion" icon="ph:envelope-simple-fill" />
-                  <span>johnmarvinbautista@gmail.com</span>
+                  <span>johnmarvinbautista18@gmail.com</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <Icon class="h-5 w-5 text-nebula" icon="ph:phone-fill" />

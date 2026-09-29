@@ -22,7 +22,12 @@ export default defineNuxtConfig({
   runtimeConfig: {
     vercelAnalyticsToken: process.env.VERCEL_ANALYTICS_TOKEN || '',
     vercelProjectId: process.env.VERCEL_PROJECT_ID || '',
-    vercelTeamId: process.env.VERCEL_TEAM_ID || ''
+    vercelTeamId: process.env.VERCEL_TEAM_ID || '',
+    /* Portfolio assistant chatbot: free-tier keys, Groq first, Gemini when Groq is out of quota or down */
+    groqApiKey: process.env.GROQ_API_KEY || '',
+    groqModel: process.env.GROQ_MODEL || 'openai/gpt-oss-120b',
+    geminiApiKey: process.env.GEMINI_API_KEY || '',
+    geminiModel: process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite'
   },
   compatibilityDate: '2026-03-19'
 })
