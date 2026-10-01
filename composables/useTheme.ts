@@ -23,12 +23,27 @@ function applyTheme(value: 'dark' | 'light') {
   localStorage.setItem('theme', value)
 }
 
+/**
+ * A named element morphs on the top layer, outside every clipping box, so text a container cuts off
+ * (a Flight Log job sliding past the edge) would show in full mid-switch. Such text just swaps instead.
+ */
+function isCutOff(el: HTMLElement, r: DOMRect) {
+  for (let parent = el.parentElement; parent && parent !== document.body; parent = parent.parentElement) {
+    const { overflowX, overflowY } = getComputedStyle(parent)
+    if (overflowX === 'visible' && overflowY === 'visible') continue
+    const box = parent.getBoundingClientRect()
+    if (r.left < box.left - 1 || r.right > box.right + 1 || r.top < box.top - 1 || r.bottom > box.bottom + 1) return true
+  }
+  return false
+}
+
 /** Gives each on-screen text block a unique view-transition-name so the browser morphs it */
 function nameVisibleText() {
   const named: { el: HTMLElement; name: string }[] = []
   document.querySelectorAll<HTMLElement>(MORPH_TEXT_SELECTOR).forEach((el) => {
     const r = el.getBoundingClientRect()
     if (!r.width || !r.height || r.bottom < 0 || r.top > window.innerHeight || r.right < 0 || r.left > window.innerWidth) return
+    if (isCutOff(el, r)) return
     const name = `vt-text-${named.length}`
     el.style.setProperty('view-transition-name', name)
     el.style.setProperty('view-transition-class', 'vt-text')

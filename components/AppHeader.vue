@@ -24,8 +24,8 @@
         </button>
       </div>
 
-      <div id="navMenu" class="nav-menu absolute left-0 right-0 top-full z-20 w-full flex-col gap-4 border-b border-nebula/15 bg-[#f4f7fa]/[0.98] px-4 pb-4 pt-3 shadow-lg shadow-[#04060f]/10 dark:bg-[#070b1c]/[0.97] dark:shadow-black/40 md:static md:z-auto md:flex md:w-auto md:flex-row md:items-center md:gap-6 md:border-none md:bg-transparent md:p-0 md:shadow-none dark:md:bg-transparent dark:md:shadow-none" :class="menuClass" @animationend="onMenuAnimationEnd">
-        <ul class="nav-links flex flex-col gap-3 text-base font-medium text-ink/75 md:flex-row md:items-center md:gap-6 md:text-[15px]">
+      <div id="navMenu" class="nav-menu absolute left-0 right-0 top-full z-20 w-full flex-col gap-4 border-b border-nebula/15 bg-[#f4f7fa]/[0.98] px-4 pb-4 pt-3 shadow-lg shadow-[#04060f]/10 dark:bg-[#070b1c]/[0.97] dark:shadow-black/40 md:static md:z-auto md:flex md:w-auto md:flex-row md:items-center md:gap-4 lg:gap-6 md:border-none md:bg-transparent md:p-0 md:shadow-none dark:md:bg-transparent dark:md:shadow-none" :class="menuClass" @animationend="onMenuAnimationEnd">
+        <ul class="nav-links flex flex-col gap-3 text-base font-medium text-ink/75 md:flex-row md:items-center md:gap-4 md:text-sm lg:gap-6 lg:text-[15px]">
           <li v-for="item in navItems" :key="item.id">
             <a
               :href="`#${item.id}`"
@@ -53,6 +53,7 @@ const navRoot = ref<HTMLElement | null>(null)
 
 const navItems = [
   { id: 'projects', label: 'Projects' },
+  { id: 'experience', label: 'Experience' },
   { id: 'skills', label: 'Skills' },
   { id: 'about', label: 'About' },
   { id: 'achievements', label: 'Achievements' },
@@ -60,7 +61,7 @@ const navItems = [
   { id: 'contact', label: 'Contact' }
 ]
 /* Every section in page order, including ones without a nav link (hero, services) */
-const PAGE_SECTIONS = ['hero', 'projects', 'skills', 'about', 'achievements', 'gallery', 'services', 'contact']
+const PAGE_SECTIONS = ['hero', 'projects', 'experience', 'skills', 'about', 'achievements', 'gallery', 'services', 'contact']
 const activeSection = ref<string | null>(null)
 let activeRaf = 0
 

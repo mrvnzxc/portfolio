@@ -337,8 +337,9 @@ html.dark.sky-lite #top-nav {
   background-color: rgb(4 6 15 / 0.9);
 }
 
+/* Opaque, not tinted: project cards stack on scroll, and the card underneath would read through */
 html.dark.sky-lite .projects-stack-card {
-  background-color: rgb(2 6 23 / 0.82);
+  background-color: rgb(2 6 22);
 }
 
 html.dark.sky-lite .gallery-glass-card {

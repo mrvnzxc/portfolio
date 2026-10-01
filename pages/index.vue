@@ -7,6 +7,7 @@
     <main>
       <HeroSection />
       <ProjectsSection />
+      <ExperienceSection />
       <SkillsSection />
       <AboutSection />
       <AchievementsSection @open-image="openImage" />
