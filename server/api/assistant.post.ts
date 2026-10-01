@@ -45,9 +45,16 @@ function parseHistory(body: unknown): ChatMessage[] | null {
   return messages[messages.length - 1].role === 'user' ? messages : null
 }
 
+/*
+ * gpt-oss on Groq sometimes sends several finished replies glued together with no space
+ * ("...refresher.Your curiosity is adorable..."). The first one is a whole answer; keep it.
+ */
+const GLUED_REPLY = /(?<=[a-z0-9)'"’”][.!?])(?=[A-Z][a-z])/
+
 /** The chat shows plain text; drop the markdown models slip in anyway. */
 function toPlainText(reply: string) {
   return reply
+    .split(GLUED_REPLY)[0]
     .replace(/\*\*|__|`/g, '')
     .replace(/^#{1,6}\s+/gm, '')
     .replace(/^\s*[*•]\s+/gm, '- ')

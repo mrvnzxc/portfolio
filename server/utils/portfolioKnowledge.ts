@@ -6,7 +6,7 @@
 export const PORTFOLIO_KNOWLEDGE = `
 PROFILE
 - Name: John Marvin E. Bautista (goes by Marvin). Software Engineer.
-- Current role: Junior Software Developer at Brigada Distribution Incorporated.
+- Current role: Junior Software Developer at Brigada Distribution Incorporated, Central Support Group (since Aug 2026).
 - Based in General Santos City, Philippines (UTC+8). Open to remote work, freelance, full-time or consulting.
 - Tagline: builds reliable, user-focused software that blends clean architecture with thoughtful design; currently exploring AI-assisted automation and modern web stacks.
 - About: a problem-solver who enjoys translating complex requirements into intuitive interfaces and dependable APIs; values clean code, thoughtful UX and measurable impact. Comfortable across frontend, backend and DevOps handoffs. Champion for accessibility, performance and secure-by-default patterns.
@@ -17,9 +17,11 @@ EDUCATION
 - Bachelor of Science in Information Systems, Cronasia Foundation College Inc., General Santos City (Aug 2022 - May 2026).
 
 WORK EXPERIENCE
-- Brigada Distribution Incorporated - Junior Software Developer (current job, present).
-- Dean IT Services, General Santos City - Intern Junior Software Developer (Jan 2026 - Apr 2026):
-  built a Law Office Management System with DOCX article upload; helped develop the MyLawyerPal SaaS project; built a Python web-scraping tool for automated data extraction.
+- Brigada Distribution Incorporated, Central Support Group - Junior Software Developer (Aug 2026 - present, current job):
+  builds internal applications that help departments and business units automate their workflows, replacing manual, repetitive tasks.
+- Dean IT Services, General Santos City - Intern Web Developer (Jan 2026 - Apr 2026):
+  learned React and other modern frameworks on the job and helped develop landing pages for the company's SaaS projects.
+- Only these job descriptions are public; the specific projects built at each job are not shared. Shown in the Flight Log section of the site.
 
 PROJECTS
 1. Payroll with Attendance System (Capstone Project, May - Dec 2025, role: programmer).

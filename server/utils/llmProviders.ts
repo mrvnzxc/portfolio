@@ -26,8 +26,9 @@ function configuredProviders(): Provider[] {
       url: 'https://api.groq.com/openai/v1/chat/completions',
       apiKey: config.groqApiKey,
       model,
-      // gpt-oss reasons before it answers; low effort keeps replies quick and inside the free token budget
-      extraBody: model.includes('gpt-oss') ? { reasoning_effort: 'low' } : undefined
+      // gpt-oss reasons before it answers. Medium costs ~100 tokens more than low but follows the roast
+      // and reply-language rules; low answered Tagalog in English and slipped in actual advice
+      extraBody: model.includes('gpt-oss') ? { reasoning_effort: 'medium' } : undefined
     })
   }
 
@@ -60,7 +61,8 @@ export async function completeChat(messages: ChatMessage[]): Promise<string> {
         body: {
           model: provider.model,
           messages,
-          temperature: 0.3,
+          // Warm enough that off-topic roasts don't repeat; the facts are pinned by the profile in the prompt
+          temperature: 0.7,
           max_tokens: 700,
           ...provider.extraBody
         },

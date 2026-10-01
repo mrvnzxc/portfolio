@@ -11,7 +11,7 @@
         <img src="/profile.webp" alt="" width="36" height="36" decoding="async">
       </span>
       <div class="min-w-0">
-        <p class="oa-title">Marvin's Assistant</p>
+        <p class="oa-title">Flo AI</p>
         <p class="oa-sub">{{ subtitle }}</p>
       </div>
       <button type="button" class="oa-close" aria-label="Close the chat" @click="emit('close')">
@@ -109,7 +109,7 @@ const logEl = ref<HTMLElement | null>(null)
 const inputEl = ref<HTMLInputElement | null>(null)
 
 const subtitle = computed(
-  () => ({ online: 'AI · answers about his work', typing: 'typing…', offline: 'offline right now' })[status.value]
+  () => ({ online: 'active now', typing: 'typing…', offline: 'offline right now' })[status.value]
 )
 
 let nextId = 1
