@@ -5,7 +5,7 @@
       <img src="/profile-shades-glasses.webp" alt="" width="287" height="102" class="profile-shades__art" :style="GLASSES_BOX">
     </div>
     <div ref="handEl" class="profile-shades__layer">
-      <img src="/profile-shades-hand.webp" alt="" width="263" height="573" class="profile-shades__art" :style="HAND_BOX">
+      <img src="/profile-shades-hand.webp" alt="" width="255" height="710" class="profile-shades__art" :style="HAND_BOX">
     </div>
   </div>
 </template>
@@ -18,13 +18,14 @@ import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
  * back in Space it takes them off again. One timeline: forward puts them on, reverse takes them off,
  * so switching mid-way just turns around.
  *
- * The art is two pictures baked from assets/profile-shades/*.svg (shadows included): painting the
- * gradient-heavy SVGs live cost the first switch about a third of a second of GPU work.
+ * The glasses are baked from assets/profile-shades/glasses.svg (shadow included): painting the
+ * gradient-heavy SVG live cost the first switch about a third of a second of GPU work. The hand is
+ * Marvin's own, cut out of assets/profile-shades/source/1.jpg by the two scripts beside it.
  */
 
 /* Where each picture sits on the square photo, in % of its width */
 const GLASSES_BOX = { left: '30.56%', top: '23.75%', width: '39.86%' }
-const HAND_BOX = { left: '63.47%', top: '20.42%', width: '36.53%' }
+const HAND_BOX = { left: '64.86%', top: '25.14%', width: '35.42%' }
 /** Where the fingers pinch the glasses: both layers swing around this point */
 const PINCH = '68.3% 26.1%'
 
