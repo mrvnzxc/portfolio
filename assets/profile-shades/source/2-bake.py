@@ -4,7 +4,7 @@ Grades the webcam's grey skin up to the portrait's, swings the forearm towards v
 hand against the face, carries the sleeve past the bottom of the frame (the photo stops at the elbow)
 and adds the same drop shadow the SVG art used. Prints the HAND_BOX percentages for ProfileShades.vue.
 
-    python assets/profile-shades/source/2-bake.py -14 0.95
+    python assets/profile-shades/source/2-bake.py -14 0.80
 """
 import sys, math
 from PIL import Image, ImageFilter
@@ -12,7 +12,7 @@ import numpy as np
 
 BAKE='assets/profile-shades/source'
 ROT   = float(sys.argv[1]) if len(sys.argv) > 1 else -14.0
-SCALE = float(sys.argv[2]) if len(sys.argv) > 2 else 0.95
+SCALE = float(sys.argv[2]) if len(sys.argv) > 2 else 0.80
 RENDER = 720                      # the photo's baking width, as in the SVG sources
 PX, PY = 0.683*RENDER, 0.261*RENDER
 SKIN_TARGET = np.array([200.0, 165.0, 150.0])   # the portrait's cheek, a shade darker
