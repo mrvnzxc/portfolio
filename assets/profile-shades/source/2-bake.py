@@ -4,21 +4,19 @@ Grades the webcam's grey skin up to the portrait's, swings the forearm towards v
 hand against the face, carries the sleeve past the bottom of the frame (the photo stops at the elbow)
 and adds the same drop shadow the SVG art used. Prints the HAND_BOX percentages for ProfileShades.vue.
 
-    python assets/profile-shades/source/2-bake.py -14 0.80
+    python assets/profile-shades/source/2-bake.py -30 0.80 0.82
 """
 import sys, math
 from PIL import Image, ImageFilter
 import numpy as np
 
 BAKE='assets/profile-shades/source'
-ROT   = float(sys.argv[1]) if len(sys.argv) > 1 else -14.0
+ROT   = float(sys.argv[1]) if len(sys.argv) > 1 else -30.0
 SCALE = float(sys.argv[2]) if len(sys.argv) > 2 else 0.80
+FINISH = float(sys.argv[3]) if len(sys.argv) > 3 else 0.82   # the whole layer, hand and sleeve alike
 RENDER = 720                      # the photo's baking width, as in the SVG sources
 PX, PY = 0.683*RENDER, 0.261*RENDER
 SKIN_TARGET = np.array([200.0, 165.0, 150.0])   # the portrait's cheek, a shade darker
-PHOTO_ARM_LEAN = 39.0                           # the forearm's lean from vertical in 1.jpg
-WRIST_BEND = float(sys.argv[3]) if len(sys.argv) > 3 else -16.0   # extra swing for the forearm alone
-WRIST = (262, 185)                              # the cuff, in hand-cut.png coordinates
 
 # ---- grade: the webcam is grey and hazy next to the studio portrait
 cut = Image.open(BAKE+'/hand-cut.png')
@@ -41,29 +39,10 @@ cut = Image.fromarray(np.dstack([graded, alpha]).astype('uint8'))
 rgbp = Image.merge('RGB', cut.split()[:3]).filter(ImageFilter.MedianFilter(3))
 cut = Image.merge('RGBA', (*rgbp.split(), cut.split()[-1]))
 
-# ---- bend the wrist: the forearm alone swings towards vertical, so it runs down the portrait
-# instead of straight out of the circle. The hand is drawn back over the join, which hides it.
-if WRIST_BEND:
-    pad = 260
-    big = Image.new('RGBA', (cut.width+pad, cut.height+pad), (0,0,0,0))
-    big.alpha_composite(cut, (0, 0))
-    w = (WRIST[0], WRIST[1])
-    arr = np.asarray(big).astype(float)
-    yy, xx = np.mgrid[0:big.height, 0:big.width]
-    d = math.radians(PHOTO_ARM_LEAN)
-    t = (xx - w[0]) * math.sin(d) + (yy - w[1]) * math.cos(d)   # distance along the forearm
-    forearm = Image.fromarray(np.where((t > -30)[...,None], arr, 0).astype('uint8'))
-    hand = Image.fromarray(np.where((t <= 0)[...,None], arr, 0).astype('uint8'))
-    bent = Image.new('RGBA', big.size, (0,0,0,0))
-    bent.alpha_composite(forearm.rotate(WRIST_BEND, resample=Image.BICUBIC, center=w))
-    bent.alpha_composite(hand)
-    cut = bent
-    print(f'wrist bent {WRIST_BEND:g} deg')
-
 # ---- rotate + scale, tracking where the fingers pinch
 import json
 ORIGIN = json.load(open(BAKE+'/hand-cut.json'))['origin']   # where 1-cut.py cropped
-PINCH_IN_PHOTO = (666, 266)                                 # where the fingers grip, in 1.jpg
+PINCH_IN_PHOTO = (689, 305)                                 # where the fingers grip, in 1.jpg
 pinch = (PINCH_IN_PHOTO[0]-ORIGIN[0], PINCH_IN_PHOTO[1]-ORIGIN[1])
 rot = cut.rotate(ROT, resample=Image.BICUBIC, expand=True)
 t = math.radians(ROT)
@@ -85,11 +64,11 @@ y_src = ys.max() - 46                      # a clean row above the diagonal cut
 xs = np.nonzero(al[y_src])[0]
 x0, x1 = xs.min(), xs.max()
 row = arr[y_src:y_src+1, x0:x1+1].copy()
-# the forearm leans 39 deg in the photo; after the rotation the extension must follow it
-lean = math.radians(PHOTO_ARM_LEAN + WRIST_BEND + ROT)
-print(f'sleeve carried on at {math.degrees(lean):.1f} deg from vertical')
+lean = math.radians(13)
+ext_rows = RENDER + 160 - (y_src+1)
 for i, y in enumerate(range(y_src+1, RENDER + 160)):
-    w = round((x1-x0+1) * (1 + 0.0009*i))
+    # a fixed total flare: widening per row would fatten the sleeve whenever the hand shrinks
+    w = round((x1-x0+1) * (1 + 0.30*i/max(1, ext_rows)))
     x = round(x0 + i*math.tan(lean) - (w-(x1-x0+1))/2)
     strip = np.asarray(Image.fromarray(row.astype('uint8')).resize((w,1), Image.BICUBIC)).astype(float)[0]
     x = max(0, min(x, arr.shape[1]-1))
@@ -109,9 +88,17 @@ out.alpha_composite(big)
 
 bbox = out.split()[-1].point(lambda v: 255 if v > 4 else 0).getbbox()
 final = out.crop(bbox)
+# Shrink the finished layer about the grip point, so the hand reads smaller without the sleeve
+# having to be regenerated (regenerating it from higher up only flares it wider).
+fin_left = (bbox[0]-pad)/RENDER*100
+fin_top = (bbox[1]-pad)/RENDER*100
+if FINISH != 1.0:
+    final = final.resize((round(final.width*FINISH), round(final.height*FINISH)), Image.LANCZOS)
+    fin_left = PX/RENDER*100 - (PX/RENDER*100 - fin_left) * FINISH
+    fin_top = PY/RENDER*100 - (PY/RENDER*100 - fin_top) * FINISH
+    print(f'layer finished at x{FINISH:g}')
 # box of the art inside the photo, in % of the photo's width (what ProfileShades needs)
-left = (bbox[0]-pad)/RENDER*100
-top  = (bbox[1]-pad)/RENDER*100
+left, top = fin_left, fin_top
 width = final.width/RENDER*100
 print(f'HAND_BOX left {left:.2f}% top {top:.2f}% width {width:.2f}%  ({final.width}x{final.height})')
 final.save(BAKE+'/profile-shades-hand.webp', quality=88, method=6)

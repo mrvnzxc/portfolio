@@ -5,6 +5,13 @@ separates them; a polygon cuts away his head, his spectacles and his torso, wher
 Writes hand-cut.png (and hand-cut-check.png on magenta, to eyeball the edge).
 
     python assets/profile-shades/source/1-cut.py
+
+1-reshoot.jpg is a second take, kept because it may be wanted again. To bake from it, swap SRC and use:
+    POLY = [(715,150),(960,160),(1000,270),(1060,360),(1130,470),(1210,610),(1205,660),(945,580),
+            (915,500),(890,420),(830,395),(760,370),(700,330),(684,305),(668,288),(666,268),(668,248),(680,232),(700,200)]
+    frame wedge x 664..700, y 232..305;  round_tip(238,264,11) and round_tip(264,294,11)
+    2-bake.py: PINCH_IN_PHOTO (666,266), PHOTO_ARM_LEAN 39, and -14 0.80 (its wrist is cocked, so a
+    bigger swing points the fingers at the sky; the forearm then leaves the circle almost at once).
 """
 from PIL import Image, ImageDraw, ImageFilter
 import numpy as np
@@ -17,8 +24,8 @@ a = np.asarray(im).astype(int)
 R,G,B = a[...,0],a[...,1],a[...,2]
 lum = (R*0.299+G*0.587+B*0.114)
 
-POLY=[(715,150),(960,160),(1000,270),(1060,360),(1130,470),(1210,610),(1205,660),(945,580),
-      (915,500),(890,420),(830,395),(760,370),(700,330),(684,305),(668,288),(666,268),(668,248),(680,232),(700,200)]
+POLY=[(710,240),(900,240),(1000,330),(1080,470),(1160,600),(1215,720),(980,720),(865,420),
+      (760,395),(700,370),(690,345),(686,320),(690,296),(700,272)]
 region = Image.new('L', im.size, 0)
 ImageDraw.Draw(region).polygon(POLY, fill=255)
 reg = np.asarray(region) > 0
@@ -26,7 +33,7 @@ reg = np.asarray(region) > 0
 fg = (((R-B > 12) & (lum < 210)) | (lum < 110)) & reg
 # A dark wedge of his spectacle frame sits on the index finger; the frame is not part of the hand
 yy, xx = np.mgrid[0:a.shape[0], 0:a.shape[1]]
-fg &= ~((xx >= 664) & (xx <= 700) & (yy >= 232) & (yy <= 305) & (lum < 125))
+fg &= ~((xx >= 686) & (xx <= 710) & (yy >= 262) & (yy <= 300) & (lum < 125))
 m = Image.fromarray((fg*255).astype('uint8'))
 m = m.filter(ImageFilter.MaxFilter(3)).filter(ImageFilter.MinFilter(3))
 m = m.filter(ImageFilter.MinFilter(3)).filter(ImageFilter.MaxFilter(3))
@@ -80,8 +87,8 @@ def round_tip(y0, y1, depth):
             shade = 1.0 - 0.13 * (i/d) ** 1.4          # the tip curves away from the light
             rgbf[y, x] = np.clip(edge * shade, 0, 255)
             keepf[y, x] = 1.0
-round_tip(238, 264, 11)   # index finger
-round_tip(264, 294, 11)   # thumb
+round_tip(289, 311, 13)   # index finger
+round_tip(311, 348, 13)   # thumb
 keep = keepf > 0.5
 im = Image.fromarray(rgbf.astype('uint8'))
 
