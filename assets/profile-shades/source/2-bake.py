@@ -17,6 +17,8 @@ RENDER = 720                      # the photo's baking width, as in the SVG sour
 PX, PY = 0.683*RENDER, 0.261*RENDER
 SKIN_TARGET = np.array([200.0, 165.0, 150.0])   # the portrait's cheek, a shade darker
 PHOTO_ARM_LEAN = 39.0                           # the forearm's lean from vertical in 1.jpg
+WRIST_BEND = float(sys.argv[3]) if len(sys.argv) > 3 else -16.0   # extra swing for the forearm alone
+WRIST = (262, 185)                              # the cuff, in hand-cut.png coordinates
 
 # ---- grade: the webcam is grey and hazy next to the studio portrait
 cut = Image.open(BAKE+'/hand-cut.png')
@@ -38,6 +40,25 @@ cut = Image.fromarray(np.dstack([graded, alpha]).astype('uint8'))
 # the webcam leaves JPEG speckle the grade amplifies; median it out, keep the alpha crisp
 rgbp = Image.merge('RGB', cut.split()[:3]).filter(ImageFilter.MedianFilter(3))
 cut = Image.merge('RGBA', (*rgbp.split(), cut.split()[-1]))
+
+# ---- bend the wrist: the forearm alone swings towards vertical, so it runs down the portrait
+# instead of straight out of the circle. The hand is drawn back over the join, which hides it.
+if WRIST_BEND:
+    pad = 260
+    big = Image.new('RGBA', (cut.width+pad, cut.height+pad), (0,0,0,0))
+    big.alpha_composite(cut, (0, 0))
+    w = (WRIST[0], WRIST[1])
+    arr = np.asarray(big).astype(float)
+    yy, xx = np.mgrid[0:big.height, 0:big.width]
+    d = math.radians(PHOTO_ARM_LEAN)
+    t = (xx - w[0]) * math.sin(d) + (yy - w[1]) * math.cos(d)   # distance along the forearm
+    forearm = Image.fromarray(np.where((t > -30)[...,None], arr, 0).astype('uint8'))
+    hand = Image.fromarray(np.where((t <= 0)[...,None], arr, 0).astype('uint8'))
+    bent = Image.new('RGBA', big.size, (0,0,0,0))
+    bent.alpha_composite(forearm.rotate(WRIST_BEND, resample=Image.BICUBIC, center=w))
+    bent.alpha_composite(hand)
+    cut = bent
+    print(f'wrist bent {WRIST_BEND:g} deg')
 
 # ---- rotate + scale, tracking where the fingers pinch
 import json
@@ -65,7 +86,7 @@ xs = np.nonzero(al[y_src])[0]
 x0, x1 = xs.min(), xs.max()
 row = arr[y_src:y_src+1, x0:x1+1].copy()
 # the forearm leans 39 deg in the photo; after the rotation the extension must follow it
-lean = math.radians(PHOTO_ARM_LEAN + ROT)
+lean = math.radians(PHOTO_ARM_LEAN + WRIST_BEND + ROT)
 print(f'sleeve carried on at {math.degrees(lean):.1f} deg from vertical')
 for i, y in enumerate(range(y_src+1, RENDER + 160)):
     w = round((x1-x0+1) * (1 + 0.0009*i))
