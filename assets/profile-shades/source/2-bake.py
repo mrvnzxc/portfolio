@@ -63,7 +63,13 @@ arr = np.asarray(canvas).astype(float)
 # ---- the photo stops at the elbow; carry the sleeve down past the bottom of the frame
 al = arr[...,3] > 128
 ys = np.nonzero(al.any(1))[0]
-y_src = ys.max() - 46                      # a clean row above the diagonal cut
+# The cut ends the arm on a straight diagonal, so its last rows taper away. Picking one of those up
+# makes the sleeve carry on at 60% width: an elbow sliced off. Take the last row still at full width.
+lo = max(ys.min(), ys.max() - 320)
+widths = {y: int(al[y].sum()) for y in range(lo, ys.max()+1)}
+full = max(widths.values())
+y_src = max(y for y, w in widths.items() if w >= 0.93*full)
+print(f'sleeve carries on from row {y_src} ({widths[y_src]} px wide, arm peaks at {full})')
 xs = np.nonzero(al[y_src])[0]
 x0, x1 = xs.min(), xs.max()
 row = arr[y_src:y_src+1, x0:x1+1].copy()
