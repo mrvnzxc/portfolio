@@ -2,6 +2,8 @@ const DESKTOP_MQ = '(min-width: 1024px)'
 
 type GsapContext = { revert: () => void }
 
+type StackEnd = { endTrigger: Element; end: string | (() => string) }
+
 /**
  * `end` = pixel end on the stage bottom (desktop).
  * `end` = null (mobile): the stack releases the moment the last card reaches its slot, and the last
@@ -13,7 +15,7 @@ function runStackAnimation(
   stage: HTMLElement,
   startOffset: (index: number) => number,
   end: string | null,
-) {
+): StackEnd | null {
   const wrappers = gsap.utils.toArray<HTMLElement>('.projects-card-wrapper', stage)
   const cards = gsap.utils.toArray<HTMLElement>('.projects-stack-card', stage)
 
@@ -22,6 +24,13 @@ function runStackAnimation(
   })
 
   const lastIndex = cards.length - 1
+  if (lastIndex < 0) return null
+
+  /* Where the whole stack lets go — reused to release the sticky heading at the same instant */
+  const stackEnd: StackEnd =
+    end === null
+      ? { endTrigger: wrappers[lastIndex], end: () => `top ${startOffset(lastIndex)}` }
+      : { endTrigger: stage, end }
 
   wrappers.forEach((wrapper, index) => {
     const card = cards[index]
@@ -42,10 +51,8 @@ function runStackAnimation(
       ease: 'none',
       scrollTrigger: {
         trigger: wrapper,
-        start: `top ${startOffset(index)}`,
-        ...(end === null
-          ? { endTrigger: wrappers[lastIndex], end: `top ${startOffset(lastIndex)}` }
-          : { endTrigger: stage, end }),
+        start: () => `top ${startOffset(index)}`,
+        ...stackEnd,
         scrub: true,
         pin: wrapper,
         pinSpacing: false,
@@ -54,15 +61,21 @@ function runStackAnimation(
       },
     })
   })
+
+  return stackEnd
 }
 
-export function useProjectStackScroll(stageRef: { value: HTMLElement | null }) {
+export function useProjectStackScroll(
+  stageRef: { value: HTMLElement | null },
+  headingRef?: { value: HTMLElement | null },
+) {
   let ctx: GsapContext | null = null
   let mediaQuery: MediaQueryList | null = null
 
   function destroy() {
     ctx?.revert()
     ctx = null
+    headingRef?.value?.classList.remove('is-stack-released')
   }
 
   async function init() {
@@ -81,14 +94,39 @@ export function useProjectStackScroll(stageRef: { value: HTMLElement | null }) {
       const isDesktop = window.matchMedia(DESKTOP_MQ).matches
       /* Cards pin just below the sticky header */
       const headerHeight = document.getElementById('top-nav')?.offsetHeight ?? 0
+      /* ...and below the section title, which stays parked there while the stack runs */
+      const heading = headingRef?.value ?? null
+      const headingClearance = () => (heading ? heading.offsetHeight + 14 : 0)
 
       ctx = gsap.context(() => {
+        let stackEnd: StackEnd | null
         if (isDesktop) {
           // Desktop — unchanged from the working version
-          runStackAnimation(gsap, stage, (index) => Math.max(60, headerHeight + 12) + 10 * index, 'bottom 550')
+          stackEnd = runStackAnimation(
+            gsap,
+            stage,
+            (index) => Math.max(60, headerHeight + 12) + headingClearance() + 10 * index,
+            'bottom 550',
+          )
         } else {
           // Mobile / tablet — same scale & tilt; stack releases as the last card arrives
-          runStackAnimation(gsap, stage, (index) => headerHeight + 12 + 8 * index, null)
+          stackEnd = runStackAnimation(
+            gsap,
+            stage,
+            (index) => headerHeight + 12 + headingClearance() + 8 * index,
+            null,
+          )
+        }
+
+        if (heading && stackEnd) {
+          /* Fade the title out exactly when the cards let go, so none scrolls up behind it */
+          ScrollTrigger.create({
+            trigger: stackEnd.endTrigger,
+            start: stackEnd.end,
+            invalidateOnRefresh: true,
+            onEnter: () => heading.classList.add('is-stack-released'),
+            onLeaveBack: () => heading.classList.remove('is-stack-released'),
+          })
         }
       }, stage)
 

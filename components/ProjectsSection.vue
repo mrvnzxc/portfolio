@@ -18,16 +18,19 @@
     </div>
 
     <div class="relative mx-auto max-w-6xl 2xl:max-w-7xl px-4">
-      <!-- Same row layout as GallerySection: title left, label right (text-primary-600) -->
-      <div
-        class="mb-4 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 reveal-on-scroll sm:mb-5"
-      >
-        <h2 class="mb-1 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-          Mission Control Projects
-        </h2>
-        <span class="section-tag self-end sm:self-auto">
-          Featured projects
-        </span>
+      <!-- Heading parks under the header while the cards stack past it, then fades on release -->
+      <div ref="headingRow" class="projects-heading">
+        <!-- Same row layout as GallerySection: title left, label right (text-primary-600) -->
+        <div
+          class="mb-4 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 reveal-on-scroll sm:mb-5"
+        >
+          <h2 class="mb-1 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+            Mission Control Projects
+          </h2>
+          <span class="section-tag self-end sm:self-auto">
+            Featured projects
+          </span>
+        </div>
       </div>
 
       <!-- GSAP stacking cards — desktop & mobile (same scroll logic) -->
@@ -299,10 +302,11 @@ import { setPageScrollLock } from '~/utils/pageScrollLock'
 const introContentReady = useIntroContentReady()
 const sectionRoot = ref(null)
 const stackStage = ref(null)
+const headingRow = ref(null)
 const selectedProject = ref(null)
 const imagePreview = ref({ src: '', alt: '' })
 
-const { init: initProjectStackScroll, bind: bindProjectStackScroll } = useProjectStackScroll(stackStage)
+const { init: initProjectStackScroll, bind: bindProjectStackScroll } = useProjectStackScroll(stackStage, headingRow)
 let unbindProjectStackScroll = null
 let stackInitialized = false
 
@@ -540,6 +544,26 @@ watch(imagePreview, (preview) => {
 </script>
 
 <style scoped>
+/* Title stays parked under the sticky header for as long as the cards are stacking */
+.projects-heading {
+  position: sticky;
+  top: calc(var(--header-h, 61px) + 0.5rem);
+  z-index: 20;
+  transition: opacity 0.25s ease;
+}
+
+/* Released with the stack, so the last card never scrolls up behind the title */
+.projects-heading.is-stack-released {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .projects-heading {
+    transition: none;
+  }
+}
+
 .projects-stack-stage {
   width: 100%;
   padding-top: 1rem;
