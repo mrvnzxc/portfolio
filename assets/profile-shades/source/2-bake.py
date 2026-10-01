@@ -15,7 +15,7 @@ ROT   = float(sys.argv[1]) if len(sys.argv) > 1 else -30.0
 SCALE = float(sys.argv[2]) if len(sys.argv) > 2 else 0.80
 FINISH = float(sys.argv[3]) if len(sys.argv) > 3 else 0.82   # the whole layer, hand and sleeve alike
 RENDER = 720                      # the photo's baking width, as in the SVG sources
-PX, PY = 0.683*RENDER, 0.286*RENDER
+PX, PY = 0.683*RENDER, 0.261*RENDER
 SKIN_TARGET = np.array([200.0, 165.0, 150.0])   # the portrait's cheek, a shade darker
 SLEEVE_LEAN = 13.0                              # the forearm's lean where the photo runs out
 SLEEVE_FLARE = 0.9                              # how much wider the sleeve gets by the bottom
@@ -139,7 +139,7 @@ import os; print('webp bytes', os.path.getsize(BAKE+'/profile-shades-hand.webp')
 base = Image.open('public/profile.webp').convert('RGBA').resize((RENDER,RENDER), Image.LANCZOS)
 gl = Image.open('public/profile-shades-glasses.webp').convert('RGBA')
 gw = round(RENDER*0.3986); gl = gl.resize((gw, round(gl.height*gw/gl.width)), Image.LANCZOS)
-base.alpha_composite(gl, (round(RENDER*0.3056), round(RENDER*0.2625)))
+base.alpha_composite(gl, (round(RENDER*0.3056), round(RENDER*0.2375)))
 base.alpha_composite(final, (round(left/100*RENDER), round(top/100*RENDER)))
 mask = Image.new('L', base.size, 0)
 from PIL import ImageDraw; ImageDraw.Draw(mask).ellipse((0,0,RENDER-1,RENDER-1), fill=255)
