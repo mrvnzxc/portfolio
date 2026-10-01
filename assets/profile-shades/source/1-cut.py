@@ -61,6 +61,30 @@ for c in holes:
         for y,x in c: keep[y,x]=True
 print('kept', keep.sum(), 'holes left', sum(1 for c in holes if len(c) >= 220))
 
+# The fingertips end against his spectacles, so the cut leaves them squared off. Round them back on:
+# each tip grows a cap that peaks where the two meet, which reads as a pinch instead of a chop.
+rgbf = np.asarray(im).astype(float)
+keepf = keep.astype(float)
+def round_tip(y0, y1, depth):
+    import math
+    for y in range(y0, y1):
+        xs = np.nonzero(keep[y])[0]
+        if not len(xs): continue
+        lx = xs.min()
+        d = round(depth * math.sin(math.pi * (y-y0) / (y1-y0)) ** 0.65)
+        if d <= 0: continue
+        edge = rgbf[y, lx:lx+3].mean(0)
+        for i in range(1, d+1):
+            x = lx - i
+            if x < 0: break
+            shade = 1.0 - 0.13 * (i/d) ** 1.4          # the tip curves away from the light
+            rgbf[y, x] = np.clip(edge * shade, 0, 255)
+            keepf[y, x] = 1.0
+round_tip(289, 311, 13)   # index finger
+round_tip(311, 348, 13)   # thumb
+keep = keepf > 0.5
+im = Image.fromarray(rgbf.astype('uint8'))
+
 alpha = Image.fromarray((keep*255).astype('uint8'))
 alpha = alpha.filter(ImageFilter.MinFilter(3))
 alpha = alpha.filter(ImageFilter.GaussianBlur(0.7))
@@ -69,4 +93,6 @@ bbox = alpha.point(lambda v: 255 if v > 8 else 0).getbbox()
 print('bbox', bbox)
 c = cut.crop(bbox)
 c.save(OUT+'/hand-cut.png')
+import json
+json.dump({'origin': [bbox[0], bbox[1]]}, open(OUT+'/hand-cut.json','w'))
 Image.alpha_composite(Image.new('RGBA', c.size, (255,0,255,255)), c).save(OUT+'/hand-cut-check.png')

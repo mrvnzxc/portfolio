@@ -39,7 +39,10 @@ rgbp = Image.merge('RGB', cut.split()[:3]).filter(ImageFilter.MedianFilter(3))
 cut = Image.merge('RGBA', (*rgbp.split(), cut.split()[-1]))
 
 # ---- rotate + scale, tracking where the fingers pinch
-pinch = (689-686, 305-251)
+import json
+ORIGIN = json.load(open(BAKE+'/hand-cut.json'))['origin']   # where 1-cut.py cropped
+PINCH_IN_PHOTO = (689, 305)                                 # where the fingers grip, in 1.jpg
+pinch = (PINCH_IN_PHOTO[0]-ORIGIN[0], PINCH_IN_PHOTO[1]-ORIGIN[1])
 rot = cut.rotate(ROT, resample=Image.BICUBIC, expand=True)
 t = math.radians(ROT)
 dx, dy = pinch[0]-cut.width/2, pinch[1]-cut.height/2
