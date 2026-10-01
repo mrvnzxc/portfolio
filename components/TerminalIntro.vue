@@ -206,7 +206,8 @@ const SCROLL_KEYS = new Set([' ', 'Spacebar', 'ArrowDown', 'ArrowUp', 'PageDown'
 
 function skip(event?: Event) {
   if (event instanceof KeyboardEvent && SCROLL_KEYS.has(event.key)) event.preventDefault()
-  if (skipped) return
+  /* Once finished, pendingTimer is the hand-off to the page; clearing it would leave the intro up */
+  if (skipped || finished) return
   skipped = true
   if (pendingTimer) clearTimeout(pendingTimer)
   wake?.()
