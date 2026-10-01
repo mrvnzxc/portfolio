@@ -4,18 +4,19 @@ Grades the webcam's grey skin up to the portrait's, swings the forearm towards v
 hand against the face, carries the sleeve past the bottom of the frame (the photo stops at the elbow)
 and adds the same drop shadow the SVG art used. Prints the HAND_BOX percentages for ProfileShades.vue.
 
-    python assets/profile-shades/source/2-bake.py -30 0.80
+    python assets/profile-shades/source/2-bake.py -14 0.95
 """
 import sys, math
 from PIL import Image, ImageFilter
 import numpy as np
 
 BAKE='assets/profile-shades/source'
-ROT   = float(sys.argv[1]) if len(sys.argv) > 1 else -30.0
-SCALE = float(sys.argv[2]) if len(sys.argv) > 2 else 0.80
+ROT   = float(sys.argv[1]) if len(sys.argv) > 1 else -14.0
+SCALE = float(sys.argv[2]) if len(sys.argv) > 2 else 0.95
 RENDER = 720                      # the photo's baking width, as in the SVG sources
 PX, PY = 0.683*RENDER, 0.261*RENDER
 SKIN_TARGET = np.array([200.0, 165.0, 150.0])   # the portrait's cheek, a shade darker
+PHOTO_ARM_LEAN = 39.0                           # the forearm's lean from vertical in 1.jpg
 
 # ---- grade: the webcam is grey and hazy next to the studio portrait
 cut = Image.open(BAKE+'/hand-cut.png')
@@ -41,7 +42,7 @@ cut = Image.merge('RGBA', (*rgbp.split(), cut.split()[-1]))
 # ---- rotate + scale, tracking where the fingers pinch
 import json
 ORIGIN = json.load(open(BAKE+'/hand-cut.json'))['origin']   # where 1-cut.py cropped
-PINCH_IN_PHOTO = (689, 305)                                 # where the fingers grip, in 1.jpg
+PINCH_IN_PHOTO = (666, 266)                                 # where the fingers grip, in 1.jpg
 pinch = (PINCH_IN_PHOTO[0]-ORIGIN[0], PINCH_IN_PHOTO[1]-ORIGIN[1])
 rot = cut.rotate(ROT, resample=Image.BICUBIC, expand=True)
 t = math.radians(ROT)
@@ -63,7 +64,9 @@ y_src = ys.max() - 46                      # a clean row above the diagonal cut
 xs = np.nonzero(al[y_src])[0]
 x0, x1 = xs.min(), xs.max()
 row = arr[y_src:y_src+1, x0:x1+1].copy()
-lean = math.radians(13)
+# the forearm leans 39 deg in the photo; after the rotation the extension must follow it
+lean = math.radians(PHOTO_ARM_LEAN + ROT)
+print(f'sleeve carried on at {math.degrees(lean):.1f} deg from vertical')
 for i, y in enumerate(range(y_src+1, RENDER + 160)):
     w = round((x1-x0+1) * (1 + 0.0009*i))
     x = round(x0 + i*math.tan(lean) - (w-(x1-x0+1))/2)

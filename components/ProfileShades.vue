@@ -5,7 +5,7 @@
       <img src="/profile-shades-glasses.webp" alt="" width="287" height="102" class="profile-shades__art" :style="GLASSES_BOX">
     </div>
     <div ref="handEl" class="profile-shades__layer">
-      <img src="/profile-shades-hand.webp" alt="" width="260" height="714" class="profile-shades__art" :style="HAND_BOX">
+      <img src="/profile-shades-hand.webp" alt="" width="236" height="741" class="profile-shades__art" :style="HAND_BOX">
     </div>
   </div>
 </template>
@@ -25,7 +25,7 @@ import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 /* Where each picture sits on the square photo, in % of its width */
 const GLASSES_BOX = { left: '30.56%', top: '23.75%', width: '39.86%' }
-const HAND_BOX = { left: '64.17%', top: '24.58%', width: '36.11%' }
+const HAND_BOX = { left: '67.50%', top: '19.86%', width: '32.78%' }
 /** Where the fingers pinch the glasses: both layers swing around this point */
 const PINCH = '68.3% 26.1%'
 
