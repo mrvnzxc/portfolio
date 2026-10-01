@@ -17,6 +17,9 @@ FINISH = float(sys.argv[3]) if len(sys.argv) > 3 else 0.82   # the whole layer, 
 RENDER = 720                      # the photo's baking width, as in the SVG sources
 PX, PY = 0.683*RENDER, 0.261*RENDER
 SKIN_TARGET = np.array([200.0, 165.0, 150.0])   # the portrait's cheek, a shade darker
+SLEEVE_LEAN = 13.0                              # the forearm's lean where the photo runs out
+SLEEVE_FLARE = 0.9                              # how much wider the sleeve gets by the bottom
+SLEEVE_INWARD = -7.0                            # and where that lean has eased to by the frame's bottom
 
 # ---- grade: the webcam is grey and hazy next to the studio portrait
 cut = Image.open(BAKE+'/hand-cut.png')
@@ -64,13 +67,34 @@ y_src = ys.max() - 46                      # a clean row above the diagonal cut
 xs = np.nonzero(al[y_src])[0]
 x0, x1 = xs.min(), xs.max()
 row = arr[y_src:y_src+1, x0:x1+1].copy()
-lean = math.radians(13)
+lean = math.radians(SLEEVE_LEAN)
 ext_rows = RENDER + 160 - (y_src+1)
+# The forearm runs towards the elbow, which sits near the body, so the sleeve eases inwards as it
+# falls. Straight on the arm's own angle it leaves through the side of the round photo and gets
+# clipped flat, which reads as a severed arm.
+# Repeating one row leaves vertical streaks where the fabric should have grain, so the extension
+# walks up and down a band of real sleeve instead.
+band = []
+for by in range(max(0, y_src-79), y_src+1):
+    bxs = np.nonzero(al[by])[0]
+    if len(bxs) > 20:
+        band.append(arr[by:by+1, bxs.min():bxs.max()+1].copy())
+if not band:
+    band = [row]
+
+dx = 0.0
 for i, y in enumerate(range(y_src+1, RENDER + 160)):
-    # a fixed total flare: widening per row would fatten the sleeve whenever the hand shrinks
-    w = round((x1-x0+1) * (1 + 0.30*i/max(1, ext_rows)))
-    x = round(x0 + i*math.tan(lean) - (w-(x1-x0+1))/2)
-    strip = np.asarray(Image.fromarray(row.astype('uint8')).resize((w,1), Image.BICUBIC)).astype(float)[0]
+    k = i / max(1, ext_rows)
+    dx += math.tan(lean * (1 - k) + math.radians(SLEEVE_INWARD) * k)
+    # Flares wide enough that the sleeve always reaches past the round photo's edge: a narrower one
+    # runs almost parallel to that edge and leaves a sliver of gown showing beside it. The overdraw
+    # is clipped away, so it costs nothing.
+    w = round((x1-x0+1) * (1 + SLEEVE_FLARE*k))
+    x = round(x0 + dx - (w-(x1-x0+1))/2)
+    j = i % (2*len(band) - 2) if len(band) > 1 else 0
+    src = band[j if j < len(band) else 2*len(band)-2-j]            # ping-pong, so the grain never jumps
+    strip = np.asarray(Image.fromarray(src.astype('uint8')).resize((w,1), Image.BICUBIC)).astype(float)[0]
+    strip[:, :3] *= 1 - 0.14*k                                      # the arm recedes as it falls
     x = max(0, min(x, arr.shape[1]-1))
     strip = strip[:arr.shape[1]-x]
     arr[y, x:x+len(strip)] = strip
